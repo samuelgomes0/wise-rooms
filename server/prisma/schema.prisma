@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  name         String
+  email        String        @unique
+  password     String
+  role         Role          @relation(fields: [roleId], references: [id])
+  roleId       Int
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  reservations Reservation[]
+  AuditLog     AuditLog[]
+
+  @@map("users")
+}
+
+model Role {
+  id          Int          @id @default(autoincrement())
+  name        String
+  description String?
+  permissions Permission[]
+  users       User[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@map("roles")
+}
+
+model Permission {
+  id         Int      @id @default(autoincrement())
+  roleId     Int
+  permission String
+  role       Role     @relation(fields: [roleId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("permissions")
+}
+
+model Space {
+  id           Int           @id @default(autoincrement())
+  name         String
+  description  String?
+  location     String?
+  capacity     Int?
+  available    Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  reservations Reservation[]
+  SpaceItem    SpaceItem[]
+
+  @@map("spaces")
+}
+
+model Reservation {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  spaceId   Int
+  startTime DateTime
+  endTime   DateTime
+  status    String
+  user      User     @relation(fields: [userId], references: [id])
+  space     Space    @relation(fields: [spaceId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("reservations")
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  action    String
+  timestamp DateTime @default(now())
+  details   String?
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("audit_logs")
+}
+
+model Item {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  spaceItems  SpaceItem[]
+
+  @@map("items")
+}
+
+model SpaceItem {
+  id        Int      @id @default(autoincrement())
+  spaceId   Int
+  itemId    Int
+  quantity  Int      @default(1)
+  space     Space    @relation(fields: [spaceId], references: [id])
+  item      Item     @relation(fields: [itemId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("space_items")
+}

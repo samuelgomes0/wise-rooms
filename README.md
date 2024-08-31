@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 📅 Sistema de Agendamento de Espaços Institucionais
 
 ## Descrição do Projeto
@@ -146,7 +145,3 @@ Jest é um framework de testes JavaScript mantido pelo Facebook que se destaca p
 **Utilização no Projeto**
 
 Jest será utilizado para escrever e executar testes unitários e de integração, garantindo que todas as funcionalidades do sistema de agendamento estejam corretas e estáveis antes do lançamento. Isso ajuda a manter a qualidade e a confiabilidade do software ao longo do tempo.
-=======
-# projeto-de-graduacao
-Aplicação web que automatiza o processo de reserva em espaços institucionais.
->>>>>>> ea3ae73255a7dc72ad07d96d912e0c3ab0cda55d

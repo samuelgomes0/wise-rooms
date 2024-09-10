@@ -36,7 +36,7 @@ export default function LoginPage() {
 
   const handleFormSubmit = () => {
     console.log("Teste!");
-  }
+  };
 
   return (
     <main className="w-full h-screen flex justify-center items-center">
@@ -95,7 +95,7 @@ export default function LoginPage() {
               </Button>
               <Label className="text-sm text-center">
                 Não possui uma conta? {""}
-                <Link href="/cadastro" className="font-bold">
+                <Link href="/cadastrar" className="font-bold">
                   Cadastre-se
                 </Link>
               </Label>

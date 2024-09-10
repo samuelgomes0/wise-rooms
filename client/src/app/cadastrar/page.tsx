@@ -10,37 +10,35 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { registerSchema } from "@/schemas/register.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { createUser } from "@/services";
 import { ArrowLeft, EyeIcon, EyeOffIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  const { register, handleSubmit } = useForm();
 
-  const form = useForm<z.infer<typeof registerSchema>>({
-    resolver: zodResolver(registerSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-    },
-  });
+  const onSubmit = (data) => {
+    if (data.password !== data.confirmPassword) {
+      alert("As senhas não conferem.");
+      return;
+    }
 
-  const handleFormSubmit = () => {
-    console.log("Teste");
+    // Passar os dados do usuário para a função createUser
+    createUser({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    });
   };
 
   return (
     <main className="w-full h-screen flex justify-center items-center">
-      <Link href={"/"} className="absolute top-8 left-8">
+      <Link href="/" className="absolute top-8 left-8">
         <ArrowLeft size={24} />
       </Link>
       <Card className="max-w-sm">
@@ -52,18 +50,31 @@ export default function RegisterPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="flex flex-col gap-6">
+          <form
+            className="flex flex-col gap-6"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div className="w-full flex flex-col gap-2">
               <Label htmlFor="name" className="font-semibold">
                 Nome
               </Label>
-              <Input type="name" id="name" placeholder="John Doe" />
+              <Input
+                type="text"
+                id="name"
+                placeholder="John Doe"
+                {...register("name")}
+              />
             </div>
             <div className="w-full flex flex-col gap-2">
               <Label htmlFor="email" className="font-semibold">
                 E-mail
               </Label>
-              <Input type="email" id="email" placeholder="email@exemplo.com" />
+              <Input
+                type="email"
+                id="email"
+                placeholder="email@exemplo.com"
+                {...register("email")}
+              />
             </div>
             <div className="w-full relative flex flex-col gap-2">
               <Label htmlFor="password" className="font-semibold">
@@ -73,6 +84,7 @@ export default function RegisterPage() {
                 type={showPassword ? "text" : "password"}
                 id="password"
                 placeholder="Sua senha"
+                {...register("password")}
               />
               <button
                 type="button"
@@ -94,6 +106,7 @@ export default function RegisterPage() {
                 type={showPassword ? "text" : "password"}
                 id="confirmPassword"
                 placeholder="Confirmar sua senha"
+                {...register("confirmPassword")}
               />
               <button
                 type="button"

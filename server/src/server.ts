@@ -1,11 +1,17 @@
+import cors from "cors";
 import express from "express";
+import usersRoutes from "./routes/users.route";
 
-const app = express();
+const server = express();
 
-app.get("/", (req, res) => {
+server.use(cors());
+
+server.use(express.json());
+
+server.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.listen(3000, () => {
-  console.log("Server is running on http://localhost:3000");
-});
+server.use("/users", usersRoutes);
+
+export default server;

@@ -1,6 +1,24 @@
+-- CreateEnum
+CREATE TYPE "RoleType" AS ENUM ('VIEWER_USER', 'RESERVATION_OPERATOR_USER', 'ADMIN_USER');
+
+-- CreateEnum
+CREATE TYPE "PermissionType" AS ENUM ('CAN_VIEW_RESERVATIONS', 'CAN_MANAGE_RESERVATIONS', 'CAN_MANAGE_SPACES', 'CAN_MANAGE_ITEMS', 'CAN_MANAGE_SPACE_ITEMS');
+
+-- CreateEnum
+CREATE TYPE "ScopeType" AS ENUM ('GLOBAL', 'RESERVATION_MANAGEMENT', 'SPACE_MANAGEMENT');
+
+-- CreateEnum
+CREATE TYPE "SpaceAvailability" AS ENUM ('AVAILABLE', 'UNAVAILABLE', 'MAINTENANCE', 'INACTIVE');
+
+-- CreateEnum
+CREATE TYPE "ReservationStatus" AS ENUM ('APPROVED', 'PENDING', 'REJECTED', 'CANCELLED');
+
+-- CreateEnum
+CREATE TYPE "AuditAction" AS ENUM ('RESERVATION_CREATE', 'RESERVATION_UPDATE', 'RESERVATION_DELETE', 'SPACE_CREATE', 'SPACE_UPDATE', 'SPACE_DELETE', 'ITEM_CREATE', 'ITEM_UPDATE', 'ITEM_DELETE', 'SPACE_ITEM_CREATE', 'SPACE_ITEM_UPDATE', 'SPACE_ITEM_DELETE');
+
 -- CreateTable
 CREATE TABLE "users" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
@@ -14,7 +32,7 @@ CREATE TABLE "users" (
 -- CreateTable
 CREATE TABLE "roles" (
     "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
+    "name" "RoleType" NOT NULL DEFAULT 'VIEWER_USER',
     "description" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -26,7 +44,8 @@ CREATE TABLE "roles" (
 CREATE TABLE "permissions" (
     "id" SERIAL NOT NULL,
     "roleId" INTEGER NOT NULL,
-    "permission" TEXT NOT NULL,
+    "permission" "PermissionType" NOT NULL,
+    "scope" "ScopeType" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -40,7 +59,7 @@ CREATE TABLE "spaces" (
     "description" TEXT,
     "location" TEXT,
     "capacity" INTEGER,
-    "available" BOOLEAN NOT NULL DEFAULT true,
+    "available" "SpaceAvailability" NOT NULL DEFAULT 'AVAILABLE',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -50,11 +69,11 @@ CREATE TABLE "spaces" (
 -- CreateTable
 CREATE TABLE "reservations" (
     "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
     "spaceId" INTEGER NOT NULL,
     "startTime" TIMESTAMP(3) NOT NULL,
     "endTime" TIMESTAMP(3) NOT NULL,
-    "status" TEXT NOT NULL,
+    "status" "ReservationStatus" NOT NULL DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -64,8 +83,8 @@ CREATE TABLE "reservations" (
 -- CreateTable
 CREATE TABLE "audit_logs" (
     "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
-    "action" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "action" "AuditAction" NOT NULL,
     "timestamp" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "details" TEXT,
 
@@ -97,6 +116,9 @@ CREATE TABLE "space_items" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "roles_name_key" ON "roles"("name");
 
 -- AddForeignKey
 ALTER TABLE "users" ADD CONSTRAINT "users_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "roles"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

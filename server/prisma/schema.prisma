@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
+  id           String        @id @default(uuid())
   name         String
   email        String        @unique
   password     String
@@ -22,9 +22,15 @@ model User {
   @@map("users")
 }
 
+enum RoleType {
+  VIEWER_USER
+  RESERVATION_OPERATOR_USER
+  ADMIN_USER
+}
+
 model Role {
   id          Int          @id @default(autoincrement())
-  name        String
+  name        RoleType     @unique @default(VIEWER_USER)
   description String?
   permissions Permission[]
   users       User[]
@@ -34,54 +40,98 @@ model Role {
   @@map("roles")
 }
 
+enum PermissionType {
+  CAN_VIEW_RESERVATIONS
+  CAN_MANAGE_RESERVATIONS
+  CAN_MANAGE_SPACES
+  CAN_MANAGE_ITEMS
+  CAN_MANAGE_SPACE_ITEMS
+}
+
+enum ScopeType {
+  GLOBAL
+  RESERVATION_MANAGEMENT
+  SPACE_MANAGEMENT
+}
+
 model Permission {
-  id         Int      @id @default(autoincrement())
+  id         Int            @id @default(autoincrement())
   roleId     Int
-  permission String
-  role       Role     @relation(fields: [roleId], references: [id])
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  permission PermissionType
+  scope      ScopeType
+  role       Role           @relation(fields: [roleId], references: [id])
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
 
   @@map("permissions")
 }
 
+enum SpaceAvailability {
+  AVAILABLE
+  UNAVAILABLE
+  MAINTENANCE
+  INACTIVE
+}
+
 model Space {
-  id           Int           @id @default(autoincrement())
+  id           Int               @id @default(autoincrement())
   name         String
   description  String?
   location     String?
   capacity     Int?
-  available    Boolean       @default(true)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  available    SpaceAvailability @default(AVAILABLE)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
   reservations Reservation[]
   SpaceItem    SpaceItem[]
 
   @@map("spaces")
 }
 
+enum ReservationStatus {
+  APPROVED
+  PENDING
+  REJECTED
+  CANCELLED
+}
+
 model Reservation {
-  id        Int      @id @default(autoincrement())
-  userId    Int
+  id        String            @id @default(uuid())
+  userId    String
   spaceId   Int
   startTime DateTime
   endTime   DateTime
-  status    String
-  user      User     @relation(fields: [userId], references: [id])
-  space     Space    @relation(fields: [spaceId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  status    ReservationStatus @default(PENDING)
+  user      User              @relation(fields: [userId], references: [id])
+  space     Space             @relation(fields: [spaceId], references: [id])
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
 
   @@map("reservations")
 }
 
+enum AuditAction {
+  RESERVATION_CREATE
+  RESERVATION_UPDATE
+  RESERVATION_DELETE
+  SPACE_CREATE
+  SPACE_UPDATE
+  SPACE_DELETE
+  ITEM_CREATE
+  ITEM_UPDATE
+  ITEM_DELETE
+  SPACE_ITEM_CREATE
+  SPACE_ITEM_UPDATE
+  SPACE_ITEM_DELETE
+}
+
 model AuditLog {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  action    String
-  timestamp DateTime @default(now())
+  id        String      @id @default(uuid())
+  userId    String
+  action    AuditAction
+  timestamp DateTime    @default(now())
   details   String?
-  user      User     @relation(fields: [userId], references: [id])
+  user      User        @relation(fields: [userId], references: [id])
 
   @@map("audit_logs")
 }

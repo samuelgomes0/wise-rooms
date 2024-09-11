@@ -1,3 +1,4 @@
-import { encryptPassword } from "./encryptPassword";
+import { hashPassword } from "./hashPassword";
+import { verifyPassword } from "./verifyPassword";
 
-export { encryptPassword };
+export { hashPassword, verifyPassword };

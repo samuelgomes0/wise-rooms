@@ -1,7 +1,7 @@
 import { prisma } from "../database/prisma-client";
 import { CreateUserDTO, UsersRepository } from "../interfaces/User.interface";
 import { UsersRepositoryPrisma } from "../repositories/users.repository";
-import { encryptPassword } from "../utils";
+import { hashPassword } from "../utils";
 
 export class UsersUseCase {
   private userRepository: UsersRepository;
@@ -21,7 +21,7 @@ export class UsersUseCase {
       throw new Error("USER_ALREADY_EXISTS");
     }
 
-    password = encryptPassword(password);
+    password = await hashPassword(password);
 
     const user = await this.userRepository.createUser({
       name,

@@ -42,16 +42,6 @@ router.delete("/:email", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
-  try {
-    const users = await usersUseCase.getAllUsers();
-
-    return res.status(200).json(users);
-  } catch (error: any) {
-    return res.status(500).json({ error: error.message });
-  }
-});
-
 router.get("/:email", async (req, res) => {
   const { email } = req.params;
 
@@ -63,6 +53,16 @@ router.get("/:email", async (req, res) => {
     if (error.message === "USER_NOT_FOUND") {
       return res.status(404).json({ error: error.message });
     }
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+router.get("/", async (req, res) => {
+  try {
+    const users = await usersUseCase.getAllUsers();
+
+    return res.status(200).json(users);
+  } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }
 });

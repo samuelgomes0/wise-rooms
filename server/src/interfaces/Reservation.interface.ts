@@ -1,5 +1,5 @@
 import { Space, User } from "@prisma/client";
-import { ReservationStatus } from "./enums"; // Import enum if needed
+import { ReservationStatus } from "./enums";
 
 export interface Reservation {
   id: number;

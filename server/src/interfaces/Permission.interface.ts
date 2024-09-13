@@ -1,5 +1,5 @@
 import { Role } from "@prisma/client";
-import { PermissionType, ScopeType } from "./enums"; // Import enums if needed
+import { PermissionType, ScopeType } from "./enums";
 
 export interface Permission {
   id: number;

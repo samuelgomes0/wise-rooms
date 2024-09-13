@@ -1,6 +1,4 @@
-import { Reservation } from "@/types/Reservation";
-
-export const reservations: Reservation[] = [
+export const reservations = [
   {
     date: "2024-08-05",
     startTime: "09:00",

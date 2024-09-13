@@ -12,6 +12,7 @@ import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginSchema } from "@/schemas/login.schema";
+import { findUserByEmail } from "@/services";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, EyeIcon, EyeOffIcon } from "lucide-react";
 import Link from "next/link";
@@ -90,7 +91,11 @@ export default function LoginPage() {
                   )}
                 </button>
               </div>
-              <Button type="submit" className="mt-2">
+              <Button
+                type="submit"
+                className="mt-2"
+                onClick={() => findUserByEmail("samuel_gomes26@hotmail.com")}
+              >
                 Entrar
               </Button>
               <Label className="text-sm text-center">

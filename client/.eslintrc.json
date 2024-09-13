@@ -1,3 +1,48 @@
 {
-  "extends": "next/core-web-vitals"
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "plugins": ["react", "@typescript-eslint", "prettier"],
+  "rules": {
+    "quotes": ["error", "double"], // Aspas duplas
+    "semi": ["error", "always"], // Ponto e vírgula
+    "indent": ["error", 2], // Indentação de 2 espaços
+    "space-before-blocks": ["error", "always"], // Espaço antes e depois das chaves
+    "comma-spacing": ["error", { "before": false, "after": true }], // Espaços após vírgulas
+    "no-unused-vars": "warn", // Variáveis não utilizadas
+    "prefer-const": "error", // Preferência por const em vez de let
+    "arrow-body-style": ["error", "as-needed"], // Forçar uso de arrow functions quando possível
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto",
+        "singleQuote": false, // Aspas duplas no Prettier também
+        "semi": true, // Ponto e vírgula no Prettier
+        "tabWidth": 2, // Indentação de 2 espaços no Prettier
+        "trailingComma": "es5" // Trailing comma onde for aplicável
+      }
+    ]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
 }

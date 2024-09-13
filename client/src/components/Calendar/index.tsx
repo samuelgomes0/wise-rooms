@@ -74,7 +74,7 @@ function Calendar({ reservations }: CalendarProps) {
 
     const filteredReservations = reservations.filter((reservation) => {
       const reservationDateTime = parseISO(
-        `${reservation.date}T${reservation.startTime}`
+        `${reservation.date}T${reservation.startTime}`,
       );
       return (
         isEqual(day, new Date(reservation.date)) &&

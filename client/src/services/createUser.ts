@@ -4,7 +4,7 @@ import axios from "axios";
 export async function createUser({ name, email, password }: CreateUserDTO) {
   const requestOptions = {
     method: "POST",
-    url: "http://localhost:3003/users",
+    url: `${process.env.NEXT_PUBLIC_API_URL}/users`,
     headers: { "Content-Type": "application/json" },
     data: {
       name,

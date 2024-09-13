@@ -7,155 +7,136 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// User Model
 model User {
-  id           String        @id @default(uuid())
-  name         String
-  email        String        @unique
-  password     String
-  role         Role          @relation(fields: [roleId], references: [id])
-  roleId       Int
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  reservations Reservation[]
-  AuditLog     AuditLog[]
+  id        String     @id @default(cuid())
+  name      String
+  email     String     @unique
+  password  String
+  role      Role       @relation(fields: [roleId], references: [id])
+  roleId    Int
+  bookings  Booking[]
+  AuditLog  AuditLog[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
   @@map("users")
 }
 
-enum RoleType {
-  VIEWER_USER
-  RESERVATION_OPERATOR_USER
-  ADMIN_USER
-}
-
+// Role Model
 model Role {
-  id          Int          @id @default(autoincrement())
-  name        RoleType     @unique @default(VIEWER_USER)
+  id          Int      @id @default(autoincrement())
+  name        RoleName @unique
   description String?
-  permissions Permission[]
   users       User[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
 
   @@map("roles")
 }
 
-enum PermissionType {
-  CAN_VIEW_RESERVATIONS
-  CAN_MANAGE_RESERVATIONS
-  CAN_MANAGE_SPACES
-  CAN_MANAGE_ITEMS
-  CAN_MANAGE_SPACE_ITEMS
+// Room Model
+model Room {
+  id          Int        @id @default(autoincrement())
+  name        String
+  location    String
+  capacity    Int
+  description String?
+  resources   Resource[]
+  bookings    Booking[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@map("rooms")
 }
 
-enum ScopeType {
-  GLOBAL
-  RESERVATION_MANAGEMENT
-  SPACE_MANAGEMENT
+// Resource Model
+model Resource {
+  id          Int          @id @default(autoincrement())
+  name        String
+  type        ResourceType
+  quantity    Int
+  description String?
+  room        Room         @relation(fields: [roomId], references: [id])
+  roomId      Int
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@map("resources")
 }
 
-model Permission {
-  id         Int            @id @default(autoincrement())
-  roleId     Int
-  permission PermissionType
-  scope      ScopeType
-  role       Role           @relation(fields: [roleId], references: [id])
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime       @updatedAt
+// Booking Model
+model Booking {
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  room        Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId      Int
+  bookingDate DateTime
+  startTime   DateTime
+  endTime     DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  @@map("permissions")
+  @@map("bookings")
 }
 
-enum SpaceAvailability {
-  AVAILABLE
-  UNAVAILABLE
-  MAINTENANCE
-  INACTIVE
-}
-
-model Space {
-  id           Int               @id @default(autoincrement())
-  name         String
-  description  String?
-  location     String?
-  capacity     Int?
-  available    SpaceAvailability @default(AVAILABLE)
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
-  reservations Reservation[]
-  SpaceItem    SpaceItem[]
-
-  @@map("spaces")
-}
-
-enum ReservationStatus {
-  APPROVED
-  PENDING
-  REJECTED
-  CANCELLED
-}
-
-model Reservation {
-  id        String            @id @default(uuid())
-  userId    String
-  spaceId   Int
-  startTime DateTime
-  endTime   DateTime
-  status    ReservationStatus @default(PENDING)
-  user      User              @relation(fields: [userId], references: [id])
-  space     Space             @relation(fields: [spaceId], references: [id])
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
-
-  @@map("reservations")
-}
-
-enum AuditAction {
-  RESERVATION_CREATE
-  RESERVATION_UPDATE
-  RESERVATION_DELETE
-  SPACE_CREATE
-  SPACE_UPDATE
-  SPACE_DELETE
-  ITEM_CREATE
-  ITEM_UPDATE
-  ITEM_DELETE
-  SPACE_ITEM_CREATE
-  SPACE_ITEM_UPDATE
-  SPACE_ITEM_DELETE
-}
-
+// AuditLog Model
 model AuditLog {
-  id        String      @id @default(uuid())
+  id        Int         @id @default(autoincrement())
   userId    String
-  action    AuditAction
-  timestamp DateTime    @default(now())
-  details   String?
   user      User        @relation(fields: [userId], references: [id])
+  action    AuditAction
+  entity    AuditEntity
+  entityId  String      @default(cuid())
+  details   String?
+  createdAt DateTime    @default(now())
 
   @@map("audit_logs")
 }
 
-model Item {
-  id          Int         @id @default(autoincrement())
-  name        String
-  description String?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  spaceItems  SpaceItem[]
+// AuditAction Enum
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
 
-  @@map("items")
+  @@map("audit_actions")
 }
 
-model SpaceItem {
-  id        Int      @id @default(autoincrement())
-  spaceId   Int
-  itemId    Int
-  quantity  Int      @default(1)
-  space     Space    @relation(fields: [spaceId], references: [id])
-  item      Item     @relation(fields: [itemId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+// AuditEntity Enum
+enum AuditEntity {
+  User
+  Room
+  Booking
 
-  @@map("space_items")
+  @@map("audit_entities")
+}
+
+// RoleName Enum
+enum RoleName {
+  VIEWER
+  OPERATOR
+  ADMIN
+
+  @@map("role_names")
+}
+
+// ResourceType Enum
+enum ResourceType {
+  PROJECTOR
+  WHITEBOARD
+  COMPUTER
+  MICROPHONE
+  CAMERA
+  TELEVISION
+  VIDEO_CONFERENCE_SYSTEM
+  SOUND_SYSTEM
+  TABLE
+  CHAIR
+  AIR_CONDITIONER
+  COFFEE_MACHINE
+  WIFI
+  PRINTER
+  DOCUMENT_SCANNER
+
+  @@map("resource_types")
 }

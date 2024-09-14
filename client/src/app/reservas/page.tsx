@@ -1,4 +1,6 @@
+import { AddReservationDialog } from "@/components/AddReservationDialog";
 import { NotificationsDropdown } from "@/components/NotificationsDropdown";
+import { ReservationsTable } from "@/components/ReservationsTable";
 import { UserDropdown } from "@/components/UserDropdown";
 import {
   ReservationsHeader,
@@ -21,9 +23,12 @@ export default function ReservationsLayout() {
       </ReservationsHeader>
       <ReservationsMain>
         <ReservationsMainHeader>
-          <h2>Reservas</h2>
+          <h2 className="text-2xl font-semibold">Reservas</h2>
+          <AddReservationDialog />
         </ReservationsMainHeader>
-        <ReservationsMainContent>Conteúdo</ReservationsMainContent>
+        <ReservationsMainContent>
+          <ReservationsTable />
+        </ReservationsMainContent>
       </ReservationsMain>
     </ReservationsPage>
   );

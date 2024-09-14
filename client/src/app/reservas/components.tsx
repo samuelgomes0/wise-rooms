@@ -24,7 +24,7 @@ export function ReservationsHeader({
     <header
       className={cn(
         "border-b p-6 flex justify-between items-center",
-        className,
+        className
       )}
     >
       {children}
@@ -47,14 +47,18 @@ export function ReservationsMain({
   className,
   children,
 }: DashboardGenericProps) {
-  return <main className={cn("", className)}>{children}</main>;
+  return <main className={cn("p-6", className)}>{children}</main>;
 }
 
 export function ReservationsMainHeader({
   className,
   children,
 }: DashboardGenericProps) {
-  return <header className={cn("p-6", className)}>{children}</header>;
+  return (
+    <header className={cn("flex items-center justify-between", className)}>
+      {children}
+    </header>
+  );
 }
 
 export function ReservationsMainContent({

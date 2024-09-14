@@ -21,6 +21,7 @@
   },
   "plugins": ["react", "@typescript-eslint", "prettier"],
   "rules": {
+    "react/react-in-jsx-scope": "off", // Remover importação do React
     "quotes": ["error", "double"], // Aspas duplas
     "semi": ["error", "always"], // Ponto e vírgula
     "indent": ["error", 2], // Indentação de 2 espaços

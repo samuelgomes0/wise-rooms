@@ -12,20 +12,33 @@ type SidebarLinkProps = {
 
 export function Sidebar({ className, children }: SidebarGenericProps) {
   return (
-    <aside className={cn("border-r max-w-56", className)}>{children}</aside>
+    <aside
+      className={cn(
+        "border-r max-w-56 flex flex-col items-center justify-between",
+        className
+      )}
+    >
+      {children}
+    </aside>
   );
 }
 
 export function SidebarHeader({ className, children }: SidebarGenericProps) {
-  return <header className={cn(className)}>{children}</header>;
+  return <header className={cn("p-6", className)}>{children}</header>;
+}
+
+export function SidebarMain({ className, children }: SidebarGenericProps) {
+  return (
+    <main className={cn("flex flex-grow p-6", className)}>{children}</main>
+  );
 }
 
 export function SidebarNav({ className, children }: SidebarGenericProps) {
-  return <nav className={cn(className)}>{children}</nav>;
+  return <nav className={cn("", className)}>{children}</nav>;
 }
 
 export function SidebarNavList({ className, children }: SidebarGenericProps) {
-  return <ul className={cn("flex flex-col gap-2", className)}>{children}</ul>;
+  return <ul className={cn("flex flex-col gap-4", className)}>{children}</ul>;
 }
 
 export function SidebarNavListLink({
@@ -42,6 +55,8 @@ export function SidebarNavListLink({
 
 export function SidebarFooter({ className, children }: SidebarGenericProps) {
   return (
-    <footer className={cn("border-t m-auto", className)}>{children}</footer>
+    <footer className={cn("border-t m-auto w-full p-6", className)}>
+      {children}
+    </footer>
   );
 }

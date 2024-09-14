@@ -10,7 +10,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createUser } from "@/services";
+import UserService from "@/services/UserService";
+import { IFormData } from "@/types/formData";
 import { ArrowLeft, EyeIcon, EyeOffIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -20,20 +21,28 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<IFormData>();
 
-  const onSubmit = (data) => {
-    if (data.password !== data.confirmPassword) {
+  const onSubmit = async ({
+    name,
+    email,
+    password,
+    confirmPassword,
+  }: IFormData) => {
+    if (password !== confirmPassword) {
       alert("As senhas não conferem.");
       return;
     }
 
-    // Passar os dados do usuário para a função createUser
-    createUser({
-      name: data.name,
-      email: data.email,
-      password: data.password,
-    });
+    try {
+      await UserService.create({ name, email, password }).then(
+        () => (window.location.href = "/entrar")
+      );
+    } catch (error) {
+      throw new Error(
+        error instanceof Error ? error.message : "Erro desconhecido."
+      );
+    }
   };
 
   return (

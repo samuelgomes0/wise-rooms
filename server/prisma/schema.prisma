@@ -124,8 +124,9 @@ enum RoleName {
 
 enum BookingStatus {
   PENDING
-  APPROVED
-  REJECTED
+  CONFIRMED
+  ACTIVE
+  COMPLETED
   CANCELLED
 
   @@map("booking_statuses")

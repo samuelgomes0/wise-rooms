@@ -105,9 +105,10 @@ enum AuditAction {
 
 // AuditEntity Enum
 enum AuditEntity {
-  User
-  Room
-  Booking
+  USER
+  ROOM
+  RESOURCE
+  BOOKING
 
   @@map("audit_entities")
 }

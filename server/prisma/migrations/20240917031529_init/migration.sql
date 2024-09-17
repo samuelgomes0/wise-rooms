@@ -2,7 +2,7 @@
 CREATE TYPE "audit_actions" AS ENUM ('CREATE', 'UPDATE', 'DELETE');
 
 -- CreateEnum
-CREATE TYPE "audit_entities" AS ENUM ('User', 'Room', 'Booking');
+CREATE TYPE "audit_entities" AS ENUM ('USER', 'ROOM', 'RESOURCE', 'BOOKING');
 
 -- CreateEnum
 CREATE TYPE "role_names" AS ENUM ('VIEWER', 'OPERATOR', 'ADMIN');

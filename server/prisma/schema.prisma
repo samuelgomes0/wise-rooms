@@ -65,16 +65,17 @@ model Resource {
 
 // Booking Model
 model Booking {
-  id          String   @id @default(cuid())
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String        @id @default(cuid())
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
-  room        Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  room        Room          @relation(fields: [roomId], references: [id], onDelete: Cascade)
   roomId      Int
   bookingDate DateTime
   startTime   DateTime
   endTime     DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  status      BookingStatus @default(PENDING)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 
   @@map("bookings")
 }
@@ -118,6 +119,15 @@ enum RoleName {
   ADMIN
 
   @@map("role_names")
+}
+
+enum BookingStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+
+  @@map("booking_statuses")
 }
 
 // ResourceType Enum

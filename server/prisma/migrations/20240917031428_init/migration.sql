@@ -8,6 +8,9 @@ CREATE TYPE "audit_entities" AS ENUM ('User', 'Room', 'Booking');
 CREATE TYPE "role_names" AS ENUM ('VIEWER', 'OPERATOR', 'ADMIN');
 
 -- CreateEnum
+CREATE TYPE "booking_statuses" AS ENUM ('PENDING', 'APPROVED', 'REJECTED', 'CANCELLED');
+
+-- CreateEnum
 CREATE TYPE "resource_types" AS ENUM ('PROJECTOR', 'WHITEBOARD', 'COMPUTER', 'MICROPHONE', 'CAMERA', 'TELEVISION', 'VIDEO_CONFERENCE_SYSTEM', 'SOUND_SYSTEM', 'TABLE', 'CHAIR', 'AIR_CONDITIONER', 'COFFEE_MACHINE', 'WIFI', 'PRINTER', 'DOCUMENT_SCANNER');
 
 -- CreateTable
@@ -67,6 +70,7 @@ CREATE TABLE "bookings" (
     "bookingDate" TIMESTAMP(3) NOT NULL,
     "startTime" TIMESTAMP(3) NOT NULL,
     "endTime" TIMESTAMP(3) NOT NULL,
+    "status" "booking_statuses" NOT NULL DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

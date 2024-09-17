@@ -1,3 +1,11 @@
+import Dashboard from "@/components/Dashboard";
+import { Sidebar } from "@/components/Sidebar";
+
 export default function Home() {
-  return <h1>Dashboard</h1>;
+  return (
+    <>
+      <Sidebar />
+      <Dashboard />
+    </>
+  );
 }

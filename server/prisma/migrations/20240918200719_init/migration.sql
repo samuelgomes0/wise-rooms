@@ -71,6 +71,7 @@ CREATE TABLE "bookings" (
     "startTime" TIMESTAMP(3) NOT NULL,
     "endTime" TIMESTAMP(3) NOT NULL,
     "status" "booking_statuses" NOT NULL DEFAULT 'PENDING',
+    "description" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

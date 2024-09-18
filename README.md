@@ -24,19 +24,19 @@ Wise Rooms é um sistema intuitivo de agendamento e reserva de espaços instituc
 ## Funcionalidades Principais
 
 - **Gerenciamento de Usuários e Autenticação**  
-   Suporte para criação de contas, login e atribuição de papéis como Admin, Operador e Usuário, com diferentes permissões de acesso.
+   Suporte para criação de contas, login e atribuição de papéis com diferentes permissões de acesso.
 
 - **Reserva de Salas**  
    Usuários podem visualizar a disponibilidade das salas e realizar reservas para horários e datas específicas, com verificação de conflitos de agendamento.
 
 - **Gerenciamento de Recursos**  
-   Administração de recursos associados às salas (como projetores, computadores, etc.), permitindo a adição, edição e remoção de equipamentos.
+   Administração de recursos associados às salas, permitindo a adição, edição e remoção de equipamentos.
 
 - **Histórico de Reservas e Cancelamentos**  
    Usuários podem visualizar o histórico de suas reservas e realizar cancelamentos, se necessário.
 
 - **Gerenciamento de Salas**  
-   Criação, edição e exclusão de salas com informações detalhadas, como nome, localização, capacidade e descrição.
+   Criação, edição e exclusão de salas com informações detalhadas.
 
 
 ## Instalação
@@ -47,7 +47,7 @@ Siga as etapas abaixo para rodar o projeto localmente.
 
 - [Node.js](https://nodejs.org/)
 - [PostgreSQL](https://www.postgresql.org/)
-- [Yarn](https://yarnpkg.com/) ou [npm](https://www.npmjs.com/)
+- [npm](https://www.npmjs.com/) ou [Yarn](https://yarnpkg.com/)
 
 ### Passos para rodar o projeto
 

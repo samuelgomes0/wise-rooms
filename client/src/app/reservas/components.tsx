@@ -5,10 +5,7 @@ type DashboardGenericProps<T = unknown> = {
   className?: string;
 } & T;
 
-export function ReservationsPage({
-  className,
-  children,
-}: DashboardGenericProps) {
+export function BookingsPage({ className, children }: DashboardGenericProps) {
   return (
     <div className={cn("flex flex-col w-full h-screen", className)}>
       {children}

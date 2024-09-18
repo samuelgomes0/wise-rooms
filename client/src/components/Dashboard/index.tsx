@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { filterBookings } from "@/utils";
 import { Search } from "lucide-react";
 import { useState } from "react";
 import { BookingModal } from "../BookingModal";
@@ -23,41 +24,23 @@ export default function Dashboard() {
   const [dateFilter, setDateFilter] = useState("");
   const itemsPerPage = 30;
 
-  const filteredBookings = bookings
-    .filter(
-      (booking) =>
-        (booking.guest.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          booking.room.includes(searchTerm)) &&
-        (statusFilter === "all" || booking.status === statusFilter) &&
-        (dateFilter === "" || booking.date === dateFilter)
-    )
-    .map((booking) => ({
-      ...booking,
-      id: booking.id.toString(),
-    }))
-    .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
-  const totalPages = Math.ceil(
-    bookings.filter(
-      (booking) =>
-        (booking.guest.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          booking.room.includes(searchTerm)) &&
-        (statusFilter === "all" || booking.status === statusFilter) &&
-        (dateFilter === "" || booking.date === dateFilter)
-    ).length / itemsPerPage
+  const { filteredBookings, totalPages } = filterBookings(
+    bookings,
+    searchTerm,
+    statusFilter,
+    dateFilter,
+    currentPage,
+    itemsPerPage
   );
 
-  // Função para mudar de página
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
 
   return (
     <div className="flex h-screen w-full bg-gray-100">
-      {/* Main Content */}
       <main className="flex-1 p-8 overflow-hidden">
         <div className="max-w-7xl mx-auto h-full flex flex-col">
-          {/* Header */}
           <header className="flex justify-between items-center mb-8">
             <div className="flex items-center">
               <Avatar className="h-12 w-12">
@@ -74,7 +57,6 @@ export default function Dashboard() {
             </div>
             <BookingModal />
           </header>
-          {/* Search and Filters */}
           <div className="mb-6 flex gap-4">
             <div className="relative flex-1">
               <Search
@@ -83,7 +65,7 @@ export default function Dashboard() {
               />
               <Input
                 className="pl-10"
-                placeholder="Buscar por sala ou responsável"
+                placeholder="Buscar por reserva, responsável ou sala"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -108,9 +90,7 @@ export default function Dashboard() {
               className="max-w-xs"
             />
           </div>
-          {/* Bookings Table */}
           <BookingsTable bookings={filteredBookings} />
-          {/* Pagination */}
           <TablePageNavigation
             indexOfFirstItem={(currentPage - 1) * itemsPerPage}
             indexOfLastItem={currentPage * itemsPerPage}

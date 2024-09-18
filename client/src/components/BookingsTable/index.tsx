@@ -18,19 +18,24 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { BookingsTableProps } from "@/types";
-import { getStatusBadge } from "@/utils/getStatusBadge";
+import { getStatusBadge } from "@/utils";
 import { MoreHorizontal } from "lucide-react";
 
 export function BookingsTable({ bookings }: BookingsTableProps) {
+  const handleCopyId = (id: string) => {
+    navigator.clipboard.writeText(id);
+    alert(`ID ${id} copiado para a área de transferência`);
+  };
+
   return (
     <div className="bg-white shadow rounded-lg overflow-hidden flex-1">
       <div className="h-[100%] overflow-auto">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>ID</TableHead>
-              <TableHead>Sala</TableHead>
+              <TableHead>Reserva</TableHead>
               <TableHead>Responsável</TableHead>
+              <TableHead>Sala</TableHead>
               <TableHead>Início</TableHead>
               <TableHead>Fim</TableHead>
               <TableHead>Data</TableHead>
@@ -42,9 +47,14 @@ export function BookingsTable({ bookings }: BookingsTableProps) {
             {bookings.map(
               ({ id, room, guest, date, checkIn, checkOut, status }) => (
                 <TableRow key={id}>
-                  <TableCell className="py-2">{id}</TableCell>
-                  <TableCell className="py-2 font-semibold">{room}</TableCell>
+                  <TableCell
+                    className="py-2 max-w-[150px] truncate cursor-pointer font-semibold"
+                    onClick={() => handleCopyId(id)}
+                  >
+                    {id}
+                  </TableCell>
                   <TableCell className="py-2">{guest}</TableCell>
+                  <TableCell className="py-2">{room}</TableCell>
                   <TableCell className="py-2">{checkIn}</TableCell>
                   <TableCell className="py-2">{checkOut}</TableCell>
                   <TableCell className="py-2">{date}</TableCell>

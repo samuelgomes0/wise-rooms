@@ -1,6 +1,5 @@
 "use client";
 
-import { Header } from "@/components/Header";
 import { useState } from "react";
 
 export default function Recursos() {
@@ -12,19 +11,7 @@ export default function Recursos() {
 
   return (
     <div className="flex h-screen w-full">
-      <main className="flex-1 p-8">
-        <Header
-          userInitials="SG"
-          headerTitle="Recursos"
-          userRole="Administrador"
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
-          dateFilter={dateFilter}
-          setDateFilter={setDateFilter}
-        />
-      </main>
+      <main className="flex-1 p-8"></main>
     </div>
   );
 }

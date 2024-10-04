@@ -48,19 +48,17 @@ export function BookingsTable({ bookings }: BookingsTableProps) {
               ({ id, room, guest, date, checkIn, checkOut, status }) => (
                 <TableRow key={id}>
                   <TableCell
-                    className="py-2 max-w-[150px] truncate cursor-pointer font-semibold"
+                    className="max-w-[150px] truncate cursor-pointer font-semibold"
                     onClick={() => handleCopyId(id)}
                   >
                     {id}
                   </TableCell>
-                  <TableCell className="py-2">{guest}</TableCell>
-                  <TableCell className="py-2">{room}</TableCell>
-                  <TableCell className="py-2">{checkIn}</TableCell>
-                  <TableCell className="py-2">{checkOut}</TableCell>
-                  <TableCell className="py-2">{date}</TableCell>
-                  <TableCell className="py-2">
-                    {getStatusBadge(status)}
-                  </TableCell>
+                  <TableCell>{guest}</TableCell>
+                  <TableCell>{room}</TableCell>
+                  <TableCell>{checkIn}</TableCell>
+                  <TableCell>{checkOut}</TableCell>
+                  <TableCell>{date}</TableCell>
+                  <TableCell>{getStatusBadge(status)}</TableCell>
                   <TableCell className="text-right py-2">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

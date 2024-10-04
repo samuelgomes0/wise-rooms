@@ -78,7 +78,7 @@ export const bookings: BookingData[] = [
     checkOut: `${Math.floor(Math.random() * 24)
       .toString()
       .padStart(2, "0")}:00`,
-    date: `${Math.floor(Math.random() * 28) + 1}/09/2024`,
+    date: `${Math.floor(Math.random() * 28) + 1}/10/2024`,
     status: ["Pendente", "Confirmado", "Ativo", "Completado", "Cancelado"][
       Math.floor(Math.random() * 5)
     ],

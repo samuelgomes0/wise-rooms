@@ -11,7 +11,7 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"} fixed inset-y-0 left-0 z-50 w-72 bg-white shadow transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
+      className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"} left-0 top-0 z-50 w-72 bg-white shadow transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
       role="navigation"
     >
       <div className="flex items-center justify-between p-4">

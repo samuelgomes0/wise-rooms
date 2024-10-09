@@ -1,4 +1,4 @@
-export type BookingsTableProps = {
+export type TBookingsTableProps = {
   bookings: {
     id: string;
     room: string;

@@ -1,4 +1,4 @@
-import { BookingData } from "@/types/BookingData.interface";
+import { BookingData } from "@/types/IBooking";
 
 const randomNames = [
   "John Doe",

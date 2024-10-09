@@ -1,4 +1,4 @@
-export interface BookingData {
+export interface IBooking {
   id: string;
   room: string;
   guest: string;

@@ -1,11 +1,11 @@
-import { BookingData } from "./BookingData.interface";
-import { BookingsTableProps } from "./BookingsTableProps.type";
 import { CreateUserDTO } from "./createUser";
+import { IBooking } from "./IBooking";
 import { TablePageNavigationProps } from "./TablePageNavigationProps.type";
+import { TBookingsTableProps } from "./TBookingsTableProps.type";
 
 export type {
-  BookingData,
-  BookingsTableProps,
   CreateUserDTO,
+  IBooking,
   TablePageNavigationProps,
+  TBookingsTableProps,
 };

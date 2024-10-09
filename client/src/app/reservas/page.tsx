@@ -72,8 +72,8 @@ export default function Reservas() {
   const totalPages = Math.ceil(filteredReservations.length / itemsPerPage);
 
   return (
-    <div className="flex h-screen w-full">
-      <main className="flex-1 p-8">
+    <div className="flex p-8 w-full">
+      <main className="flex-1">
         <header className="bg-white rounded-lg shadow p-6 mb-8">
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-4">

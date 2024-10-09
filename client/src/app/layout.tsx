@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body className={`${inter.className} flex h-screen bg-gray-100`}>
+      <body className={`${inter.className} flex bg-gray-100`}>
         <AuthProvider>
           <Sidebar />
           <>{children}</>

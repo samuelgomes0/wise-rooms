@@ -94,7 +94,7 @@ export const Calendar: React.FC = () => {
   const weekDates = getWeekDates();
 
   return (
-    <div className="flex h-screen w-full">
+    <div className="flex  w-full">
       <main className="flex-1 overflow-y-auto p-4">
         <CalendarHeader
           filter={filter}

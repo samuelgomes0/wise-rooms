@@ -46,7 +46,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="w-full h-screen flex justify-center items-center">
+    <main className="w-full flex justify-center items-center">
       <Link href="/" className="absolute top-8 left-8">
         <ArrowLeft size={24} />
       </Link>

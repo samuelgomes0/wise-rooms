@@ -22,8 +22,8 @@ export function SidebarNav() {
 
   const managementNavItems = [
     { label: "Reservas", icon: ClipboardIcon, path: "/reservas" },
-    { label: "Recursos", icon: HammerIcon, path: "/recursos" },
     { label: "Salas", icon: HouseIcon, path: "/salas" },
+    { label: "Recursos", icon: HammerIcon, path: "/recursos" },
     { label: "Usuários", icon: UserCog2Icon, path: "/usuarios" },
   ];
 
@@ -32,7 +32,7 @@ export function SidebarNav() {
       <ul className="space-y-2">
         {mainNavItems.map(({ label, icon: Icon, path }) => (
           <li key={label}>
-            <Link href={path}>
+            <Link href={path} aria-hidden>
               <Button
                 variant="ghost"
                 className={`w-full justify-start ${isActive(path) ? "bg-gray-100" : ""}`}

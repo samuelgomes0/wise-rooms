@@ -1,0 +1,17 @@
+export const resourceTypes = [
+  "Projetor",
+  "Quadro branco",
+  "Computador",
+  "Microfone",
+  "Câmera",
+  "Televisão",
+  "Sistema de videoconferência",
+  "Sistema de som",
+  "Mesa",
+  "Cadeira",
+  "Ar condicionado",
+  "Máquina de café",
+  "Wifi",
+  "Impressora",
+  "Escaneador de documentos",
+];

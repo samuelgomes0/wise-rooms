@@ -34,7 +34,7 @@ import { IBooking } from "@/types/IBooking";
 import { getStatusBadge } from "@/utils";
 import { format, parse } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { CalendarIcon, MoreHorizontal, SearchIcon } from "lucide-react";
+import { CalendarIcon, MoreHorizontalIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
 
 export default function Reservas() {
@@ -169,7 +169,7 @@ export default function Reservas() {
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <GenericTable
             columns={[
-              { header: "ID", accessor: "id" },
+              { header: "Código", accessor: "id" },
               { header: "Responsável", accessor: "guest" },
               { header: "Sala", accessor: "room" },
               { header: "Início", accessor: "checkIn" },
@@ -193,7 +193,7 @@ export default function Reservas() {
                       variant="ghost"
                       aria-label="Ações da reserva"
                     >
-                      <MoreHorizontal />
+                      <MoreHorizontalIcon />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-full">

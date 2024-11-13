@@ -48,7 +48,7 @@ export default function Recursos() {
   const totalPages = Math.ceil(filteredResources.length / itemsPerPage);
 
   return (
-    <div className="flex p-8 w-full">
+    <div className="flex p-4 w-full">
       <main className="flex-1">
         <header className="bg-white rounded-lg shadow p-6 mb-8">
           <div className="flex justify-between items-center mb-8">

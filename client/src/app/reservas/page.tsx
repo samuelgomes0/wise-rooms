@@ -72,7 +72,7 @@ export default function Reservas() {
   const totalPages = Math.ceil(filteredReservations.length / itemsPerPage);
 
   return (
-    <div className="flex p-8 w-full">
+    <div className="flex p-4 w-full">
       <main className="flex-1">
         <header className="bg-white rounded-lg shadow p-6 mb-8">
           <div className="flex justify-between items-center mb-8">
@@ -123,7 +123,7 @@ export default function Reservas() {
             <SearchFilter
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
-              placeholder="Buscar por reserva, responsável ou sala"
+              placeholder="Buscar por código, responsável ou sala"
             />
             <div className="relative">
               <Popover>

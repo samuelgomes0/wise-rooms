@@ -37,7 +37,7 @@ export default function Usuarios() {
     (resource) =>
       resource.id.toString().includes(searchTerm) ||
       resource.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      resource.type.toLowerCase().includes(searchTerm.toLowerCase())
+      resource.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const paginatedUsers = filteredUsers.slice(
@@ -47,7 +47,7 @@ export default function Usuarios() {
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
 
   return (
-    <div className="flex p-8 w-full">
+    <div className="flex p-4 w-full">
       <main className="flex-1">
         <header className="bg-white rounded-lg shadow p-6 mb-8">
           <div className="flex justify-between items-center mb-8">
@@ -104,7 +104,7 @@ export default function Usuarios() {
               <SelectContent>
                 <SelectItem value="Todos">Todos</SelectItem>
                 <SelectItem value="Usuário">Usuário</SelectItem>
-                <SelectItem value="Administrador">Operador de Salas</SelectItem>
+                <SelectItem value="Operador">Operador</SelectItem>
                 <SelectItem value="Administrador">Administrador</SelectItem>
               </SelectContent>
             </Select>

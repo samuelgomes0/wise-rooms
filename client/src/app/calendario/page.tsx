@@ -349,7 +349,7 @@ export default function Calendario() {
         date.setDate(currentDate.getDate() + index);
         return (
           <div key={day} className="bg-white p-2 text-center">
-            <div className="font-semibold">{day}</div>
+            <div className="font-semibold">{day.slice(0, 3)}</div>
             <div className="text-sm text-gray-600">
               {date.getDate()}/{date.getMonth() + 1}
             </div>
@@ -473,43 +473,12 @@ export default function Calendario() {
     );
   };
 
-  const renderRoomOccupancy = () => (
-    <div className="mt-8 bg-white p-4 rounded-lg shadow">
-      <h2 className="text-xl font-bold mb-4">Ocupação das Salas</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {ROOMS.map((room) => (
-          <div key={room.name} className={`${room.color} p-4 rounded-lg`}>
-            <h3 className="font-bold mb-2">{room.name}</h3>
-            <div className="space-y-2">
-              {Object.entries(reservations).flatMap(
-                ([dateKey, dayReservations]) =>
-                  Object.values(dayReservations)
-                    .filter((r: any) => r.room === room.name)
-                    .map((reservation: any, idx) => (
-                      <div key={`${dateKey}-${idx}`} className="text-sm">
-                        {new Date(dateKey).toLocaleDateString("pt-BR", {
-                          weekday: "short",
-                          day: "numeric",
-                          month: "short",
-                        })}
-                        : {reservation.startTime} - {reservation.endTime}
-                      </div>
-                    ))
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
   return (
-    <div className="container mx-auto p-4 bg-gray-50 rounded-lg">
+    <div className="container mx-auto p-4">
       {renderHeader()}
       {viewMode === "day" && renderDayView()}
       {viewMode === "week" && renderWeekView()}
       {viewMode === "month" && renderMonthView()}
-      {renderRoomOccupancy()}
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent>

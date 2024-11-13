@@ -1,6 +1,5 @@
 "use client";
 
-import { resources as resourcesData } from "@/api/resources";
 import GenericForm from "@/components/GenericForm";
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
@@ -28,7 +27,7 @@ import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
 
 export default function Recursos() {
-  const [resources, setResources] = useState(resourcesData);
+  const [resources, setResources] = useState([]);
   const [statusFilter, setStatusFilter] = useState("Todos");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);

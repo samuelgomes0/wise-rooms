@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -21,9 +22,10 @@ function GenericModal({
       <DialogTrigger asChild>
         <Button variant="default">{triggerText}</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>Preencha os campos abaixo</DialogDescription>
         </DialogHeader>
         {children}
       </DialogContent>

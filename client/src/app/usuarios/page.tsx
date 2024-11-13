@@ -1,6 +1,5 @@
 "use client";
 
-import { users as usersData } from "@/api/users";
 import GenericForm from "@/components/GenericForm";
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
@@ -27,7 +26,7 @@ import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
 
 export default function Usuarios() {
-  const [users, setUsers] = useState(usersData);
+  const [users, setUsers] = useState([]);
   const [statusFilter, setStatusFilter] = useState("Todos");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);

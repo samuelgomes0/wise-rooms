@@ -474,7 +474,7 @@ export default function Calendario() {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="p-4">
       {renderHeader()}
       {viewMode === "day" && renderDayView()}
       {viewMode === "week" && renderWeekView()}

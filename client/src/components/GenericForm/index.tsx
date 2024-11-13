@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { DialogTrigger } from "../ui/dialog";
 
 type FormField = {
   name: string;
@@ -24,11 +25,13 @@ function GenericForm({
   fields,
   onSubmit,
   defaultValues,
+  onCancel,
 }: {
   schema: z.ZodObject<any>;
   fields: FormField[];
   onSubmit: (data: any) => void;
   defaultValues: any;
+  onCancel: () => void;
 }) {
   const form = useForm({
     resolver: zodResolver(schema),
@@ -63,9 +66,16 @@ function GenericForm({
             )}
           />
         ))}
-        <Button type="submit" className="w-full">
-          Salvar
-        </Button>
+        <div className="flex gap-4">
+          <DialogTrigger asChild>
+            <Button variant="outline" onClick={onCancel} className="w-full">
+              Cancelar
+            </Button>
+          </DialogTrigger>
+          <Button type="submit" className="w-full">
+            Salvar
+          </Button>
+        </div>
       </form>
     </Form>
   );

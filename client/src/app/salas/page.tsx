@@ -1,6 +1,5 @@
 "use client";
 
-import { spaces } from "@/api/rooms";
 import GenericForm from "@/components/GenericForm";
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
@@ -21,7 +20,7 @@ import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
 
 export default function Salas() {
-  const [rooms, setRooms] = useState(spaces);
+  const [rooms, setRooms] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;

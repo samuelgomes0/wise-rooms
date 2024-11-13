@@ -1,6 +1,5 @@
 "use client";
 
-import { bookings } from "@/api/bookings";
 import GenericForm from "@/components/GenericForm";
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
@@ -38,7 +37,7 @@ import { CalendarIcon, MoreHorizontalIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
 
 export default function Reservas() {
-  const [reservations, setReservations] = useState(bookings);
+  const [reservations, setReservations] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [dateFilter, setDateFilter] = useState<Date | undefined>(undefined);
   const [statusFilter, setStatusFilter] = useState("Todos");

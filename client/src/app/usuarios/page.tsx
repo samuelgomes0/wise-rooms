@@ -1,6 +1,5 @@
 "use client";
 
-import GenericForm from "@/components/GenericForm";
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
 import Pagination from "@/components/Pagination";
@@ -22,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { UsersForm } from "@/components/UsersForm";
 import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -67,21 +67,7 @@ export default function Usuarios() {
               title="Adicionar Novo Usuário"
               triggerText="+ Novo Usuário"
             >
-              <GenericForm
-                fields={[
-                  { name: "name", label: "Nome", type: "text" },
-                  { name: "email", label: "E-mail", type: "email" },
-                  { name: "password", label: "Senha", type: "password" },
-                  {
-                    name: "role",
-                    label: "Função",
-                    type: "select",
-                  },
-                ]}
-                defaultValues={{
-                  role: "Usuário",
-                }}
-              />
+              <UsersForm />
             </GenericModal>
           </div>
           <div className="flex gap-4 ">

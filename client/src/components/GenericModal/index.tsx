@@ -25,7 +25,9 @@ function GenericModal({
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>Preencha os campos abaixo</DialogDescription>
+          <DialogDescription>
+            Preencha os campos abaixo para continuar.
+          </DialogDescription>
         </DialogHeader>
         {children}
       </DialogContent>

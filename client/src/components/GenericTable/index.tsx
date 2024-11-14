@@ -29,15 +29,23 @@ function GenericTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((row, idx) => (
-          <TableRow key={idx}>
-            {columns.map((col) => (
-              <TableCell className="py-3" key={col.accessor}>
-                {row[col.accessor]}
-              </TableCell>
-            ))}
+        {data.length > 0 ? (
+          data.map((row, idx) => (
+            <TableRow key={idx}>
+              {columns.map((col) => (
+                <TableCell className="py-3" key={col.accessor}>
+                  {row[col.accessor]}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))
+        ) : (
+          <TableRow>
+            <TableCell colSpan={columns.length} className="py-3">
+              Nenhum resultado encontrado.
+            </TableCell>
           </TableRow>
-        ))}
+        )}
       </TableBody>
     </Table>
   );

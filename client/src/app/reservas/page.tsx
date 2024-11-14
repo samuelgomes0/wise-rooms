@@ -1,9 +1,9 @@
 "use client";
 
-import GenericForm from "@/components/GenericForm";
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
 import Pagination from "@/components/Pagination";
+import { ReservationForm } from "@/components/ReservationsForm";
 import SearchFilter from "@/components/SearchFilter";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -28,8 +28,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { reservationSchema } from "@/schemas";
-import { IBooking } from "@/types/IBooking";
 import { getStatusBadge } from "@/utils";
 import { format, parse } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -44,11 +42,7 @@ export default function Reservas() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const handleAddReservation = (data: IBooking) => {
-    const { id } = data;
-    setReservations([...reservations, { ...data, id: id.toString() }]);
-  };
-
+  // Filtragem de reservas
   const filteredReservations = reservations.filter((reservation) => {
     const matchesSearch =
       reservation.id.toString().includes(searchTerm) ||
@@ -64,6 +58,7 @@ export default function Reservas() {
     return matchesSearch && matchesDate && matchesStatus;
   });
 
+  // Paginação de reservas
   const paginatedReservations = filteredReservations.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -92,26 +87,7 @@ export default function Reservas() {
               title="Adicionar Nova Reserva"
               triggerText="+ Nova Reserva"
             >
-              <GenericForm
-                schema={reservationSchema}
-                fields={[
-                  { name: "responsible", label: "Responsável", type: "text" },
-                  { name: "room", label: "Sala", type: "text" },
-                  { name: "start", label: "Início", type: "time" },
-                  { name: "end", label: "Fim", type: "time" },
-                  { name: "date", label: "Data", type: "date" },
-                  { name: "status", label: "Status", type: "text" },
-                ]}
-                defaultValues={{
-                  responsible: "",
-                  room: "",
-                  start: "",
-                  end: "",
-                  date: "",
-                  status: "Pendente",
-                }}
-                onSubmit={handleAddReservation}
-              />
+              <ReservationForm />
             </GenericModal>
           </div>
           <div className="flex gap-4 relative">

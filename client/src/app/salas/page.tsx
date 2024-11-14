@@ -1,9 +1,9 @@
 "use client";
 
-import GenericForm from "@/components/GenericForm";
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
 import Pagination from "@/components/Pagination";
+import { RoomsForm } from "@/components/RoomsForm";
 import SearchFilter from "@/components/SearchFilter";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { roomSchema } from "@/schemas"; // Certifique-se de definir esse schema para validação no formulário
 import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -62,20 +61,7 @@ export default function Salas() {
               </div>
             </div>
             <GenericModal title="Adicionar Nova Sala" triggerText="+ Nova Sala">
-              <GenericForm
-                schema={roomSchema}
-                fields={[
-                  { name: "name", label: "Nome", type: "text" },
-                  { name: "description", label: "Descrição", type: "text" },
-                  { name: "capacity", label: "Capacidade", type: "number" },
-                ]}
-                defaultValues={{
-                  name: "",
-                  description: "",
-                  capacity: "",
-                }}
-                onSubmit={handleAddRoom}
-              />
+              <RoomsForm />
             </GenericModal>
           </div>
           <div className="flex gap-4 relative">

@@ -1,9 +1,9 @@
 "use client";
 
-import GenericForm from "@/components/GenericForm";
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
 import Pagination from "@/components/Pagination";
+import { ResourcesForm } from "@/components/ResourcesForm";
 import SearchFilter from "@/components/SearchFilter";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -68,18 +68,7 @@ export default function Recursos() {
               title="Adicionar Novo Recurso"
               triggerText="+ Novo Recurso"
             >
-              <GenericForm
-                fields={[
-                  { name: "name", label: "Nome", type: "text" },
-                  { name: "type", label: "Tipo", type: "text" },
-                  { name: "quantity", label: "Quantidade", type: "number" },
-                ]}
-                defaultValues={{
-                  name: "",
-                  description: "",
-                  capacity: "",
-                }}
-              />
+              <ResourcesForm />
             </GenericModal>
           </div>
           <div className="flex gap-4 ">

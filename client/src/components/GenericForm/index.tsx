@@ -45,7 +45,10 @@ function GenericForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="space-y-6 max-h-[500px] overflow-y-auto p-2"
+      >
         {fields.map((field) => (
           <FormField
             key={field.name}

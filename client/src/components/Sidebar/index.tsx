@@ -13,7 +13,7 @@ export function Sidebar() {
     <aside
       className={`${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } sticky top-0 z-50 w-72 h-screen bg-white shadow transition-transform duration-300 ease-in-out lg:translate-x-0`}
+      } sticky top-0 z-50 w-60 h-screen bg-white shadow transition-transform duration-300 ease-in-out lg:translate-x-0`}
       role="navigation"
     >
       <div className="flex items-center justify-between p-4">

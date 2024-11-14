@@ -3,7 +3,7 @@
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
 import Pagination from "@/components/Pagination";
-import { ResourcesForm } from "@/components/ResourcesForm";
+import { ResourceRegistrationForm } from "@/components/ResourceRegistrationForm";
 import SearchFilter from "@/components/SearchFilter";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -68,7 +68,7 @@ export default function Recursos() {
               title="Adicionar Novo Recurso"
               triggerText="+ Novo Recurso"
             >
-              <ResourcesForm />
+              <ResourceRegistrationForm />
             </GenericModal>
           </div>
           <div className="flex gap-4 ">

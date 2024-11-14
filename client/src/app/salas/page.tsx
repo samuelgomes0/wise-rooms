@@ -3,7 +3,7 @@
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
 import Pagination from "@/components/Pagination";
-import { RoomsForm } from "@/components/RoomsForm";
+import { RoomRegistrationForm } from "@/components/RoomRegistrationForm";
 import SearchFilter from "@/components/SearchFilter";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -23,11 +23,6 @@ export default function Salas() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-
-  const handleAddRoom = (data) => {
-    const { id } = data;
-    setRooms([...rooms, { ...data, id: id.toString() }]);
-  };
 
   const filteredRooms = rooms.filter(
     (room) =>
@@ -61,7 +56,7 @@ export default function Salas() {
               </div>
             </div>
             <GenericModal title="Adicionar Nova Sala" triggerText="+ Nova Sala">
-              <RoomsForm />
+              <RoomRegistrationForm />
             </GenericModal>
           </div>
           <div className="flex gap-4 relative">

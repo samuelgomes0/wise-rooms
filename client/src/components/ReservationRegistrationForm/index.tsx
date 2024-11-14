@@ -33,35 +33,31 @@ import {
 import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
-  responsavel: z.string().min(2, {
+  guest: z.string().min(2, {
     message: "O nome do responsável deve ter pelo menos 2 caracteres.",
   }),
-  sala: z.string({
-    required_error: "Por favor selecione uma sala.",
+  room: z.string({
+    required_error: "Selecione uma sala.",
   }),
-  dataReserva: z.date({
+  date: z.date({
     required_error: "Uma data é necessária.",
   }),
-  horarioInicio: z.string({
-    required_error: "Por favor selecione um horário de início.",
+  timeStart: z.string({
+    required_error: "Selecione um horário de início.",
   }),
-  horarioFim: z.string({
-    required_error: "Por favor selecione um horário de fim.",
-  }),
-  status: z.string({
-    required_error: "Por favor selecione um status.",
+  timeEnd: z.string({
+    required_error: "Selecione um horário de fim.",
   }),
 });
 
-export function ReservationsForm() {
+export function ReservationRegistrationForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      responsavel: "",
-      sala: "",
-      horarioInicio: "",
-      horarioFim: "",
-      status: "",
+      guest: "",
+      room: "",
+      timeStart: "",
+      timeEnd: "",
     },
   });
 
@@ -78,7 +74,7 @@ export function ReservationsForm() {
       >
         <FormField
           control={form.control}
-          name="responsavel"
+          name="guest"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Responsável</FormLabel>
@@ -91,7 +87,7 @@ export function ReservationsForm() {
         />
         <FormField
           control={form.control}
-          name="sala"
+          name="room"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Sala</FormLabel>
@@ -113,7 +109,7 @@ export function ReservationsForm() {
         />
         <FormField
           control={form.control}
-          name="dataReserva"
+          name="date"
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Data da Reserva</FormLabel>
@@ -155,7 +151,7 @@ export function ReservationsForm() {
         <div className="flex gap-4">
           <FormField
             control={form.control}
-            name="horarioInicio"
+            name="timeStart"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Horário de Início</FormLabel>
@@ -185,7 +181,7 @@ export function ReservationsForm() {
           />
           <FormField
             control={form.control}
-            name="horarioFim"
+            name="timeEnd"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Horário de Fim</FormLabel>

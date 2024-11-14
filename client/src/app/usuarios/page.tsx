@@ -21,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { UsersForm } from "@/components/UsersForm";
+import { UserRegistrationForm } from "@/components/UserRegistrationForm";
 import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -67,7 +67,7 @@ export default function Usuarios() {
               title="Adicionar Novo Usuário"
               triggerText="+ Novo Usuário"
             >
-              <UsersForm />
+              <UserRegistrationForm />
             </GenericModal>
           </div>
           <div className="flex gap-4 ">

@@ -3,7 +3,7 @@
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
 import Pagination from "@/components/Pagination";
-import { ReservationForm } from "@/components/ReservationsForm";
+import { ReservationRegistrationForm } from "@/components/ReservationRegistrationForm";
 import SearchFilter from "@/components/SearchFilter";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -87,7 +87,7 @@ export default function Reservas() {
               title="Adicionar Nova Reserva"
               triggerText="+ Nova Reserva"
             >
-              <ReservationForm />
+              <ReservationRegistrationForm />
             </GenericModal>
           </div>
           <div className="flex gap-4 relative">

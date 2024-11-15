@@ -70,7 +70,7 @@ export default function Usuarios() {
               <UserRegistrationForm />
             </GenericModal>
           </div>
-          <div className="flex gap-4 ">
+          <div className="flex gap-4">
             <div className="flex gap-4 relative flex-1">
               <SearchIcon
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -83,14 +83,14 @@ export default function Usuarios() {
               />
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[200px]">
                 <SelectValue placeholder="Todos" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Todos">Todos</SelectItem>
-                <SelectItem value="Usuário">Usuário</SelectItem>
-                <SelectItem value="Operador">Operador</SelectItem>
-                <SelectItem value="Administrador">Administrador</SelectItem>
+                <SelectItem value="Todos">Todos os cargos</SelectItem>
+                <SelectItem value="viewer">Visualizador</SelectItem>
+                <SelectItem value="operator">Operador</SelectItem>
+                <SelectItem value="admin">Administrador</SelectItem>
               </SelectContent>
             </Select>
           </div>

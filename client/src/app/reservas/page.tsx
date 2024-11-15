@@ -105,7 +105,7 @@ export default function Reservas() {
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-[240px] justify-start text-left font-normal"
+                    className="w-[200px] justify-start text-left font-normal"
                   >
                     {dateFilter ? (
                       format(dateFilter, "PPP", { locale: ptBR })
@@ -127,11 +127,11 @@ export default function Reservas() {
               </Popover>
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[300px]">
                 <SelectValue placeholder="Todos" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Todos">Todos</SelectItem>
+                <SelectItem value="Todos">Todos os status</SelectItem>
                 <SelectItem value="Pendente">Pendente</SelectItem>
                 <SelectItem value="Confirmado">Confirmado</SelectItem>
                 <SelectItem value="Ativo">Ativo</SelectItem>

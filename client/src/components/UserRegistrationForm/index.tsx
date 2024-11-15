@@ -66,7 +66,7 @@ export function UserRegistrationForm() {
             <FormItem>
               <FormLabel>Nome</FormLabel>
               <FormControl>
-                <Input placeholder="Nome completo" {...field} />
+                <Input placeholder="Seu nome" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -77,9 +77,9 @@ export function UserRegistrationForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>E-mail</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="Email" {...field} />
+                <Input type="email" placeholder="Seu e-mail" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -92,7 +92,7 @@ export function UserRegistrationForm() {
             <FormItem>
               <FormLabel>Senha</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Senha" {...field} />
+                <Input type="password" placeholder="Sua senha" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -111,9 +111,9 @@ export function UserRegistrationForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="admin">Administrador</SelectItem>
-                  <SelectItem value="editor">Editor</SelectItem>
                   <SelectItem value="viewer">Visualizador</SelectItem>
+                  <SelectItem value="operator">Operador</SelectItem>
+                  <SelectItem value="admin">Administrador</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />

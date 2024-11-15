@@ -71,7 +71,7 @@ export default function Recursos() {
               <ResourceRegistrationForm />
             </GenericModal>
           </div>
-          <div className="flex gap-4 ">
+          <div className="flex gap-4">
             <div className="flex gap-4 relative flex-1">
               <SearchIcon
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -84,11 +84,11 @@ export default function Recursos() {
               />
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[200px]">
                 <SelectValue placeholder="Todos" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Todos">Todos</SelectItem>
+                <SelectItem value="Todos">Todos os tipos</SelectItem>
                 {resourceTypes.map((type) => (
                   <SelectItem key={type} value={type}>
                     {type}

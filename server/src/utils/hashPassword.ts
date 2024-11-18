@@ -11,6 +11,6 @@ export async function hashPassword(password: string): Promise<string> {
 
     return hash;
   } catch (err) {
-    throw new Error("Erro ao gerar hash da senha");
+    throw new Error("Erro ao gerar hash da senha.");
   }
 }

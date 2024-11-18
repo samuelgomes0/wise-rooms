@@ -19,10 +19,4 @@ export interface IBookingCreateDTO {
 
 export interface IBookingRepository {
   createBooking(booking: IBookingCreateDTO): Promise<IBooking>;
-  findBookingByRoomAndDate(
-    roomId: number,
-    bookingDate: Date,
-    startTime: Date,
-    endTime: Date
-  ): Promise<IBooking[]>;
 }

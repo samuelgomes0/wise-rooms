@@ -6,6 +6,7 @@ const router = Router();
 const userRepository = new UserRepository();
 const userUseCase = new UserUseCase(userRepository);
 
+// POST /user/create
 router.post("/create", async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -26,17 +27,33 @@ router.post("/create", async (req, res) => {
   }
 });
 
-router.get("/:email", async (req, res) => {
-  const { email } = req.params;
+router.get("/", async (req, res) => {
+  const { name } = req.query as { name: string };
 
-  console.log(email);
+  if (name) {
+    try {
+      const user = await userUseCase.findByName(name);
+
+      const response = {
+        message: "User found.",
+        user,
+      };
+
+      return res.status(200).json(response);
+    } catch (error) {
+      return res.status(400).json({
+        error:
+          error instanceof Error ? error.message : "An unknown error occurred.",
+      });
+    }
+  }
 
   try {
-    const user = await userUseCase.findByEmail(email);
+    const users = await userUseCase.getAll();
 
     const response = {
-      message: "User found.",
-      user,
+      message: "Users found.",
+      users,
     };
 
     return res.status(200).json(response);

@@ -12,7 +12,7 @@
   "author": "Samuel Gomes Rosa",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^5.17.0",
+    "@prisma/client": "^5.22.0",
     "argon2": "^0.41.1",
     "cors": "^2.8.5",
     "express": "^4.19.2"
@@ -22,7 +22,7 @@
     "@types/express": "^4.17.21",
     "@types/node": "^20.14.11",
     "nodemon": "^3.1.4",
-    "prisma": "^5.19.1",
+    "prisma": "^5.22.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
   },

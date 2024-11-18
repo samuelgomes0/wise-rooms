@@ -15,16 +15,15 @@ export class BookingUseCase {
     startTime,
     endTime,
   }: IBookingCreateDTO): Promise<IBooking> {
-    const bookingOnSameTime =
-      await this.bookingRepository.findBookingByRoomAndDate(
-        roomId,
-        bookingDate,
-        startTime,
-        endTime
-      );
+    const hasConflict = await this.bookingRepository.checkConflict(
+      roomId,
+      bookingDate,
+      startTime,
+      endTime
+    );
 
-    if (bookingOnSameTime) {
-      throw new Error("Booking already exists");
+    if (hasConflict) {
+      throw new Error("Booking conflict detected. Please choose another time.");
     }
 
     return await this.bookingRepository.createBooking({

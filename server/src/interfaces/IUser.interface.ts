@@ -22,6 +22,8 @@ export interface IUserCreateDTO {
 export interface IUserRepository {
   create(user: IUserCreateDTO): Promise<IUser>;
   findByEmail(email: string): Promise<IUser | null>;
+  findByName(name: string): Promise<IUser | null>;
+  getAll(): Promise<IUser[]>;
   update(user: IUserCreateDTO): Promise<IUser>;
   delete(id: string): Promise<IUser>;
 }

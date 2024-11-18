@@ -32,6 +32,25 @@ export class UserRepository implements IUserRepository {
     });
   }
 
+  async findByName(name: string): Promise<IUser | null> {
+    return await prisma.user.findFirst({
+      where: {
+        name,
+      },
+      include: {
+        role: true,
+      },
+    });
+  }
+
+  async getAll(): Promise<IUser[]> {
+    return await prisma.user.findMany({
+      include: {
+        role: true,
+      },
+    });
+  }
+
   async update({ name, email, password }: IUserCreateDTO): Promise<IUser> {
     return await prisma.user.update({
       where: {

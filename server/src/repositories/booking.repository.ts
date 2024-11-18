@@ -24,19 +24,29 @@ export class BookingRepository implements IBookingRepository {
     });
   }
 
-  async findBookingByRoomAndDate(
+  async checkConflict(
     roomId: number,
     bookingDate: Date,
     startTime: Date,
     endTime: Date
-  ): Promise<IBooking[]> {
-    return await prisma.booking.findMany({
+  ): Promise<boolean> {
+    const conflict = await prisma.booking.findFirst({
       where: {
         roomId,
         bookingDate,
-        startTime,
-        endTime,
+        OR: [
+          {
+            startTime: {
+              lt: endTime,
+            },
+            endTime: {
+              gt: startTime,
+            },
+          },
+        ],
       },
     });
+
+    return !!conflict; // Retorna `true` se houver conflito
   }
 }

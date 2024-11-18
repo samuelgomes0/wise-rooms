@@ -50,6 +50,30 @@ export class UserUseCase {
     return userWithoutPasswordAndRoleId;
   }
 
+  async findByName(
+    name: string
+  ): Promise<Omit<IUser, "password" | "roleId"> | null> {
+    const user = await this.userRepository.findByName(name);
+
+    if (!user) {
+      throw new Error("User not found.");
+    }
+
+    const { password, roleId, ...userWithoutPasswordAndRoleId } = user;
+
+    return userWithoutPasswordAndRoleId;
+  }
+
+  async getAll(): Promise<Omit<IUser, "password" | "roleId">[]> {
+    const users = await this.userRepository.getAll();
+
+    return users.map((user) => {
+      const { password, roleId, ...userWithoutPasswordAndRoleId } = user;
+
+      return userWithoutPasswordAndRoleId;
+    });
+  }
+
   async update({ name, email, password }: IUserCreateDTO): Promise<IUser> {
     const user = await this.userRepository.findByEmail(email);
 

@@ -9,13 +9,17 @@ const bookingUseCase = new BookingUseCase(bookingRepository);
 router.post("/create", async (req, res) => {
   const { userId, roomId, bookingDate, startTime, endTime } = req.body;
 
+  if (!userId || !roomId || !bookingDate || !startTime || !endTime) {
+    return res.status(400).json({ error: "Missing required fields." });
+  }
+
   try {
     const booking = await bookingUseCase.createBooking({
       userId,
       roomId,
-      bookingDate,
-      startTime,
-      endTime,
+      bookingDate: new Date(bookingDate),
+      startTime: new Date(startTime),
+      endTime: new Date(endTime),
     });
 
     const response = {

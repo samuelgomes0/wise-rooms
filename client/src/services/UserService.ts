@@ -14,6 +14,10 @@ class UserService {
       password,
     });
   }
+
+  async findByName(name: string) {
+    return await apiServiceInstance.get(`/users/${name}`);
+  }
 }
 
 const userServiceInstance = new UserService();

@@ -31,23 +31,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import userServiceInstance from "@/services/UserService";
 
 const formSchema = z.object({
-  guest: z.string().min(2, {
-    message: "O nome do responsável deve ter pelo menos 2 caracteres.",
-  }),
-  room: z.string({
-    required_error: "Selecione uma sala.",
-  }),
+  guest: z.string().min(1, "É necessário um responsável pela reserva."),
+  room: z.string().min(1, "É necessário uma sala para a reserva."),
   date: z.date({
-    required_error: "Uma data é necessária.",
+    required_error: "Selecione uma data para a reserva.",
   }),
-  timeStart: z.string({
-    required_error: "Selecione um horário de início.",
-  }),
-  timeEnd: z.string({
-    required_error: "Selecione um horário de fim.",
-  }),
+  startTime: z.string().min(1, "Selecione um horário de início."),
+  endTime: z.string().min(1, "Selecione um horário de fim."),
 });
 
 export function ReservationRegistrationForm() {
@@ -56,14 +49,18 @@ export function ReservationRegistrationForm() {
     defaultValues: {
       guest: "",
       room: "",
-      timeStart: "",
-      timeEnd: "",
+      startTime: "",
+      endTime: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // Aqui você pode adicionar a lógica para enviar os dados para o servidor
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const timeStartDate = new Date(`2021-01-01T${values.startTime}`);
+    const timeEndDate = new Date(`2021-01-01T${values.endTime}`);
+  }
+
+  function handleUserSearch(query: string) {
+    userServiceInstance.findByName(query);
   }
 
   return (
@@ -79,7 +76,11 @@ export function ReservationRegistrationForm() {
             <FormItem>
               <FormLabel>Responsável</FormLabel>
               <FormControl>
-                <Input placeholder="Nome do responsável" {...field} />
+                <Input
+                  placeholder="Nome do responsável"
+                  {...field}
+                  onChange={({ target }) => handleUserSearch(target.value)}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -151,7 +152,7 @@ export function ReservationRegistrationForm() {
         <div className="flex gap-4">
           <FormField
             control={form.control}
-            name="timeStart"
+            name="startTime"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Horário de Início</FormLabel>
@@ -181,7 +182,7 @@ export function ReservationRegistrationForm() {
           />
           <FormField
             control={form.control}
-            name="timeEnd"
+            name="endTime"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Horário de Fim</FormLabel>

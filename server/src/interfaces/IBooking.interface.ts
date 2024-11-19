@@ -2,7 +2,7 @@ export interface IBooking {
   id: string;
   userId: string;
   roomId: number;
-  bookingDate: Date;
+  date: Date;
   startTime: Date;
   endTime: Date;
   createdAt: Date;
@@ -12,11 +12,12 @@ export interface IBooking {
 export interface IBookingCreateDTO {
   userId: string;
   roomId: number;
-  bookingDate: Date;
+  date: Date;
   startTime: Date;
   endTime: Date;
 }
 
 export interface IBookingRepository {
   createBooking(booking: IBookingCreateDTO): Promise<IBooking>;
+  getAll(): Promise<IBooking[]>;
 }

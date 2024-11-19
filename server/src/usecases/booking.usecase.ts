@@ -11,13 +11,13 @@ export class BookingUseCase {
   async createBooking({
     userId,
     roomId,
-    bookingDate,
+    date,
     startTime,
     endTime,
   }: IBookingCreateDTO): Promise<IBooking> {
     const hasConflict = await this.bookingRepository.checkConflict(
       roomId,
-      bookingDate,
+      date,
       startTime,
       endTime
     );
@@ -29,9 +29,13 @@ export class BookingUseCase {
     return await this.bookingRepository.createBooking({
       userId,
       roomId,
-      bookingDate,
+      date,
       startTime,
       endTime,
     });
+  }
+
+  async getAll(): Promise<IBooking[]> {
+    return await this.bookingRepository.getAll();
   }
 }

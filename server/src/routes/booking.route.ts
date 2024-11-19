@@ -7,9 +7,9 @@ const bookingRepository = new BookingRepository();
 const bookingUseCase = new BookingUseCase(bookingRepository);
 
 router.post("/create", async (req, res) => {
-  const { userId, roomId, bookingDate, startTime, endTime } = req.body;
+  const { userId, roomId, date, startTime, endTime } = req.body;
 
-  if (!userId || !roomId || !bookingDate || !startTime || !endTime) {
+  if (!userId || !roomId || !date || !startTime || !endTime) {
     return res.status(400).json({ error: "Missing required fields." });
   }
 
@@ -17,7 +17,7 @@ router.post("/create", async (req, res) => {
     const booking = await bookingUseCase.createBooking({
       userId,
       roomId,
-      bookingDate: new Date(bookingDate),
+      date: new Date(date),
       startTime: new Date(startTime),
       endTime: new Date(endTime),
     });
@@ -28,6 +28,19 @@ router.post("/create", async (req, res) => {
     };
 
     return res.status(201).json(response);
+  } catch (error) {
+    return res.status(400).json({
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred.",
+    });
+  }
+});
+
+router.get("/", async (req, res) => {
+  try {
+    const bookings = await bookingRepository.getAll();
+
+    return res.status(200).json(bookings);
   } catch (error) {
     return res.status(400).json({
       error:

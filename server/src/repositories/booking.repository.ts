@@ -9,7 +9,7 @@ export class BookingRepository implements IBookingRepository {
   async createBooking({
     userId,
     roomId,
-    bookingDate,
+    date,
     startTime,
     endTime,
   }: IBookingCreateDTO): Promise<IBooking> {
@@ -17,7 +17,7 @@ export class BookingRepository implements IBookingRepository {
       data: {
         userId,
         roomId,
-        bookingDate,
+        date,
         startTime,
         endTime,
       },
@@ -26,14 +26,14 @@ export class BookingRepository implements IBookingRepository {
 
   async checkConflict(
     roomId: number,
-    bookingDate: Date,
+    date: Date,
     startTime: Date,
     endTime: Date
   ): Promise<boolean> {
     const conflict = await prisma.booking.findFirst({
       where: {
         roomId,
-        bookingDate,
+        date,
         OR: [
           {
             startTime: {
@@ -48,5 +48,14 @@ export class BookingRepository implements IBookingRepository {
     });
 
     return !!conflict; // Retorna `true` se houver conflito
+  }
+
+  async getAll(): Promise<IBooking[]> {
+    return await prisma.booking.findMany({
+      include: {
+        user: true,
+        room: true,
+      },
+    });
   }
 }

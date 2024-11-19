@@ -70,7 +70,7 @@ model Booking {
   userId      String
   room        Room          @relation(fields: [roomId], references: [id], onDelete: Cascade)
   roomId      Int
-  bookingDate DateTime
+  date        DateTime
   startTime   DateTime
   endTime     DateTime
   status      BookingStatus @default(PENDING)

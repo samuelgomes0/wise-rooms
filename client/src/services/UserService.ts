@@ -15,6 +15,10 @@ class UserService {
     });
   }
 
+  async getAll() {
+    return await apiServiceInstance.get("/users");
+  }
+
   async findByName(name: string) {
     return await apiServiceInstance.get(`/users/${name}`);
   }

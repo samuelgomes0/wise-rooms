@@ -1,9 +1,9 @@
 "use client";
 
+import { BookingRegistrationForm } from "@/components/BookingRegistrationForm";
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
 import Pagination from "@/components/Pagination";
-import { ReservationRegistrationForm } from "@/components/ReservationRegistrationForm";
 import SearchFilter from "@/components/SearchFilter";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -28,14 +28,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import bookingServiceInstance from "@/services/BookingService";
+import { IBooking } from "@/types";
 import { getStatusBadge } from "@/utils";
 import { format, parse } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CalendarIcon, MoreHorizontalIcon, SearchIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Reservas() {
-  const [reservations, setReservations] = useState([]);
+  const [bookings, setBookings] = useState<IBooking[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [dateFilter, setDateFilter] = useState<Date | undefined>(undefined);
   const [statusFilter, setStatusFilter] = useState("Todos");
@@ -43,27 +45,33 @@ export default function Reservas() {
   const itemsPerPage = 10;
 
   // Filtragem de reservas
-  const filteredReservations = reservations.filter((reservation) => {
+  const filteredBookings = bookings.filter((booking: IBooking) => {
     const matchesSearch =
-      reservation.id.toString().includes(searchTerm) ||
-      reservation.guest.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      reservation.room.toLowerCase().includes(searchTerm.toLowerCase());
+      booking.id.toString().includes(searchTerm) ||
+      booking.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      booking.room.name.toLowerCase().includes(searchTerm.toLowerCase());
+
+    console.log(booking);
 
     const matchesDate =
-      !dateFilter || reservation.date === format(dateFilter, "dd/MM/yyyy");
+      !dateFilter || booking.date === format(dateFilter, "dd/MM/yyyy");
 
     const matchesStatus =
-      statusFilter === "Todos" || reservation.status === statusFilter;
+      statusFilter === "Todos" || booking.status === statusFilter;
 
     return matchesSearch && matchesDate && matchesStatus;
   });
 
   // Paginação de reservas
-  const paginatedReservations = filteredReservations.slice(
+  const paginatedBookings = filteredBookings.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-  const totalPages = Math.ceil(filteredReservations.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredBookings.length / itemsPerPage);
+
+  useEffect(() => {
+    bookingServiceInstance.getAll().then(({ data }) => setBookings(data));
+  }, []);
 
   return (
     <div className="flex p-4 w-full">
@@ -87,7 +95,7 @@ export default function Reservas() {
               title="Adicionar Nova Reserva"
               triggerText="+ Nova Reserva"
             >
-              <ReservationRegistrationForm />
+              <BookingRegistrationForm />
             </GenericModal>
           </div>
           <div className="flex gap-4 relative">
@@ -153,13 +161,13 @@ export default function Reservas() {
               { header: "Status", accessor: "status" },
               { header: "Opções", accessor: "options" },
             ]}
-            data={paginatedReservations.map((reservation) => ({
-              ...reservation,
+            data={paginatedBookings.map((booking: IBooking) => ({
+              ...booking,
               date: format(
-                parse(reservation.date, "dd/MM/yyyy", new Date()),
+                parse(booking.date, "dd/MM/yyyy", new Date()),
                 "dd/MM/yyyy"
               ),
-              status: getStatusBadge(reservation.status),
+              status: getStatusBadge(booking.status),
               options: (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -188,8 +196,8 @@ export default function Reservas() {
         </div>
         <div className="flex justify-between items-center mt-4">
           <p className="text-sm text-gray-500">
-            Exibindo {paginatedReservations.length} de{" "}
-            {filteredReservations.length} reservas
+            Exibindo {paginatedBookings.length} de {filteredBookings.length}{" "}
+            reservas
           </p>
           <Pagination
             currentPage={currentPage}

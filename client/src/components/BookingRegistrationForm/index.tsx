@@ -31,37 +31,72 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import bookingServiceInstance from "@/services/BookingService";
 import userServiceInstance from "@/services/UserService";
+import { useEffect, useState } from "react";
 
 const formSchema = z.object({
-  guest: z.string().min(1, "É necessário um responsável pela reserva."),
+  user: z.string().min(1, "É necessário um responsável pela reserva."),
   room: z.string().min(1, "É necessário uma sala para a reserva."),
   date: z.date({
     required_error: "Selecione uma data para a reserva.",
   }),
-  startTime: z.string().min(1, "Selecione um horário de início."),
-  endTime: z.string().min(1, "Selecione um horário de fim."),
+  startTime: z.date({
+    required_error: "Selecione um horário de início.",
+  }),
+  endTime: z.date({
+    required_error: "Selecione um horário de fim.",
+  }),
 });
 
-export function ReservationRegistrationForm() {
+export function BookingRegistrationForm() {
+  const [users, setUsers] = useState([]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      guest: "",
+      user: "",
       room: "",
-      startTime: "",
-      endTime: "",
+      date: undefined,
+      startTime: undefined,
+      endTime: undefined,
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const timeStartDate = new Date(`2021-01-01T${values.startTime}`);
-    const timeEndDate = new Date(`2021-01-01T${values.endTime}`);
+    const dateISO = values.date.toISOString().split("T")[0]; // Captura apenas a parte da data (YYYY-MM-DD)
+
+    // Combina a data com os horários
+    const timeStartDate = new Date(`${dateISO}T${values.startTime}:00`);
+    const timeEndDate = new Date(`${dateISO}T${values.endTime}:00`);
+
+    console.log({
+      userId: "cm3nke2ld0000enx07jihovpd", // Substitua com o ID real
+      roomId: 1, // Substitua com o ID real
+      date: values.date.toISOString(),
+      startTime: timeStartDate.toISOString(),
+      endTime: timeEndDate.toISOString(),
+    });
+
+    try {
+      await bookingServiceInstance.create({
+        userId: "cm3nke2ld0000enx07jihovpd", // Substitua com o ID real
+        roomId: 1, // Substitua com o ID real
+        date: values.date,
+        startTime: timeStartDate,
+        endTime: timeEndDate,
+      });
+      alert("Reserva criada com sucesso!");
+    } catch (error) {
+      console.error("Erro ao criar reserva:", error);
+    }
   }
 
-  function handleUserSearch(query: string) {
-    userServiceInstance.findByName(query);
-  }
+  useEffect(() => {
+    userServiceInstance.getAll().then(({ data }) => {
+      console.log(data.users);
+    });
+  }, []);
 
   return (
     <Form {...form}>
@@ -76,11 +111,7 @@ export function ReservationRegistrationForm() {
             <FormItem>
               <FormLabel>Responsável</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Nome do responsável"
-                  {...field}
-                  onChange={({ target }) => handleUserSearch(target.value)}
-                />
+                <Input placeholder="Nome do responsável" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

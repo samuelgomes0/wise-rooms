@@ -31,29 +31,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { registerBookingSchema } from "@/schemas";
 import bookingServiceInstance from "@/services/BookingService";
-import userServiceInstance from "@/services/UserService";
-import { useEffect, useState } from "react";
-
-const formSchema = z.object({
-  user: z.string().min(1, "É necessário um responsável pela reserva."),
-  room: z.string().min(1, "É necessário uma sala para a reserva."),
-  date: z.date({
-    required_error: "Selecione uma data para a reserva.",
-  }),
-  startTime: z.date({
-    required_error: "Selecione um horário de início.",
-  }),
-  endTime: z.date({
-    required_error: "Selecione um horário de fim.",
-  }),
-});
 
 export function BookingRegistrationForm() {
-  const [users, setUsers] = useState([]);
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof registerBookingSchema>>({
+    resolver: zodResolver(registerBookingSchema),
     defaultValues: {
       user: "",
       room: "",
@@ -63,25 +46,16 @@ export function BookingRegistrationForm() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const dateISO = values.date.toISOString().split("T")[0]; // Captura apenas a parte da data (YYYY-MM-DD)
+  async function onSubmit(values: z.infer<typeof registerBookingSchema>) {
+    const dateISO = values.date.toISOString().split("T")[0];
 
-    // Combina a data com os horários
     const timeStartDate = new Date(`${dateISO}T${values.startTime}:00`);
     const timeEndDate = new Date(`${dateISO}T${values.endTime}:00`);
 
-    console.log({
-      userId: "cm3nke2ld0000enx07jihovpd", // Substitua com o ID real
-      roomId: 1, // Substitua com o ID real
-      date: values.date.toISOString(),
-      startTime: timeStartDate.toISOString(),
-      endTime: timeEndDate.toISOString(),
-    });
-
     try {
       await bookingServiceInstance.create({
-        userId: "cm3nke2ld0000enx07jihovpd", // Substitua com o ID real
-        roomId: 1, // Substitua com o ID real
+        userId: "cm3rrukdg0000b85baub4rj1o",
+        roomId: 1,
         date: values.date,
         startTime: timeStartDate,
         endTime: timeEndDate,
@@ -92,21 +66,23 @@ export function BookingRegistrationForm() {
     }
   }
 
-  useEffect(() => {
-    userServiceInstance.getAll().then(({ data }) => {
-      console.log(data.users);
-    });
-  }, []);
-
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(
+          (data) => {
+            console.log("Dados válidos:", data);
+            onSubmit(data);
+          },
+          (errors) => {
+            console.log("Erros de validação:", errors);
+          }
+        )}
         className="flex flex-col gap-4"
       >
         <FormField
           control={form.control}
-          name="guest"
+          name="user"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Responsável</FormLabel>

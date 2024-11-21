@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 
 export const getStatusBadge = (status: string) => {
   switch (status) {
-    case "Confirmado":
+    case "CONFIRMED":
       return (
         <Badge
           variant="outline"
@@ -12,7 +12,7 @@ export const getStatusBadge = (status: string) => {
           Confirmado
         </Badge>
       );
-    case "Ativo":
+    case "ACTIVE":
       return (
         <Badge
           variant="default"
@@ -21,7 +21,7 @@ export const getStatusBadge = (status: string) => {
           Ativo
         </Badge>
       );
-    case "Completado":
+    case "COMPLETED":
       return (
         <Badge
           variant="secondary"
@@ -30,7 +30,7 @@ export const getStatusBadge = (status: string) => {
           Completado
         </Badge>
       );
-    case "Cancelado":
+    case "CANCELLED":
       return (
         <Badge
           variant="destructive"
@@ -39,7 +39,7 @@ export const getStatusBadge = (status: string) => {
           Cancelado
         </Badge>
       );
-    default:
+    case "PENDING":
       return (
         <Badge
           variant="outline"

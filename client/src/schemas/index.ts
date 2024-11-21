@@ -1,3 +1,3 @@
-import { reservationSchema } from "./reservation.schema";
+import { registerBookingSchema } from "./registerBooking.schema";
 
-export { reservationSchema };
+export { registerBookingSchema };

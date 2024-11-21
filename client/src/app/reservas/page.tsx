@@ -31,7 +31,8 @@ import {
 import bookingServiceInstance from "@/services/BookingService";
 import { IBooking } from "@/types";
 import { getStatusBadge } from "@/utils";
-import { format, parse } from "date-fns";
+import { filterBookings } from "@/utils/filterBookings"; // Função de filtragem
+import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CalendarIcon, MoreHorizontalIcon, SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -44,33 +45,20 @@ export default function Reservas() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // Filtragem de reservas
-  const filteredBookings = bookings.filter((booking: IBooking) => {
-    const matchesSearch =
-      booking.id.toString().includes(searchTerm) ||
-      booking.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      booking.room.name.toLowerCase().includes(searchTerm.toLowerCase());
-
-    console.log(booking);
-
-    const matchesDate =
-      !dateFilter || booking.date === format(dateFilter, "dd/MM/yyyy");
-
-    const matchesStatus =
-      statusFilter === "Todos" || booking.status === statusFilter;
-
-    return matchesSearch && matchesDate && matchesStatus;
+  // Filtragem e Paginação usando a função separada
+  const { filteredBookings, paginatedBookings, totalPages } = filterBookings({
+    bookings,
+    searchTerm,
+    statusFilter,
+    dateFilter,
+    currentPage,
+    itemsPerPage,
   });
 
-  // Paginação de reservas
-  const paginatedBookings = filteredBookings.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-  const totalPages = Math.ceil(filteredBookings.length / itemsPerPage);
-
   useEffect(() => {
-    bookingServiceInstance.getAll().then(({ data }) => setBookings(data));
+    bookingServiceInstance.getAll().then(({ data }) => {
+      setBookings(data);
+    });
   }, []);
 
   return (
@@ -140,11 +128,11 @@ export default function Reservas() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="Todos">Todos os status</SelectItem>
-                <SelectItem value="Pendente">Pendente</SelectItem>
-                <SelectItem value="Confirmado">Confirmado</SelectItem>
-                <SelectItem value="Ativo">Ativo</SelectItem>
-                <SelectItem value="Completado">Completado</SelectItem>
-                <SelectItem value="Cancelado">Cancelado</SelectItem>
+                <SelectItem value="PENDING">Pendente</SelectItem>
+                <SelectItem value="CONFIRMED">Confirmado</SelectItem>
+                <SelectItem value="ACTIVE">Ativo</SelectItem>
+                <SelectItem value="COMPLETED">Completado</SelectItem>
+                <SelectItem value="CANCELLED">Cancelado</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -153,20 +141,21 @@ export default function Reservas() {
           <GenericTable
             columns={[
               { header: "Código", accessor: "id" },
-              { header: "Responsável", accessor: "guest" },
+              { header: "Responsável", accessor: "user" },
               { header: "Sala", accessor: "room" },
-              { header: "Início", accessor: "checkIn" },
-              { header: "Fim", accessor: "checkOut" },
+              { header: "Início", accessor: "startTime" },
+              { header: "Fim", accessor: "endTime" },
               { header: "Data", accessor: "date" },
               { header: "Status", accessor: "status" },
               { header: "Opções", accessor: "options" },
             ]}
             data={paginatedBookings.map((booking: IBooking) => ({
               ...booking,
-              date: format(
-                parse(booking.date, "dd/MM/yyyy", new Date()),
-                "dd/MM/yyyy"
-              ),
+              user: booking.user.name,
+              room: booking.room.name,
+              date: format(parseISO(booking.date), "dd/MM/yyyy"),
+              startTime: format(parseISO(booking.startTime), "HH:mm"),
+              endTime: format(parseISO(booking.endTime), "HH:mm"),
               status: getStatusBadge(booking.status),
               options: (
                 <DropdownMenu>

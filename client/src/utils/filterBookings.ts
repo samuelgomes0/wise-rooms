@@ -1,63 +1,49 @@
-import { BookingData } from "@/types";
+import { IBooking } from "@/types";
+import { parseISO } from "date-fns";
 
-export function filterBookings(
-  bookings: BookingData[],
-  searchTerm: string,
-  statusFilter: string,
-  dateFilter: string,
-  currentPage: number,
-  itemsPerPage: number
-) {
+interface FilterBookingsParams {
+  bookings: IBooking[];
+  searchTerm: string;
+  statusFilter: string;
+  dateFilter?: Date;
+  currentPage: number;
+  itemsPerPage: number;
+}
+
+export function filterBookings({
+  bookings,
+  searchTerm,
+  statusFilter,
+  dateFilter,
+  currentPage,
+  itemsPerPage,
+}: FilterBookingsParams) {
   const lowerSearchTerm = searchTerm.toLowerCase();
-  const startSlice = (currentPage - 1) * itemsPerPage;
-  const endSlice = currentPage * itemsPerPage;
 
-  const filteredBookings = bookings
-    .filter((booking) => {
-      const idString = booking.id.toString().toLowerCase();
-      const roomString = booking.room.toString().toLowerCase();
-      const guestString = booking.guest.toLowerCase();
+  // Filtra as reservas com base nos critérios fornecidos
+  const filteredBookings = bookings.filter((booking) => {
+    const matchesSearch =
+      booking.id.toString().toLowerCase().includes(lowerSearchTerm) ||
+      booking.user.name.toLowerCase().includes(lowerSearchTerm) ||
+      booking.room.name.toLowerCase().includes(lowerSearchTerm);
 
-      const matchesSearchTerm =
-        idString.startsWith(lowerSearchTerm) ||
-        guestString.includes(lowerSearchTerm) ||
-        roomString.includes(lowerSearchTerm);
+    const matchesDate =
+      !dateFilter ||
+      parseISO(booking.date.toString()).toDateString() ===
+        dateFilter.toDateString();
 
-      const statusMatch =
-        statusFilter === "all" || booking.status === statusFilter;
+    const matchesStatus =
+      statusFilter === "Todos" || booking.status === statusFilter;
 
-      const bookingDate = new Date(booking.date.split("/").reverse().join("-"));
-      const dateMatch =
-        dateFilter === "" ||
-        new Date(dateFilter).toDateString() === bookingDate.toDateString();
+    return matchesSearch && matchesDate && matchesStatus;
+  });
 
-      return matchesSearchTerm && statusMatch && dateMatch;
-    })
-    .map((booking) => ({
-      ...booking,
-      id: booking.id.toString(),
-    }))
-    .slice(startSlice, endSlice);
-
-  const totalPages = Math.ceil(
-    bookings.filter((booking) => {
-      const guestMatch = booking.guest
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
-      const roomMatch = booking.room
-        .toString()
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
-      const statusMatch =
-        statusFilter === "all" || booking.status === statusFilter;
-      const dateMatch =
-        dateFilter === "" ||
-        new Date(dateFilter).toDateString() ===
-          new Date(booking.date.split("/").reverse().join("-")).toDateString();
-
-      return guestMatch || (roomMatch && statusMatch && dateMatch);
-    }).length / itemsPerPage
+  // Pagina os resultados filtrados
+  const totalPages = Math.ceil(filteredBookings.length / itemsPerPage);
+  const paginatedBookings = filteredBookings.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
-  return { filteredBookings, totalPages };
+  return { filteredBookings, paginatedBookings, totalPages };
 }

@@ -3,7 +3,6 @@ import {
   CalendarIcon,
   ClipboardIcon,
   HammerIcon,
-  HomeIcon,
   HouseIcon,
   UserCog2Icon,
 } from "lucide-react";
@@ -15,10 +14,7 @@ export function SidebarNav() {
 
   const isActive = (path: string) => pathname === path;
 
-  const mainNavItems = [
-    { label: "Dashboard", icon: HomeIcon, path: "/" },
-    { label: "Calendário", icon: CalendarIcon, path: "/calendario" },
-  ];
+  const mainNavItems = [{ label: "Calendário", icon: CalendarIcon, path: "/" }];
 
   const managementNavItems = [
     { label: "Reservas", icon: ClipboardIcon, path: "/reservas" },

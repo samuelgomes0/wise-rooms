@@ -10,9 +10,6 @@ CREATE TYPE "role_names" AS ENUM ('VIEWER', 'OPERATOR', 'ADMIN');
 -- CreateEnum
 CREATE TYPE "booking_statuses" AS ENUM ('PENDING', 'CONFIRMED', 'ACTIVE', 'COMPLETED', 'CANCELLED');
 
--- CreateEnum
-CREATE TYPE "resource_types" AS ENUM ('PROJECTOR', 'WHITEBOARD', 'COMPUTER', 'MICROPHONE', 'CAMERA', 'TELEVISION', 'VIDEO_CONFERENCE_SYSTEM', 'SOUND_SYSTEM', 'TABLE', 'CHAIR', 'AIR_CONDITIONER', 'COFFEE_MACHINE', 'WIFI', 'PRINTER', 'DOCUMENT_SCANNER');
-
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
@@ -52,7 +49,7 @@ CREATE TABLE "rooms" (
 CREATE TABLE "resources" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "type" "resource_types" NOT NULL,
+    "type" TEXT NOT NULL,
     "quantity" INTEGER NOT NULL,
     "description" TEXT,
     "roomId" INTEGER NOT NULL,
@@ -67,7 +64,7 @@ CREATE TABLE "bookings" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "roomId" INTEGER NOT NULL,
-    "bookingDate" TIMESTAMP(3) NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
     "startTime" TIMESTAMP(3) NOT NULL,
     "endTime" TIMESTAMP(3) NOT NULL,
     "status" "booking_statuses" NOT NULL DEFAULT 'PENDING',

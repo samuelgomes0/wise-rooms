@@ -50,15 +50,15 @@ model Room {
 
 // Resource Model
 model Resource {
-  id          Int          @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
-  type        ResourceType
+  type        String
   quantity    Int
   description String?
-  room        Room         @relation(fields: [roomId], references: [id])
+  room        Room     @relation(fields: [roomId], references: [id])
   roomId      Int
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@map("resources")
 }
@@ -131,25 +131,4 @@ enum BookingStatus {
   CANCELLED
 
   @@map("booking_statuses")
-}
-
-// ResourceType Enum
-enum ResourceType {
-  PROJECTOR
-  WHITEBOARD
-  COMPUTER
-  MICROPHONE
-  CAMERA
-  TELEVISION
-  VIDEO_CONFERENCE_SYSTEM
-  SOUND_SYSTEM
-  TABLE
-  CHAIR
-  AIR_CONDITIONER
-  COFFEE_MACHINE
-  WIFI
-  PRINTER
-  DOCUMENT_SCANNER
-
-  @@map("resource_types")
 }

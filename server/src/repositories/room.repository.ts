@@ -3,7 +3,7 @@ import {
   IRoom,
   IRoomCreateDTO,
   IRoomRepository,
-} from "../interfaces/IRoom.interface";
+} from "../interfaces/Room.interface";
 
 export class RoomRepository implements IRoomRepository {
   async create({

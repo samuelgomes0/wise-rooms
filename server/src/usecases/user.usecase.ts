@@ -1,5 +1,5 @@
 import { prisma } from "../database/prisma-client";
-import { IUser, IUserCreateDTO } from "../interfaces/IUser.interface";
+import { IUser, IUserCreateDTO } from "../interfaces/User.interface";
 import { UserRepository } from "../repositories/user.repository";
 import { hashPassword } from "../utils";
 

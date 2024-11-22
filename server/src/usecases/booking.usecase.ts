@@ -1,4 +1,4 @@
-import { IBooking, IBookingCreateDTO } from "../interfaces/IBooking.interface";
+import { IBooking, IBookingCreateDTO } from "../interfaces/Booking.interface";
 import { BookingRepository } from "../repositories/booking.repository";
 
 export class BookingUseCase {

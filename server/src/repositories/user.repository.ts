@@ -3,7 +3,7 @@ import {
   IUser,
   IUserCreateDTO,
   IUserRepository,
-} from "../interfaces/IUser.interface";
+} from "../interfaces/User.interface";
 
 export class UserRepository implements IUserRepository {
   async create({ name, email, password }: IUserCreateDTO): Promise<IUser> {

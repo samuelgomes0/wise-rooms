@@ -3,7 +3,7 @@ import {
   IBooking,
   IBookingCreateDTO,
   IBookingRepository,
-} from "../interfaces/IBooking.interface";
+} from "../interfaces/Booking.interface";
 
 export class BookingRepository implements IBookingRepository {
   async createBooking({

@@ -1,4 +1,4 @@
-import { IRoom, IRoomCreateDTO } from "../interfaces/IRoom.interface";
+import { IRoom, IRoomCreateDTO } from "../interfaces/Room.interface";
 import { RoomRepository } from "../repositories/room.repository";
 
 export class RoomUseCase {

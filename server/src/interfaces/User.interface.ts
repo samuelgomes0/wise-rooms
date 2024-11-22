@@ -1,5 +1,5 @@
+import { IAuditLog } from "./AuditLog.interface";
 import { IBooking } from "./Booking.interface";
-import { IAuditLog } from "./IAuditLog.interface";
 
 export interface IUser {
   id: string;

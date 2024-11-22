@@ -1,4 +1,4 @@
-import { EResourceType } from "./enums/EResourceType.enum";
+import { EResourceType } from "./enums/ResourceType.enum";
 
 export interface IResource {
   id: number;

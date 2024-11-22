@@ -1,4 +1,4 @@
+import { comparePasswords } from "./comparePasswords";
 import { hashPassword } from "./hashPassword";
-import { verifyPassword } from "./verifyPassword";
 
-export { hashPassword, verifyPassword };
+export { comparePasswords, hashPassword };

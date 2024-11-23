@@ -19,8 +19,8 @@ class UserService {
     return await apiServiceInstance.get("/users");
   }
 
-  async findByName(name: string) {
-    return await apiServiceInstance.get(`/users/${name}`);
+  async findByEmail(email: string) {
+    return await apiServiceInstance.get(`/users/email?email=${email}`);
   }
 }
 

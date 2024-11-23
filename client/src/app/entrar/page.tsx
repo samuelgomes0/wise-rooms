@@ -11,7 +11,7 @@ import {
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { loginSchema } from "@/schemas/login.schema";
+import { loginSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, EyeIcon, EyeOffIcon } from "lucide-react";
 import Link from "next/link";

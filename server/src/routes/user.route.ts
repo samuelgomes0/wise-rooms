@@ -6,7 +6,65 @@ const router = Router();
 const userRepository = new UserRepository();
 const userUseCase = new UserUseCase(userRepository);
 
-// POST /user/create
+// GET /users
+router.get("/", async (req, res) => {
+  try {
+    const users = await userUseCase.getAll();
+
+    return res.status(200).json(users);
+  } catch (error) {
+    return res.status(400).json({
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred.",
+    });
+  }
+});
+
+// GET /users/email
+router.get("/email", async (req, res) => {
+  const email = req.query.email as string;
+
+  if (!email) {
+    return res.status(400).json({
+      error: "The e-mail parameter is required.",
+    });
+  }
+
+  try {
+    const user = await userUseCase.findByEmail(email);
+
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(400).json({
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred.",
+    });
+  }
+});
+
+// GET /users/name
+router.get("/name", async (req, res) => {
+  const name = req.query.name as string;
+
+  if (!name) {
+    return res.status(400).json({
+      error: "The name parameter is required.",
+    });
+  }
+
+  try {
+    const user = await userUseCase.findByName(name);
+
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(400).json({
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred.",
+    });
+  }
+});
+
+// POST /users/create
 router.post("/create", async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -19,44 +77,6 @@ router.post("/create", async (req, res) => {
     };
 
     return res.status(201).json(response);
-  } catch (error) {
-    return res.status(400).json({
-      error:
-        error instanceof Error ? error.message : "An unknown error occurred.",
-    });
-  }
-});
-
-router.get("/", async (req, res) => {
-  const { name } = req.query as { name: string };
-
-  if (name) {
-    try {
-      const user = await userUseCase.findByName(name);
-
-      const response = {
-        message: "User found.",
-        user,
-      };
-
-      return res.status(200).json(response);
-    } catch (error) {
-      return res.status(400).json({
-        error:
-          error instanceof Error ? error.message : "An unknown error occurred.",
-      });
-    }
-  }
-
-  try {
-    const users = await userUseCase.getAll();
-
-    const response = {
-      message: "Users found.",
-      users,
-    };
-
-    return res.status(200).json(response);
   } catch (error) {
     return res.status(400).json({
       error:

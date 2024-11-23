@@ -39,7 +39,7 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="w-full  flex justify-center items-center">
+    <main className="w-full h-full flex justify-center items-center">
       <Link href={"/"} className="absolute top-8 left-8">
         <ArrowLeft size={24} />
       </Link>
@@ -93,12 +93,6 @@ export default function LoginPage() {
               <Button type="submit" className="mt-2">
                 Entrar
               </Button>
-              <Label className="text-sm text-center">
-                Não possui uma conta? {""}
-                <Link href="/cadastrar" className="font-bold">
-                  Cadastre-se
-                </Link>
-              </Label>
             </form>
           </Form>
         </CardContent>

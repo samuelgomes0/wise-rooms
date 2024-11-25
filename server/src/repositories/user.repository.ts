@@ -6,17 +6,10 @@ import {
 } from "../interfaces/User.interface";
 
 export class UserRepository implements IUserRepository {
-  async create({ name, email, password }: IUserCreateDTO): Promise<IUser> {
-    return await prisma.user.create({
-      data: {
-        name,
-        email,
-        password,
-        role: {
-          connect: {
-            name: "VIEWER",
-          },
-        },
+  async getAll(): Promise<IUser[]> {
+    return await prisma.user.findMany({
+      include: {
+        role: true,
       },
     });
   }
@@ -43,10 +36,17 @@ export class UserRepository implements IUserRepository {
     });
   }
 
-  async getAll(): Promise<IUser[]> {
-    return await prisma.user.findMany({
-      include: {
-        role: true,
+  async create({ name, email, password }: IUserCreateDTO): Promise<IUser> {
+    return await prisma.user.create({
+      data: {
+        name,
+        email,
+        password,
+        role: {
+          connect: {
+            name: "VIEWER",
+          },
+        },
       },
     });
   }

@@ -1,6 +1,6 @@
 import { Sidebar } from "@/components/Sidebar";
 import { Toaster } from "@/components/ui/toaster";
-import { AuthProvider } from "@/contexts/auth-context";
+import { AuthProvider } from "@/contexts/AuthContext";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";

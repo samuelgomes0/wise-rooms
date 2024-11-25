@@ -9,15 +9,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { AuthContext } from "@/contexts/AuthContext";
 import { ChevronDownIcon, LogOutIcon, User2Icon } from "lucide-react";
 import Link from "next/link";
+import { useContext } from "react";
 
 export function UserDropdown() {
-  const isLogged = false;
+  const { user, isAuthenticated } = useContext(AuthContext);
 
   return (
     <>
-      {isLogged ? (
+      {isAuthenticated ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -26,7 +28,7 @@ export function UserDropdown() {
               aria-label="Menu do usuário"
             >
               <User2Icon className="mr-2 flex-shrink-0" size={20} />
-              <span className="truncate mr-2">Samuel Gomes Rosa</span>
+              <span className="truncate mr-2">{user?.name}</span>
               <ChevronDownIcon size={20} />
             </Button>
           </DropdownMenuTrigger>

@@ -7,20 +7,20 @@ interface UserData {
 }
 
 class UserService {
-  async create({ name, email, password }: UserData) {
-    return await apiServiceInstance.post<void, UserData>("/users/create", {
-      name,
-      email,
-      password,
-    });
-  }
-
   async getAll() {
     return await apiServiceInstance.get("/users");
   }
 
   async findByEmail(email: string) {
     return await apiServiceInstance.get(`/users/email?email=${email}`);
+  }
+
+  async create({ name, email, password }: UserData) {
+    return await apiServiceInstance.post<void, UserData>("/users/create", {
+      name,
+      email,
+      password,
+    });
   }
 }
 

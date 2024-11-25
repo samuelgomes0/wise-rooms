@@ -11,17 +11,19 @@ import {
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { AuthContext } from "@/contexts/AuthContext";
 import { loginSchema } from "@/schemas";
 import userServiceInstance from "@/services/UserService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, EyeIcon, EyeOffIcon } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const { signIn } = useContext(AuthContext);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -41,6 +43,8 @@ export default function LoginPage() {
     userServiceInstance.findByEmail(data.email).then(({ data }) => {
       console.log("Usuário encontrado:", data);
     });
+
+    signIn(data);
   };
 
   return (

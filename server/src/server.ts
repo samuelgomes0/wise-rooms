@@ -11,10 +11,6 @@ server.use(cors());
 
 server.use(express.json());
 
-server.get("/", (req, res) => {
-  res.send("Hello World");
-});
-
 server.use("/users", userRoutes);
 server.use("/bookings", bookingRoutes);
 server.use("/rooms", roomRoutes);

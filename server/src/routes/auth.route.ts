@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { isAuthenticated } from "../middlewares/auth.middleware";
 import { UserRepository } from "../repositories/user.repository";
 import { AuthUseCase } from "../usecases/auth.usecase";
 
@@ -12,7 +13,7 @@ router.post("/signin", async (req, res) => {
 
   try {
     const { token } = await authUseCase.signIn(email, password);
-    res.status(200).json({ message: "User authenticated", token });
+    res.status(200).json({ message: "Usuário autenticado.", token });
   } catch (error: any) {
     res.status(401).json({ error: error.message || "Erro de autenticação." });
   }
@@ -23,7 +24,17 @@ router.post("/logout", async (req, res) => {
 
   try {
     await authUseCase.logout(email);
-    res.status(200).json({ message: "User logged out" });
+    res.status(200).json({ message: "Usuário deslogado." });
+  } catch (error: any) {
+    res.status(401).json({ error: error.message || "Erro de autenticação." });
+  }
+});
+
+router.get("/profile", isAuthenticated, async (req: any, res) => {
+  console.log(req.user);
+
+  try {
+    res.status(200).json({ user: req.user });
   } catch (error: any) {
     res.status(401).json({ error: error.message || "Erro de autenticação." });
   }

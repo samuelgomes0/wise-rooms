@@ -20,6 +20,7 @@ export class UserRepository implements IUserRepository {
         id,
       },
       include: {
+        role: true,
         bookings: true,
       },
     });

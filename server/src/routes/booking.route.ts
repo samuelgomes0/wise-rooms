@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { isAuthenticated } from "../middlewares/auth.middleware";
 import { BookingRepository } from "../repositories/booking.repository";
 import { BookingUseCase } from "../usecases/booking.usecase";
 
@@ -6,7 +7,7 @@ const router = Router();
 const bookingRepository = new BookingRepository();
 const bookingUseCase = new BookingUseCase(bookingRepository);
 
-router.post("/create", async (req, res) => {
+router.post("/create", isAuthenticated, async (req, res) => {
   const { userId, roomId, date, startTime, endTime } = req.body;
 
   if (!userId || !roomId || !date || !startTime || !endTime) {

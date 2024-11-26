@@ -39,6 +39,8 @@ export class UserUseCase {
   async findById(id: string): Promise<Omit<IUser, "password"> | null> {
     const user = await this.userRepository.findById(id);
 
+    console.log(user);
+
     if (!user) {
       throw new Error("User not found.");
     }

@@ -36,7 +36,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// GET /users?email
+// GET /users/email/:email
 router.get("/email/:email", async (req, res) => {
   const email = req.params.email;
 

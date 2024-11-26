@@ -5,7 +5,7 @@ import GenericTable from "@/components/GenericTable";
 import Pagination from "@/components/Pagination";
 import { ResourceRegistrationForm } from "@/components/ResourceRegistrationForm";
 import SearchFilter from "@/components/SearchFilter";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -22,9 +22,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { AuthContext } from "@/contexts/AuthContext";
 import { resourceTypes } from "@/types/resourceTypes.enum";
+import { Roles } from "@/types/Roles.enum";
 import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 export default function Recursos() {
   const [resources, setResources] = useState([]);
@@ -32,6 +34,8 @@ export default function Recursos() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+
+  const { user } = useContext(AuthContext);
 
   const filteredResources = resources.filter(
     (resource) =>
@@ -53,15 +57,13 @@ export default function Recursos() {
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-4">
               <Avatar>
-                <AvatarImage
-                  src="https://avatars.githubusercontent.com/u/51432896?v=4"
-                  alt="Avatar"
-                />
-                <AvatarFallback>SG</AvatarFallback>
+                <AvatarFallback>{user?.name[0]}</AvatarFallback>
               </Avatar>
               <div>
                 <h1 className="text-2xl font-bold">Recursos</h1>
-                <p className="text-sm text-gray-500">Administrador</p>
+                <p className="text-sm text-gray-500">
+                  {Roles[user?.roleId as unknown as keyof typeof Roles]}
+                </p>
               </div>
             </div>
             <GenericModal

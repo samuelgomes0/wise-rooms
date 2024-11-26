@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { AuthContext } from "@/contexts/AuthContext";
 import {
   CalendarIcon,
   ClipboardIcon,
@@ -8,8 +9,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useContext } from "react";
 
 export function SidebarNav() {
+  const { user, isAuthenticated } = useContext(AuthContext);
+
   const pathname = usePathname();
 
   const isActive = (path: string) => pathname === path;
@@ -40,21 +44,25 @@ export function SidebarNav() {
             </Link>
           </li>
         ))}
-        <h3 className="font-bold text-sm py-2">Gerenciamento</h3>
-        {managementNavItems.map(({ label, icon: Icon, path }) => (
-          <li key={label}>
-            <Link href={path}>
-              <Button
-                variant="ghost"
-                className={`w-full justify-start ${isActive(path) ? "bg-gray-100" : ""}`}
-                aria-current={isActive(path) ? "page" : undefined}
-              >
-                <Icon className="mr-2 h-4 w-4" />
-                {label}
-              </Button>
-            </Link>
-          </li>
-        ))}
+        {isAuthenticated && user?.roleId === 1 && (
+          <>
+            <h3 className="font-bold text-sm py-2">Gerenciamento</h3>
+            {managementNavItems.map(({ label, icon: Icon, path }) => (
+              <li key={label}>
+                <Link href={path}>
+                  <Button
+                    variant="ghost"
+                    className={`w-full justify-start ${isActive(path) ? "bg-gray-100" : ""}`}
+                    aria-current={isActive(path) ? "page" : undefined}
+                  >
+                    <Icon className="mr-2 h-4 w-4" />
+                    {label}
+                  </Button>
+                </Link>
+              </li>
+            ))}
+          </>
+        )}
       </ul>
     </nav>
   );

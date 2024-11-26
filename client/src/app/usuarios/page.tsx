@@ -4,7 +4,7 @@ import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
 import Pagination from "@/components/Pagination";
 import SearchFilter from "@/components/SearchFilter";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -22,8 +22,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { UserRegistrationForm } from "@/components/UserRegistrationForm";
+import { AuthContext } from "@/contexts/AuthContext";
+import { Roles } from "@/types/Roles.enum";
 import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 export default function Usuarios() {
   const [users, setUsers] = useState([]);
@@ -31,6 +33,8 @@ export default function Usuarios() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+
+  const { user } = useContext(AuthContext);
 
   const filteredUsers = users.filter(
     (resource) =>
@@ -52,15 +56,13 @@ export default function Usuarios() {
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-4">
               <Avatar>
-                <AvatarImage
-                  src="https://avatars.githubusercontent.com/u/51432896?v=4"
-                  alt="Avatar"
-                />
-                <AvatarFallback>SG</AvatarFallback>
+                <AvatarFallback>{user?.name[0]}</AvatarFallback>
               </Avatar>
               <div>
                 <h1 className="text-2xl font-bold">Usuários</h1>
-                <p className="text-sm text-gray-500">Administrador</p>
+                <p className="text-sm text-gray-500">
+                  {Roles[user?.roleId as unknown as keyof typeof Roles]}
+                </p>
               </div>
             </div>
             <GenericModal

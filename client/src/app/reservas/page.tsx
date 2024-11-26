@@ -5,7 +5,7 @@ import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
 import Pagination from "@/components/Pagination";
 import SearchFilter from "@/components/SearchFilter";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -28,14 +28,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { AuthContext } from "@/contexts/AuthContext";
 import bookingServiceInstance from "@/services/BookingService";
 import { IBooking } from "@/types";
+import { Roles } from "@/types/Roles.enum";
 import { getStatusBadge } from "@/utils";
 import { filterBookings } from "@/utils/filterBookings"; // Função de filtragem
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CalendarIcon, MoreHorizontalIcon, SearchIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function Reservas() {
   const [bookings, setBookings] = useState<IBooking[]>([]);
@@ -44,6 +46,8 @@ export default function Reservas() {
   const [statusFilter, setStatusFilter] = useState("Todos");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+
+  const { user, isAuthenticated } = useContext(AuthContext);
 
   // Filtragem e Paginação usando a função separada
   const { filteredBookings, paginatedBookings, totalPages } = filterBookings({
@@ -68,15 +72,13 @@ export default function Reservas() {
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-4">
               <Avatar>
-                <AvatarImage
-                  src="https://avatars.githubusercontent.com/u/51432896?v=4"
-                  alt="Avatar"
-                />
-                <AvatarFallback>SG</AvatarFallback>
+                <AvatarFallback>{user?.name[0]}</AvatarFallback>
               </Avatar>
               <div>
                 <h1 className="text-2xl font-bold">Reservas</h1>
-                <p className="text-sm text-gray-500">Administrador</p>
+                <p className="text-sm text-gray-500">
+                  {Roles[user?.roleId as unknown as keyof typeof Roles]}
+                </p>
               </div>
             </div>
             <GenericModal

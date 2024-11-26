@@ -11,8 +11,12 @@ class UserService {
     return await apiServiceInstance.get("/users");
   }
 
+  async findById(id: string) {
+    return await apiServiceInstance.get(`/users/${id}`);
+  }
+
   async findByEmail(email: string) {
-    return await apiServiceInstance.get(`/users/email?email=${email}`);
+    return await apiServiceInstance.get(`/users/email/${email}`);
   }
 
   async create({ name, email, password }: UserData) {

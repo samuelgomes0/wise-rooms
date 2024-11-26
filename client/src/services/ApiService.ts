@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import { parseCookies } from "nookies";
 
 class ApiService {
   private api: AxiosInstance;
@@ -6,6 +7,19 @@ class ApiService {
   constructor(baseURL: string) {
     this.api = axios.create({
       baseURL,
+    });
+
+    // Adicionando um interceptor para incluir o token nos headers
+    this.api.interceptors.request.use((config) => {
+      const { "wiserooms.token": token } = parseCookies();
+
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+
+      console.log(config);
+
+      return config;
     });
   }
 

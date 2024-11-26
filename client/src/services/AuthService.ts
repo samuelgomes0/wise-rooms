@@ -21,6 +21,10 @@ class AuthService {
       }
     );
   }
+
+  async profile() {
+    return await apiServiceInstance.get("/auth/profile");
+  }
 }
 
 const authServiceInstance = new AuthService();

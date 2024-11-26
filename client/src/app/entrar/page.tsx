@@ -17,13 +17,21 @@ import userServiceInstance from "@/services/UserService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, EyeIcon, EyeOffIcon } from "lucide-react";
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const { signIn } = useContext(AuthContext);
+  const { signIn, isAuthenticated } = useContext(AuthContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthenticated, router]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -38,12 +46,7 @@ export default function LoginPage() {
   });
 
   const handleFormSubmit = async (data: z.infer<typeof loginSchema>) => {
-    console.log("Dados enviados:", data);
-
-    userServiceInstance.findByEmail(data.email).then(({ data }) => {
-      console.log("Usuário encontrado:", data);
-    });
-
+    userServiceInstance.findByEmail(data.email);
     signIn(data);
   };
 

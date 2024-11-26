@@ -2,18 +2,20 @@
 
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { SidebarNav } from "../SidebarNav";
 import { UserDropdown } from "../UserDropdown";
 
 export function Sidebar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const pathName = usePathname();
 
   return (
     <aside
       className={`${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } sticky top-0 z-50 w-60 h-screen bg-white shadow transition-transform duration-300 ease-in-out lg:translate-x-0`}
+      } sticky top-0 z-50 w-60 h-screen bg-white shadow transition-transform duration-300 ease-in-out lg:translate-x-0 ${pathName === "/entrar" ? "hidden" : "block"}`}
       role="navigation"
     >
       <div className="flex items-center justify-between p-4">

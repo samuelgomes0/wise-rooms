@@ -12,10 +12,18 @@ import {
 import { AuthContext } from "@/contexts/AuthContext";
 import { ChevronDownIcon, LogOutIcon, User2Icon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { destroyCookie } from "nookies";
 import { useContext } from "react";
 
 export function UserDropdown() {
   const { user, isAuthenticated } = useContext(AuthContext);
+  const router = useRouter();
+
+  const handleLogout = () => {
+    destroyCookie(undefined, "wiserooms.token");
+    router.push("/");
+  };
 
   return (
     <>
@@ -38,7 +46,7 @@ export function UserDropdown() {
             <DropdownMenuItem>Perfil</DropdownMenuItem>
             <DropdownMenuItem>Configurações</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-600">
+            <DropdownMenuItem className="text-red-600" onClick={handleLogout}>
               <LogOutIcon className="mr-2" size={16} />
               <span>Sair</span>
             </DropdownMenuItem>

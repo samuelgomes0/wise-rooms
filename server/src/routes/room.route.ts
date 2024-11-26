@@ -7,29 +7,39 @@ const router = Router();
 const roomRepository = new RoomRepository();
 const roomUsecase = new RoomUseCase(roomRepository);
 
-router.post("/create", async (req, res) => {
-  const { name, location, capacity, description } = req.body;
+// GET /rooms
+router.get("/", async (req, res) => {
+  const rooms = await roomUsecase.getRooms();
+  res.json(rooms);
+});
 
-  try {
-    const room = await roomUsecase.createRoom({
-      name,
-      location,
-      capacity,
-      description,
-    });
+// GET /rooms/:roomId
+router.get("/:roomId", async (req, res) => {
+  const roomId = parseInt(req.params.roomId);
+  const room = await roomUsecase.getRoomById(roomId);
+  res.json(room);
+});
 
-    const response = {
-      message: "Room created.",
-      room,
-    };
+// POST /rooms
+router.post("/", async (req, res) => {
+  const room = req.body;
+  const newRoom = await roomUsecase.createRoom(room);
+  res.json(newRoom);
+});
 
-    res.status(201).json(response);
-  } catch (error) {
-    res.status(400).json({
-      message:
-        error instanceof Error ? error.message : "An unknown error occurred.",
-    });
-  }
+// PUT /rooms/:roomId
+router.put("/:roomId", async (req, res) => {
+  const roomId = parseInt(req.params.roomId);
+  const room = req.body;
+  const updatedRoom = await roomUsecase.updateRoom(roomId, room);
+  res.json(updatedRoom);
+});
+
+// DELETE /rooms/:roomId
+router.delete("/:roomId", async (req, res) => {
+  const roomId = parseInt(req.params.roomId);
+  await roomUsecase.deleteRoom(roomId);
+  res.json({ message: "Room deleted" });
 });
 
 export default router;

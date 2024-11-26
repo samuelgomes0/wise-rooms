@@ -8,17 +8,23 @@ export class RoomUseCase {
     this.roomRepository = roomRepository;
   }
 
-  async createRoom({
-    name,
-    location,
-    capacity,
-    description,
-  }: IRoomCreateDTO): Promise<IRoom> {
-    return await this.roomRepository.create({
-      name,
-      location,
-      capacity,
-      description,
-    });
+  async getRooms(): Promise<IRoom[]> {
+    return await this.roomRepository.getRooms();
+  }
+
+  async getRoomById(roomId: number): Promise<IRoom | null> {
+    return await this.roomRepository.getRoomById(roomId);
+  }
+
+  async createRoom(room: IRoomCreateDTO): Promise<IRoom> {
+    return await this.roomRepository.createRoom(room);
+  }
+
+  async updateRoom(roomId: number, room: IRoomCreateDTO): Promise<IRoom> {
+    return await this.roomRepository.updateRoom(roomId, room);
+  }
+
+  async deleteRoom(roomId: number): Promise<void> {
+    return await this.roomRepository.deleteRoom(roomId);
   }
 }

@@ -18,6 +18,13 @@ export interface IBookingCreateDTO {
 }
 
 export interface IBookingRepository {
+  listBookings(): Promise<IBooking[]>;
+  findBookingById(bookingId: string): Promise<IBooking | null>;
+  findBookingByUser(userId: string): Promise<IBooking[]>;
   createBooking(booking: IBookingCreateDTO): Promise<IBooking>;
-  getAll(): Promise<IBooking[]>;
+  updateBooking(
+    bookingId: string,
+    booking: IBookingCreateDTO
+  ): Promise<IBooking>;
+  deleteBooking(bookingId: string): Promise<IBooking>;
 }

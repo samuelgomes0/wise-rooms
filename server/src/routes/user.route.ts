@@ -9,7 +9,7 @@ const userUseCase = new UserUseCase(userRepository);
 // GET /users
 router.get("/", async (req, res) => {
   try {
-    const users = await userUseCase.getAll();
+    const users = await userUseCase.listUsers();
 
     return res.status(200).json(users);
   } catch (error) {
@@ -58,12 +58,12 @@ router.get("/email/:email", async (req, res) => {
   }
 });
 
-// POST /users/create
-router.post("/create", async (req, res) => {
+// POST /users
+router.post("/", async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
-    const user = await userUseCase.create({ name, email, password });
+    const user = await userUseCase.createUser({ name, email, password });
 
     const response = {
       message: "User created.",
@@ -79,11 +79,12 @@ router.post("/create", async (req, res) => {
   }
 });
 
-router.put("/update", async (req, res) => {
+// PUT /users/:id
+router.put("/:id", async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
-    const user = await userUseCase.update({ name, email, password });
+    const user = await userUseCase.updateUser({ name, email, password });
 
     const response = {
       message: "User updated.",
@@ -91,6 +92,24 @@ router.put("/update", async (req, res) => {
     };
 
     return res.status(200).json(response);
+  } catch (error) {
+    return res.status(400).json({
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred.",
+    });
+  }
+});
+
+// DELETE /users/:id
+router.delete("/:id", async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    await userUseCase.deleteUser(id);
+
+    return res.status(200).json({
+      message: "User deleted.",
+    });
   } catch (error) {
     return res.status(400).json({
       error:

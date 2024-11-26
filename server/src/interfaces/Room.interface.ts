@@ -21,5 +21,9 @@ export interface IRoomCreateDTO {
 }
 
 export interface IRoomRepository {
-  create(room: IRoomCreateDTO): Promise<IRoom>;
+  getRooms(): Promise<IRoom[]>;
+  getRoomById(roomId: number): Promise<IRoom | null>;
+  createRoom(room: IRoomCreateDTO): Promise<IRoom>;
+  updateRoom(roomId: number, room: IRoomCreateDTO): Promise<IRoom>;
+  deleteRoom(roomId: number): Promise<void>;
 }

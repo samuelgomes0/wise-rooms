@@ -20,10 +20,10 @@ export interface IUserCreateDTO {
 }
 
 export interface IUserRepository {
-  getAll(): Promise<IUser[]>;
+  listUsers(): Promise<IUser[]>;
   findById(id: string): Promise<IUser | null>;
   findByEmail(email: string): Promise<IUser | null>;
-  create(user: IUserCreateDTO): Promise<IUser>;
-  update(user: IUserCreateDTO): Promise<IUser>;
-  delete(id: string): Promise<IUser>;
+  createUser(user: IUserCreateDTO): Promise<IUser>;
+  updateUser(user: IUserCreateDTO): Promise<IUser>;
+  deleteUser(id: string): Promise<IUser>;
 }

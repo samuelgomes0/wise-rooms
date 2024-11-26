@@ -1,9 +1,7 @@
-import { EResourceType } from "./enums/ResourceType.enum";
-
 export interface IResource {
   id: number;
   name: string;
-  type: EResourceType;
+  type: string;
   quantity: number;
   description?: string;
   roomId: number;
@@ -13,12 +11,19 @@ export interface IResource {
 
 export interface IResourceCreateDTO {
   name: string;
-  type: EResourceType;
+  type: string;
   quantity: number;
   description?: string;
   roomId: number;
 }
 
 export interface IResourceRepository {
-  create(data: IResourceCreateDTO): Promise<IResource>;
+  getResources(): Promise<IResource[]>;
+  getResourceById(resourceId: number): Promise<IResource | null>;
+  createResource(data: IResourceCreateDTO): Promise<IResource>;
+  updateResource(
+    resourceId: number,
+    data: IResourceCreateDTO
+  ): Promise<IResource>;
+  deleteResource(resourceId: number): Promise<IResource>;
 }

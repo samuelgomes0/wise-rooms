@@ -6,6 +6,26 @@ import {
 } from "../interfaces/Booking.interface";
 
 export class BookingRepository implements IBookingRepository {
+  async listBookings(): Promise<IBooking[]> {
+    return await prisma.booking.findMany();
+  }
+
+  async findBookingById(bookingId: string): Promise<IBooking | null> {
+    return await prisma.booking.findUnique({
+      where: {
+        id: bookingId,
+      },
+    });
+  }
+
+  async findBookingByUser(userId: string): Promise<IBooking[]> {
+    return await prisma.booking.findMany({
+      where: {
+        userId,
+      },
+    });
+  }
+
   async createBooking({
     userId,
     roomId,
@@ -50,11 +70,28 @@ export class BookingRepository implements IBookingRepository {
     return !!conflict; // Retorna `true` se houver conflito
   }
 
-  async getAll(): Promise<IBooking[]> {
-    return await prisma.booking.findMany({
-      include: {
-        user: true,
-        room: true,
+  async updateBooking(
+    bookingId: string,
+    { userId, roomId, date, startTime, endTime }: IBookingCreateDTO
+  ): Promise<IBooking> {
+    return await prisma.booking.update({
+      where: {
+        id: bookingId,
+      },
+      data: {
+        userId,
+        roomId,
+        date,
+        startTime,
+        endTime,
+      },
+    });
+  }
+
+  async deleteBooking(bookingId: string): Promise<IBooking> {
+    return await prisma.booking.delete({
+      where: {
+        id: bookingId,
       },
     });
   }

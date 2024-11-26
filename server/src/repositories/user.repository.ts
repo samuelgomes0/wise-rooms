@@ -6,7 +6,7 @@ import {
 } from "../interfaces/User.interface";
 
 export class UserRepository implements IUserRepository {
-  async getAll(): Promise<IUser[]> {
+  async listUsers(): Promise<IUser[]> {
     return await prisma.user.findMany({
       include: {
         bookings: true,
@@ -37,7 +37,7 @@ export class UserRepository implements IUserRepository {
     });
   }
 
-  async create({ name, email, password }: IUserCreateDTO): Promise<IUser> {
+  async createUser({ name, email, password }: IUserCreateDTO): Promise<IUser> {
     return await prisma.user.create({
       data: {
         name,
@@ -52,7 +52,7 @@ export class UserRepository implements IUserRepository {
     });
   }
 
-  async update({ name, email, password }: IUserCreateDTO): Promise<IUser> {
+  async updateUser({ name, email, password }: IUserCreateDTO): Promise<IUser> {
     return await prisma.user.update({
       where: {
         email,
@@ -65,7 +65,7 @@ export class UserRepository implements IUserRepository {
     });
   }
 
-  async delete(id: string): Promise<IUser> {
+  async deleteUser(id: string): Promise<IUser> {
     return await prisma.user.delete({
       where: {
         id,

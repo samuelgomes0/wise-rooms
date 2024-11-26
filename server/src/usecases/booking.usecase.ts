@@ -8,6 +8,18 @@ export class BookingUseCase {
     this.bookingRepository = bookingRepository;
   }
 
+  async listBookings(): Promise<IBooking[]> {
+    return await this.bookingRepository.listBookings();
+  }
+
+  async findBookingById(bookingId: string): Promise<IBooking | null> {
+    return await this.bookingRepository.findBookingById(bookingId);
+  }
+
+  async findBookingByUser(userId: string): Promise<IBooking[]> {
+    return await this.bookingRepository.findBookingByUser(userId);
+  }
+
   async createBooking({
     userId,
     roomId,
@@ -35,7 +47,14 @@ export class BookingUseCase {
     });
   }
 
-  async getAll(): Promise<IBooking[]> {
-    return await this.bookingRepository.getAll();
+  async updateBooking(
+    bookingId: string,
+    booking: IBookingCreateDTO
+  ): Promise<IBooking> {
+    return await this.bookingRepository.updateBooking(bookingId, booking);
+  }
+
+  async deleteBooking(bookingId: string): Promise<IBooking> {
+    return await this.bookingRepository.deleteBooking(bookingId);
   }
 }

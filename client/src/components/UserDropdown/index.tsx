@@ -12,17 +12,13 @@ import {
 import { AuthContext } from "@/contexts/AuthContext";
 import { ChevronDownIcon, LogOutIcon, User2Icon } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { destroyCookie } from "nookies";
 import { useContext } from "react";
 
 export function UserDropdown() {
-  const { user, isAuthenticated } = useContext(AuthContext);
-  const router = useRouter();
+  const { user, signOut, isAuthenticated } = useContext(AuthContext);
 
   const handleLogout = () => {
-    destroyCookie(undefined, "wiserooms.token");
-    router.push("/");
+    signOut();
   };
 
   return (

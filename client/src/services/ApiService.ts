@@ -17,8 +17,6 @@ class ApiService {
         config.headers.Authorization = `Bearer ${token}`;
       }
 
-      console.log(config);
-
       return config;
     });
   }

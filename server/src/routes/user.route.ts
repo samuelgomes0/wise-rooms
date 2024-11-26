@@ -20,18 +20,12 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET /users/email
-router.get("/email", async (req, res) => {
-  const email = req.query.email as string;
-
-  if (!email) {
-    return res.status(400).json({
-      error: "The e-mail parameter is required.",
-    });
-  }
+// GET /users/:id
+router.get("/:id", async (req, res) => {
+  const id = req.params.id;
 
   try {
-    const user = await userUseCase.findByEmail(email);
+    const user = await userUseCase.findById(id);
 
     return res.status(200).json(user);
   } catch (error) {
@@ -42,18 +36,18 @@ router.get("/email", async (req, res) => {
   }
 });
 
-// GET /users/name
-router.get("/name", async (req, res) => {
-  const name = req.query.name as string;
+// GET /users?email
+router.get("/email/:email", async (req, res) => {
+  const email = req.params.email;
 
-  if (!name) {
+  if (!email) {
     return res.status(400).json({
-      error: "The name parameter is required.",
+      error: "The e-mail parameter is required.",
     });
   }
 
   try {
-    const user = await userUseCase.findByName(name);
+    const user = await userUseCase.findByEmail(email);
 
     return res.status(200).json(user);
   } catch (error) {

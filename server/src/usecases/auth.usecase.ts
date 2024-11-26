@@ -32,8 +32,16 @@ export class AuthUseCase {
       expiresIn: "1h",
     });
 
-    const { password: _, ...userWithoutPassword } = user;
+    return { token };
+  }
 
-    return { token, user: userWithoutPassword };
+  async logout(email: string) {
+    const user = await this.userRepository.findByEmail(email);
+
+    if (!user) {
+      throw new Error("User not found.");
+    }
+
+    return { message: "User logged out" };
   }
 }

@@ -6,7 +6,7 @@ export const isAuthenticated = (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.cookies.authToken;
+  const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
     return res.status(401).json({ error: "Not authenticated." });
@@ -14,8 +14,7 @@ export const isAuthenticated = (
 
   try {
     const decoded = verifyToken(token);
-    req.user = decoded; // Adicione as informações do usuário ao objeto de requisição
-    next();
+    req.user.id = decoded;
   } catch (error) {
     return res.status(401).json({ error: "Invalid or expired token." });
   }

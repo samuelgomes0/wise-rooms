@@ -11,8 +11,19 @@ router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const { token, user } = await authUseCase.signIn(email, password);
-    res.status(200).json({ message: "User authenticated", token, user });
+    const { token } = await authUseCase.signIn(email, password);
+    res.status(200).json({ message: "User authenticated", token });
+  } catch (error: any) {
+    res.status(401).json({ error: error.message || "Erro de autenticação." });
+  }
+});
+
+router.post("/logout", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    await authUseCase.logout(email);
+    res.status(200).json({ message: "User logged out" });
   } catch (error: any) {
     res.status(401).json({ error: error.message || "Erro de autenticação." });
   }

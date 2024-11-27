@@ -5,6 +5,8 @@ export interface IBooking {
   date: Date;
   startTime: Date;
   endTime: Date;
+  status: TBookingStatus;
+  description: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,7 +17,15 @@ export interface IBookingCreateDTO {
   date: Date;
   startTime: Date;
   endTime: Date;
+  description: string | null;
 }
+
+export type TBookingStatus =
+  | "PENDING"
+  | "CONFIRMED"
+  | "ACTIVE"
+  | "COMPLETED"
+  | "CANCELLED";
 
 export interface IBookingRepository {
   listBookings(): Promise<IBooking[]>;

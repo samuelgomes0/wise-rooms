@@ -26,6 +26,7 @@ export class BookingUseCase {
     date,
     startTime,
     endTime,
+    description,
   }: IBookingCreateDTO): Promise<IBooking> {
     const hasConflict = await this.bookingRepository.checkConflict(
       roomId,
@@ -44,6 +45,7 @@ export class BookingUseCase {
       date,
       startTime,
       endTime,
+      description,
     });
   }
 

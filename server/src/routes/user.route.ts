@@ -1,10 +1,17 @@
+import { AuditAction, AuditEntity } from "@prisma/client";
 import { Router } from "express";
+import { isAuthenticated } from "../middlewares/auth.middleware";
+import { AuditLogRepository } from "../repositories/auditLog.repository";
 import { UserRepository } from "../repositories/user.repository";
+import { AuditLogUseCase } from "../usecases/auditLog.usecase";
 import { UserUseCase } from "../usecases/user.usecase";
 
 const router = Router();
 const userRepository = new UserRepository();
 const userUseCase = new UserUseCase(userRepository);
+
+const auditLogRepository = new AuditLogRepository();
+const auditLogUseCase = new AuditLogUseCase(auditLogRepository);
 
 // GET /users
 router.get("/", async (req, res) => {
@@ -59,7 +66,7 @@ router.get("/email/:email", async (req, res) => {
 });
 
 // POST /users
-router.post("/", async (req, res) => {
+router.post("/", isAuthenticated, async (req: any, res) => {
   const { name, email, password } = req.body;
 
   try {
@@ -69,6 +76,15 @@ router.post("/", async (req, res) => {
       message: "User created.",
       user,
     };
+
+    const { id: performedBy } = req.user;
+
+    await auditLogUseCase.createAuditLog({
+      userId: performedBy,
+      action: AuditAction.CREATE,
+      entity: AuditEntity.USER,
+      entityId: user.id,
+    });
 
     return res.status(201).json(response);
   } catch (error) {
@@ -80,7 +96,7 @@ router.post("/", async (req, res) => {
 });
 
 // PUT /users/:id
-router.put("/:id", async (req, res) => {
+router.put("/:id", isAuthenticated, async (req: any, res) => {
   const { name, email, password } = req.body;
 
   try {
@@ -90,6 +106,15 @@ router.put("/:id", async (req, res) => {
       message: "User updated.",
       user,
     };
+
+    const { id: performedBy } = req.user;
+
+    await auditLogUseCase.createAuditLog({
+      userId: performedBy,
+      action: AuditAction.UPDATE,
+      entity: AuditEntity.USER,
+      entityId: user.id,
+    });
 
     return res.status(200).json(response);
   } catch (error) {
@@ -101,11 +126,20 @@ router.put("/:id", async (req, res) => {
 });
 
 // DELETE /users/:id
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", isAuthenticated, async (req: any, res) => {
   const id = req.params.id;
 
   try {
     await userUseCase.deleteUser(id);
+
+    const { id: performedBy } = req.user;
+
+    await auditLogUseCase.createAuditLog({
+      userId: performedBy,
+      action: AuditAction.DELETE,
+      entity: AuditEntity.USER,
+      entityId: id,
+    });
 
     return res.status(200).json({
       message: "User deleted.",

@@ -31,8 +31,6 @@ router.post("/logout", async (req, res) => {
 });
 
 router.get("/profile", isAuthenticated, async (req: any, res) => {
-  console.log(req.user);
-
   try {
     res.status(200).json({ user: req.user });
   } catch (error: any) {

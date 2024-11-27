@@ -1,11 +1,17 @@
+import { AuditAction, AuditEntity } from "@prisma/client";
 import { Router } from "express";
 import { isAuthenticated } from "../middlewares/auth.middleware";
+import { AuditLogRepository } from "../repositories/auditLog.repository";
 import { BookingRepository } from "../repositories/booking.repository";
+import { AuditLogUseCase } from "../usecases/auditLog.usecase";
 import { BookingUseCase } from "../usecases/booking.usecase";
 
 const router = Router();
 const bookingRepository = new BookingRepository();
 const bookingUseCase = new BookingUseCase(bookingRepository);
+
+const auditLogRepository = new AuditLogRepository();
+const auditLogUseCase = new AuditLogUseCase(auditLogRepository);
 
 // GET /bookings
 router.get("/", async (req, res) => {
@@ -58,8 +64,21 @@ router.get("/user/:userId", async (req, res) => {
 });
 
 // POST /bookings
-router.post("/", isAuthenticated, async (req, res) => {
-  const { userId, roomId, date, startTime, endTime } = req.body;
+router.post("/", isAuthenticated, async (req: any, res) => {
+  const { userId, roomId, date, startTime, endTime, description } = req.body;
+
+  console.log(
+    "userId",
+    userId,
+    "roomId",
+    roomId,
+    "date",
+    date,
+    "startTime",
+    startTime,
+    "endTime",
+    endTime
+  );
 
   if (!userId || !roomId || !date || !startTime || !endTime) {
     return res.status(400).json({ error: "Missing required fields." });
@@ -72,12 +91,20 @@ router.post("/", isAuthenticated, async (req, res) => {
       date: new Date(date),
       startTime: new Date(startTime),
       endTime: new Date(endTime),
+      description,
     });
 
     const response = {
       message: "Booking created.",
       booking,
     };
+
+    await auditLogUseCase.createAuditLog({
+      userId,
+      action: AuditAction.CREATE,
+      entity: AuditEntity.BOOKING,
+      entityId: booking.id,
+    });
 
     return res.status(201).json(response);
   } catch (error) {
@@ -89,9 +116,9 @@ router.post("/", isAuthenticated, async (req, res) => {
 });
 
 // PUT /bookings/:bookingId
-router.put("/:bookingId", isAuthenticated, async (req, res) => {
+router.put("/:bookingId", isAuthenticated, async (req: any, res) => {
   const { bookingId } = req.params;
-  const { userId, roomId, date, startTime, endTime } = req.body;
+  const { userId, roomId, date, startTime, endTime, description } = req.body;
 
   if (!userId || !roomId || !date || !startTime || !endTime) {
     return res.status(400).json({ error: "Missing required fields." });
@@ -104,12 +131,20 @@ router.put("/:bookingId", isAuthenticated, async (req, res) => {
       date: new Date(date),
       startTime: new Date(startTime),
       endTime: new Date(endTime),
+      description,
     });
 
     const response = {
       message: "Booking updated.",
       booking,
     };
+
+    await auditLogUseCase.createAuditLog({
+      userId,
+      action: AuditAction.UPDATE,
+      entity: AuditEntity.BOOKING,
+      entityId: booking.id,
+    });
 
     return res.status(200).json(response);
   } catch (error) {
@@ -121,7 +156,7 @@ router.put("/:bookingId", isAuthenticated, async (req, res) => {
 });
 
 // DELETE /bookings/:bookingId
-router.delete("/:bookingId", isAuthenticated, async (req, res) => {
+router.delete("/:bookingId", isAuthenticated, async (req: any, res) => {
   const { bookingId } = req.params;
 
   try {
@@ -131,6 +166,15 @@ router.delete("/:bookingId", isAuthenticated, async (req, res) => {
       message: "Booking deleted.",
       booking,
     };
+
+    const { id: performedBy } = req.user;
+
+    await auditLogUseCase.createAuditLog({
+      userId: performedBy,
+      action: AuditAction.DELETE,
+      entity: AuditEntity.BOOKING,
+      entityId: booking.id,
+    });
 
     return res.status(200).json(response);
   } catch (error) {

@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import auditLogRoutes from "./routes/auditLog.route";
 import authRoutes from "./routes/auth.route";
 import bookingRoutes from "./routes/booking.route";
 import roomRoutes from "./routes/room.route";
@@ -15,5 +16,6 @@ server.use("/users", userRoutes);
 server.use("/bookings", bookingRoutes);
 server.use("/rooms", roomRoutes);
 server.use("/auth", authRoutes);
+server.use("/auditlogs", auditLogRoutes);
 
 export default server;

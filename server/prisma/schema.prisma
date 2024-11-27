@@ -88,8 +88,6 @@ model AuditLog {
   user      User        @relation(fields: [userId], references: [id])
   action    AuditAction
   entity    AuditEntity
-  entityId  String      @default(cuid())
-  details   String?
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 

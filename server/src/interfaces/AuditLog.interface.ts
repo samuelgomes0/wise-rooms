@@ -3,6 +3,7 @@ export interface IAuditLog {
   userId: string;
   action: AuditLogAction;
   entity: AuditLogEntity;
+  entityId: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -11,6 +12,7 @@ export interface IAuditLogDTO {
   userId: string;
   action: AuditLogAction;
   entity: AuditLogEntity;
+  entityId: string;
 }
 
 export type AuditLogAction = "CREATE" | "UPDATE" | "DELETE";

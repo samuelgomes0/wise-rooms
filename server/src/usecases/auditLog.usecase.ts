@@ -16,8 +16,9 @@ export class AuditLogUseCase {
     userId,
     action,
     entity,
+    entityId,
   }: IAuditLogDTO): Promise<IAuditLog> {
-    if (!userId || !action || !entity) {
+    if (!userId || !action || !entity || !entityId) {
       throw new Error("Missing required fields.");
     }
 
@@ -25,6 +26,7 @@ export class AuditLogUseCase {
       userId,
       action,
       entity,
+      entityId,
     });
   }
 }

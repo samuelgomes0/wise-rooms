@@ -22,13 +22,20 @@ router.get("/", async (req, res) => {
 
 // POST /auditLogs
 router.post("/", async (req, res) => {
-  try {
-    const { userId, action, entity } = req.body;
+  const { userId, action, entity, entityId } = req.body;
 
+  if (!userId || !action || !entity || !entityId) {
+    return res.status(400).json({
+      error: "userId, action, entity, and entityId are required.",
+    });
+  }
+
+  try {
     const auditLog = await auditLogUseCase.createAuditLog({
       userId,
       action,
       entity,
+      entityId,
     });
 
     return res.status(201).json(auditLog);

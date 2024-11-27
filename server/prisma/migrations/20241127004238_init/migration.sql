@@ -81,6 +81,7 @@ CREATE TABLE "audit_logs" (
     "userId" TEXT NOT NULL,
     "action" "audit_actions" NOT NULL,
     "entity" "audit_entities" NOT NULL,
+    "entityId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

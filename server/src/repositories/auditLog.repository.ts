@@ -14,12 +14,14 @@ export class AuditLogRepository implements IAuditLogRepository {
     userId,
     action,
     entity,
+    entityId,
   }: IAuditLogDTO): Promise<IAuditLog> {
     return await prisma.auditLog.create({
       data: {
         userId,
         action,
         entity,
+        entityId,
       },
     });
   }

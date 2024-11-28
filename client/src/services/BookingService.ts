@@ -9,9 +9,36 @@ interface BookingData {
 }
 
 class BookingService {
-  async create({ userId, roomId, date, startTime, endTime }: BookingData) {
-    return await apiServiceInstance.post<void, BookingData>(
-      "/bookings/create",
+  async listBookings() {
+    return await apiServiceInstance.get("/bookings");
+  }
+
+  async createBooking({
+    userId,
+    roomId,
+    date,
+    startTime,
+    endTime,
+  }: BookingData) {
+    return await apiServiceInstance.post<void, BookingData>("/bookings", {
+      userId,
+      roomId,
+      date,
+      startTime,
+      endTime,
+    });
+  }
+
+  async updateBooking({
+    bookingId,
+    userId,
+    roomId,
+    date,
+    startTime,
+    endTime,
+  }: BookingData & { bookingId: number }) {
+    return await apiServiceInstance.put<void, BookingData>(
+      `/bookings/${bookingId}`,
       {
         userId,
         roomId,
@@ -22,8 +49,8 @@ class BookingService {
     );
   }
 
-  async getAll() {
-    return await apiServiceInstance.get("/bookings");
+  async cancelBooking(bookingId: string) {
+    return await apiServiceInstance.put(`/bookings/${bookingId}/cancel`);
   }
 }
 

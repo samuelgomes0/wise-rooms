@@ -47,9 +47,8 @@ export default function Reservas() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const { user, isAuthenticated } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
-  // Filtragem e Paginação usando a função separada
   const { filteredBookings, paginatedBookings, totalPages } = filterBookings({
     bookings,
     searchTerm,
@@ -59,8 +58,16 @@ export default function Reservas() {
     itemsPerPage,
   });
 
+  const handleCancelBooking = (bookingId: string) => {
+    bookingServiceInstance.cancelBooking(bookingId).then(() => {
+      bookingServiceInstance.listBookings().then(({ data }) => {
+        setBookings(data);
+      });
+    });
+  };
+
   useEffect(() => {
-    bookingServiceInstance.getAll().then(({ data }) => {
+    bookingServiceInstance.listBookings().then(({ data }) => {
       setBookings(data);
     });
   }, []);
@@ -155,9 +162,12 @@ export default function Reservas() {
               ...booking,
               user: booking.user.name,
               room: booking.room.name,
-              date: format(parseISO(booking.date), "dd/MM/yyyy"),
-              startTime: format(parseISO(booking.startTime), "HH:mm"),
-              endTime: format(parseISO(booking.endTime), "HH:mm"),
+              date: format(booking.date, "dd/MM/yyyy"),
+              startTime: format(
+                parseISO(booking.startTime.toString()),
+                "HH:mm"
+              ),
+              endTime: format(parseISO(booking.endTime.toString()), "HH:mm"),
               status: getStatusBadge(booking.status),
               options: (
                 <DropdownMenu>
@@ -176,7 +186,10 @@ export default function Reservas() {
                     <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
                     <DropdownMenuItem>Editar reserva</DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-red-600">
+                    <DropdownMenuItem
+                      className="text-red-600"
+                      onClick={() => handleCancelBooking(booking.id)}
+                    >
                       Cancelar reserva
                     </DropdownMenuItem>
                   </DropdownMenuContent>

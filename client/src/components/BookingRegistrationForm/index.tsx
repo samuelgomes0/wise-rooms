@@ -30,11 +30,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { AuthContext } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import { registerBookingSchema } from "@/schemas";
 import bookingServiceInstance from "@/services/BookingService";
+import roomServiceInstance from "@/services/RoomService";
+import { IRoom } from "@/types/Room.interface";
+import { useRouter } from "next/navigation";
+import { useContext, useEffect, useState } from "react";
 
 export function BookingRegistrationForm() {
+  const [rooms, setRooms] = useState<IRoom[]>([]);
+  const { user } = useContext(AuthContext);
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof registerBookingSchema>>({
     resolver: zodResolver(registerBookingSchema),
     defaultValues: {
@@ -53,18 +62,30 @@ export function BookingRegistrationForm() {
     const timeEndDate = new Date(`${dateISO}T${values.endTime}:00`);
 
     try {
-      await bookingServiceInstance.create({
-        userId: "cm3rrukdg0000b85baub4rj1o",
-        roomId: 1,
+      if (user === null) {
+        throw new Error("Usuário não autenticado");
+      }
+
+      await bookingServiceInstance.createBooking({
+        userId: user.id,
+        roomId: Number(values.room),
         date: values.date,
         startTime: timeStartDate,
         endTime: timeEndDate,
       });
-      alert("Reserva criada com sucesso!");
+
+      router.refresh();
     } catch (error) {
       console.error("Erro ao criar reserva:", error);
     }
   }
+
+  useEffect(() => {
+    roomServiceInstance.listRooms().then(({ data }) => {
+      console.log(data);
+      setRooms(data);
+    });
+  }, []);
 
   return (
     <Form {...form}>
@@ -106,9 +127,11 @@ export function BookingRegistrationForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="sala1">Sala 1</SelectItem>
-                  <SelectItem value="sala2">Sala 2</SelectItem>
-                  <SelectItem value="sala3">Sala 3</SelectItem>
+                  {rooms.map((room) => (
+                    <SelectItem key={room.id} value={room.id.toString()}>
+                      {room.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <FormMessage />

@@ -1,3 +1,5 @@
+import { BookingStatus } from "@prisma/client";
+
 export interface IBooking {
   id: string;
   userId: string;
@@ -5,7 +7,7 @@ export interface IBooking {
   date: Date;
   startTime: Date;
   endTime: Date;
-  status: TBookingStatus;
+  status: BookingStatus;
   description: string | null;
   createdAt: Date;
   updatedAt: Date;
@@ -20,13 +22,6 @@ export interface IBookingCreateDTO {
   description: string | null;
 }
 
-export type TBookingStatus =
-  | "PENDING"
-  | "CONFIRMED"
-  | "ACTIVE"
-  | "COMPLETED"
-  | "CANCELLED";
-
 export interface IBookingRepository {
   listBookings(): Promise<IBooking[]>;
   findBookingById(bookingId: string): Promise<IBooking | null>;
@@ -39,6 +34,6 @@ export interface IBookingRepository {
   deleteBooking(bookingId: string): Promise<IBooking>;
   updateBookingStatus(
     bookingId: string,
-    status: TBookingStatus
+    status: BookingStatus
   ): Promise<IBooking>;
 }

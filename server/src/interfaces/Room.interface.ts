@@ -4,7 +4,6 @@ import { IResource } from "./Resource.interface";
 export interface IRoom {
   id: number;
   name: string;
-  location: string;
   capacity: number;
   description?: string | null;
   resources?: IResource[];
@@ -15,7 +14,6 @@ export interface IRoom {
 
 export interface IRoomCreateDTO {
   name: string;
-  location: string;
   capacity: number;
   description?: string | null;
 }

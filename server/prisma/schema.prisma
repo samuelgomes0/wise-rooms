@@ -39,7 +39,6 @@ model Role {
 model Room {
   id          Int        @id @default(autoincrement())
   name        String
-  location    String
   capacity    Int
   description String?
   resources   Resource[]

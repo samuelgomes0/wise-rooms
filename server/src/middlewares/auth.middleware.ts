@@ -3,15 +3,15 @@ import { UserRepository } from "../repositories/user.repository";
 import { verifyToken } from "../utils/jwt";
 
 export const isAuthenticated = async (
-  req: any,
-  res: Response,
+  request: any,
+  reply: Response,
   next: NextFunction
 ) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  const token = request.headers.authorization?.split(" ")[1];
   const userRepository = new UserRepository();
 
   if (!token) {
-    return res.status(401).json({ error: "Token não fornecido." });
+    return reply.status(401).json({ error: "Token não fornecido." });
   }
 
   try {
@@ -20,15 +20,15 @@ export const isAuthenticated = async (
     const user = await userRepository.findById(decoded.id);
 
     if (!user) {
-      return res.status(401).json({ error: "Usuário não encontrado." });
+      return reply.status(401).json({ error: "Usuário não encontrado." });
     }
 
     const { password, ...userWithoutPassword } = user;
 
-    req.user = userWithoutPassword;
+    request.user = userWithoutPassword;
 
     next();
   } catch (error) {
-    return res.status(401).json({ error: "Token inválido" });
+    return reply.status(401).json({ error: "Token inválido" });
   }
 };

@@ -39,7 +39,7 @@ export class BookingUseCase {
       throw new Error("Booking conflict detected. Please choose another time.");
     }
 
-    return await this.bookingRepository.createBooking({
+    const booking = await this.bookingRepository.createBooking({
       userId,
       roomId,
       date,
@@ -47,6 +47,10 @@ export class BookingUseCase {
       endTime,
       description,
     });
+
+    this.bookingRepository.updateBookingStatus(booking.id, "CONFIRMED");
+
+    return booking;
   }
 
   async updateBooking(

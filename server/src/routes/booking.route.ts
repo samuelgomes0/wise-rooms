@@ -3,7 +3,7 @@ import { Router } from "express";
 import { isAuthenticated } from "../middlewares/auth.middleware";
 import { AuditLogRepository } from "../repositories/auditLog.repository";
 import { BookingRepository } from "../repositories/booking.repository";
-import { BookingUseCase, AuditLogUseCase } from "../usecases";
+import { AuditLogUseCase, BookingUseCase } from "../usecases";
 
 const router = Router();
 const bookingRepository = new BookingRepository();
@@ -93,11 +93,6 @@ router.post("/", isAuthenticated, async (req: any, res) => {
       description,
     });
 
-    const response = {
-      message: "Booking created.",
-      booking,
-    };
-
     await auditLogUseCase.createAuditLog({
       userId,
       action: AuditAction.CREATE,
@@ -105,7 +100,7 @@ router.post("/", isAuthenticated, async (req: any, res) => {
       entityId: booking.id,
     });
 
-    return res.status(201).json(response);
+    return res.status(201).json({ message: "Booking created." });
   } catch (error) {
     return res.status(400).json({
       error:

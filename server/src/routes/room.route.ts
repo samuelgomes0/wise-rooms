@@ -4,7 +4,7 @@ import { Router } from "express";
 import { isAuthenticated } from "../middlewares/auth.middleware";
 import { AuditLogRepository } from "../repositories/auditLog.repository";
 import { RoomRepository } from "../repositories/room.repository";
-import { RoomUseCase, AuditLogUseCase } from "../usecases";
+import { AuditLogUseCase, RoomUseCase } from "../usecases";
 
 const router = Router();
 const roomRepository = new RoomRepository();
@@ -28,18 +28,15 @@ router.get("/:roomId", async (req, res) => {
 
 // POST /rooms
 router.post("/", isAuthenticated, async (req: any, res) => {
-  const { name, location, capacity, description } = req.body;
+  const { name, capacity, description } = req.body;
 
-  if (!name || !location || !capacity) {
-    return res
-      .status(400)
-      .json({ error: "Name, location, and capacity are required" });
+  if (!name || !capacity) {
+    return res.status(400).json({ error: "Name and capacity are required" });
   }
 
   try {
     const room = await roomUseCase.createRoom({
       name,
-      location,
       capacity,
       description,
     });
@@ -70,18 +67,15 @@ router.post("/", isAuthenticated, async (req: any, res) => {
 // PUT /rooms/:roomId
 router.put("/:roomId", isAuthenticated, async (req: any, res) => {
   const roomId = parseInt(req.params.roomId);
-  const { name, location, capacity, description } = req.body;
+  const { name, capacity, description } = req.body;
 
-  if (!name || !location || !capacity) {
-    return res
-      .status(400)
-      .json({ error: "Name, location, and capacity are required" });
+  if (!name || !capacity) {
+    return res.status(400).json({ error: "Name and capacity are required" });
   }
 
   try {
     const room = await roomUseCase.updateRoom(roomId, {
       name,
-      location,
       capacity,
       description,
     });

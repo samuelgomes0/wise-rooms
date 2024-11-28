@@ -65,7 +65,7 @@ router.get("/email/:email", async (req, res) => {
 });
 
 // POST /users
-router.post("/", async (req: any, res) => {
+router.post("/", isAuthenticated, async (req: any, res) => {
   const { name, email, password, roleId } = req.body;
 
   try {
@@ -76,10 +76,7 @@ router.post("/", async (req: any, res) => {
       roleId,
     });
 
-    const response = {
-      message: "User created.",
-      user,
-    };
+    console.log(req.user);
 
     const { id: performedBy } = req.user;
 
@@ -90,7 +87,7 @@ router.post("/", async (req: any, res) => {
       entityId: user.id,
     });
 
-    return res.status(201).json(response);
+    return res.status(201).json({ message: "User created." });
   } catch (error) {
     return res.status(400).json({
       error:

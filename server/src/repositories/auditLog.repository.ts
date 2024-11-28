@@ -1,9 +1,5 @@
 import { prisma } from "../database/prisma-client";
-import {
-  IAuditLog,
-  IAuditLogDTO,
-  IAuditLogRepository,
-} from "../interfaces/AuditLog.interface";
+import { IAuditLogRepository, IAuditLog, IAuditLogDTO } from "../interfaces";
 
 export class AuditLogRepository implements IAuditLogRepository {
   async listAuditLogs(): Promise<IAuditLog[]> {

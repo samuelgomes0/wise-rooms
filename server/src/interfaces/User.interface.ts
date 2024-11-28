@@ -17,6 +17,7 @@ export interface IUserCreateDTO {
   name: string;
   email: string;
   password: string;
+  roleId: number;
 }
 
 export interface IUserRepository {

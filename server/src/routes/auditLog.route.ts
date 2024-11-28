@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { AuditLogRepository } from "../repositories/auditLog.repository";
-import { AuditLogUseCase } from "../usecases/auditLog.usecase";
+import { AuditLogUseCase } from "../usecases";
 
 const router = Router();
 const auditLogRepository = new AuditLogRepository();

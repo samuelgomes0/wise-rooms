@@ -1,6 +1,5 @@
-import { prisma } from "../database/prisma-client";
 import { IUser, IUserCreateDTO } from "../interfaces/User.interface";
-import { UserRepository } from "../repositories/user.repository";
+import { UserRepository } from "../repositories";
 import { hashPassword } from "../utils";
 
 export class UserUseCase {
@@ -10,41 +9,59 @@ export class UserUseCase {
     this.userRepository = userRepository;
   }
 
-  async listUsers(): Promise<Omit<IUser, "password">[]> {
+  async listUsers(): Promise<
+    Omit<IUser, "password" | "createdAt" | "updatedAt">[]
+  > {
     const users = await this.userRepository.listUsers();
 
     return users.map((user) => {
-      const { password, ...userWithoutPasswordAndRoleId } = user;
+      const {
+        password,
+        createdAt,
+        updatedAt,
+        ...userWithoutPasswordAndRoleId
+      } = user;
 
       return userWithoutPasswordAndRoleId;
     });
   }
 
-  async findById(id: string): Promise<Omit<IUser, "password"> | null> {
+  async findById(
+    id: string
+  ): Promise<Omit<IUser, "password" | "createdAt" | "updatedAt"> | null> {
     const user = await this.userRepository.findById(id);
 
     if (!user) {
       throw new Error("User not found.");
     }
 
-    const { password, ...userWithoutPasswordAndRoleId } = user;
+    const { password, createdAt, updatedAt, ...userWithoutPasswordAndRoleId } =
+      user;
 
     return userWithoutPasswordAndRoleId;
   }
 
-  async findByEmail(email: string): Promise<Omit<IUser, "password"> | null> {
+  async findByEmail(
+    email: string
+  ): Promise<Omit<IUser, "password" | "createdAt" | "updatedAt"> | null> {
     const user = await this.userRepository.findByEmail(email);
 
     if (!user) {
       throw new Error("User not found.");
     }
 
-    const { password, ...userWithoutPasswordAndRoleId } = user;
+    const { password, createdAt, updatedAt, ...userWithoutPasswordAndRoleId } =
+      user;
 
     return userWithoutPasswordAndRoleId;
   }
 
-  async createUser({ name, email, password }: IUserCreateDTO): Promise<IUser> {
+  async createUser({
+    name,
+    email,
+    password,
+    roleId,
+  }: IUserCreateDTO): Promise<IUser> {
     const hashedPassword = await hashPassword(password);
 
     const userExists = await this.userRepository.findByEmail(email);
@@ -53,24 +70,20 @@ export class UserUseCase {
       throw new Error("User already exists.");
     }
 
-    const viewerRole = await prisma.role.findUnique({
-      where: {
-        name: "VIEWER",
-      },
-    });
-
-    if (!viewerRole) {
-      throw new Error("Role not found.");
-    }
-
     return await this.userRepository.createUser({
       name,
       email,
       password: hashedPassword,
+      roleId,
     });
   }
 
-  async updateUser({ name, email, password }: IUserCreateDTO): Promise<IUser> {
+  async updateUser({
+    name,
+    email,
+    password,
+    roleId,
+  }: IUserCreateDTO): Promise<IUser> {
     const user = await this.userRepository.findByEmail(email);
 
     if (!user) {
@@ -84,6 +97,7 @@ export class UserUseCase {
       name,
       email,
       password,
+      roleId,
     });
   }
 

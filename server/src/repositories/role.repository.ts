@@ -1,5 +1,5 @@
 import { prisma } from "../database/prisma-client";
-import { IRole, IRoleDTO, IRoleRepository } from "../interfaces/Role.interface";
+import { IRoleRepository, IRole, IRoleDTO } from "../interfaces";
 
 export class RoleRepository implements IRoleRepository {
   async listRoles(): Promise<IRole[]> {

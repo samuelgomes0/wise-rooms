@@ -1,5 +1,5 @@
 import { IBooking, IBookingCreateDTO } from "../interfaces/Booking.interface";
-import { BookingRepository } from "../repositories/booking.repository";
+import { BookingRepository } from "../repositories";
 
 export class BookingUseCase {
   private bookingRepository: BookingRepository;

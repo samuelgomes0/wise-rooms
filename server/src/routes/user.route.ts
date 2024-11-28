@@ -3,8 +3,7 @@ import { Router } from "express";
 import { isAuthenticated } from "../middlewares/auth.middleware";
 import { AuditLogRepository } from "../repositories/auditLog.repository";
 import { UserRepository } from "../repositories/user.repository";
-import { AuditLogUseCase } from "../usecases/auditLog.usecase";
-import { UserUseCase } from "../usecases/user.usecase";
+import { AuditLogUseCase, UserUseCase } from "../usecases";
 
 const router = Router();
 const userRepository = new UserRepository();
@@ -67,10 +66,15 @@ router.get("/email/:email", async (req, res) => {
 
 // POST /users
 router.post("/", async (req: any, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, roleId } = req.body;
 
   try {
-    const user = await userUseCase.createUser({ name, email, password });
+    const user = await userUseCase.createUser({
+      name,
+      email,
+      password,
+      roleId,
+    });
 
     const response = {
       message: "User created.",
@@ -97,10 +101,15 @@ router.post("/", async (req: any, res) => {
 
 // PUT /users/:id
 router.put("/:id", isAuthenticated, async (req: any, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, roleId } = req.body;
 
   try {
-    const user = await userUseCase.updateUser({ name, email, password });
+    const user = await userUseCase.updateUser({
+      name,
+      email,
+      password,
+      roleId,
+    });
 
     const response = {
       message: "User updated.",

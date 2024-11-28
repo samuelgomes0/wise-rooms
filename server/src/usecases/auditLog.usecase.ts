@@ -1,5 +1,5 @@
 import { IAuditLog, IAuditLogDTO } from "../interfaces/AuditLog.interface";
-import { AuditLogRepository } from "../repositories/auditLog.repository";
+import { AuditLogRepository } from "../repositories";
 
 export class AuditLogUseCase {
   private auditLogRepository: AuditLogRepository;

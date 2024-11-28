@@ -3,8 +3,7 @@ import { Router } from "express";
 import { isAuthenticated } from "../middlewares/auth.middleware";
 import { AuditLogRepository } from "../repositories/auditLog.repository";
 import { BookingRepository } from "../repositories/booking.repository";
-import { AuditLogUseCase } from "../usecases/auditLog.usecase";
-import { BookingUseCase } from "../usecases/booking.usecase";
+import { BookingUseCase, AuditLogUseCase } from "../usecases";
 
 const router = Router();
 const bookingRepository = new BookingRepository();

@@ -1,16 +1,12 @@
 import { prisma } from "../database/prisma-client";
-import {
-  IRoom,
-  IRoomCreateDTO,
-  IRoomRepository,
-} from "../interfaces/Room.interface";
+import { IRoom, IRoomCreateDTO, IRoomRepository } from "../interfaces";
 
 export class RoomRepository implements IRoomRepository {
-  async getRooms(): Promise<IRoom[]> {
+  async listRooms(): Promise<IRoom[]> {
     return await prisma.room.findMany();
   }
 
-  async getRoomById(roomId: number): Promise<IRoom | null> {
+  async findRoomById(roomId: number): Promise<IRoom | null> {
     return await prisma.room.findUnique({
       where: {
         id: roomId,

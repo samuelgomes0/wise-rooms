@@ -1,5 +1,5 @@
 import { IResource } from "../interfaces/Resource.interface";
-import { ResourceRepository } from "../repositories/resource.repository";
+import { ResourceRepository } from "../repositories";
 
 export class ResourceUsecase {
   private resourceRepository: ResourceRepository;
@@ -13,6 +13,6 @@ export class ResourceUsecase {
   }
 
   async getResources() {
-    return this.resourceRepository.getResources();
+    return this.resourceRepository.listResources();
   }
 }

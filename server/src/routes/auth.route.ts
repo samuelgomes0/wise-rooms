@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { isAuthenticated } from "../middlewares/auth.middleware";
 import { UserRepository } from "../repositories/user.repository";
-import { AuthUseCase } from "../usecases/auth.usecase";
+import { AuthUseCase } from "../usecases";
 
 const router = Router();
 const userRepository = new UserRepository();

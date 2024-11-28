@@ -2,7 +2,7 @@
 import { Router } from "express";
 import { z } from "zod";
 import { RoleRepository } from "../repositories/role.repository";
-import { RoleUseCase } from "../usecases/role.usecase";
+import { RoleUseCase } from "../usecases";
 
 const router = Router();
 const roleRepository = new RoleRepository();

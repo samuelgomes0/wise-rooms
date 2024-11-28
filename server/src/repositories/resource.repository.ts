@@ -1,11 +1,11 @@
-import { IResourceRepository } from "../interfaces/Resource.interface";
+import { IResourceRepository } from "../interfaces";
 
 export class ResourceRepository implements IResourceRepository {
-  public async getResources(): Promise<any> {
+  public async listResources(): Promise<any> {
     return [];
   }
 
-  public async getResourceById(resourceId: number): Promise<any> {
+  public async findResourceById(resourceId: number): Promise<any> {
     return null;
   }
 

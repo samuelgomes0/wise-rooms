@@ -1,5 +1,5 @@
 import { IRoom, IRoomCreateDTO } from "../interfaces/Room.interface";
-import { RoomRepository } from "../repositories/room.repository";
+import { RoomRepository } from "../repositories";
 
 export class RoomUseCase {
   private roomRepository: RoomRepository;
@@ -9,11 +9,11 @@ export class RoomUseCase {
   }
 
   async getRooms(): Promise<IRoom[]> {
-    return await this.roomRepository.getRooms();
+    return await this.roomRepository.listRooms();
   }
 
   async getRoomById(roomId: number): Promise<IRoom | null> {
-    return await this.roomRepository.getRoomById(roomId);
+    return await this.roomRepository.findRoomById(roomId);
   }
 
   async createRoom(room: IRoomCreateDTO): Promise<IRoom> {

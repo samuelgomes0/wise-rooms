@@ -1,9 +1,5 @@
 import { prisma } from "../database/prisma-client";
-import {
-  IUser,
-  IUserCreateDTO,
-  IUserRepository,
-} from "../interfaces/User.interface";
+import { IUser, IUserCreateDTO, IUserRepository } from "../interfaces";
 
 export class UserRepository implements IUserRepository {
   async listUsers(): Promise<IUser[]> {
@@ -38,22 +34,28 @@ export class UserRepository implements IUserRepository {
     });
   }
 
-  async createUser({ name, email, password }: IUserCreateDTO): Promise<IUser> {
+  async createUser({
+    name,
+    email,
+    password,
+    roleId,
+  }: IUserCreateDTO): Promise<IUser> {
     return await prisma.user.create({
       data: {
         name,
         email,
         password,
-        role: {
-          connect: {
-            name: "VIEWER",
-          },
-        },
+        roleId,
       },
     });
   }
 
-  async updateUser({ name, email, password }: IUserCreateDTO): Promise<IUser> {
+  async updateUser({
+    name,
+    email,
+    password,
+    roleId,
+  }: IUserCreateDTO): Promise<IUser> {
     return await prisma.user.update({
       where: {
         email,
@@ -62,6 +64,7 @@ export class UserRepository implements IUserRepository {
         name,
         email,
         password,
+        roleId,
       },
     });
   }

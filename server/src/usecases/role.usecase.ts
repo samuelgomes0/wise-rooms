@@ -1,5 +1,5 @@
-import { IRoleDTO } from "../interfaces/Role.interface";
-import { RoleRepository } from "../repositories/role.repository";
+import { IRole, IRoleDTO } from "../interfaces";
+import { RoleRepository } from "../repositories";
 
 export class RoleUseCase {
   private roleRepository: RoleRepository;
@@ -8,11 +8,20 @@ export class RoleUseCase {
     this.roleRepository = roleRepository;
   }
 
-  async listRoles() {
-    return this.roleRepository.listRoles();
+  async listRoles(): Promise<Omit<IRole, "createdAt" | "updatedAt">[]> {
+    const roles = await this.roleRepository.listRoles();
+
+    return roles.map((role) => {
+      const { createdAt, updatedAt, ...roleWithoutCreatedAtAndUpdatedAt } =
+        role;
+
+      return roleWithoutCreatedAtAndUpdatedAt;
+    });
   }
 
-  async createRole({ name, description }: IRoleDTO) {
-    return this.roleRepository.createRole({ name, description });
+  async createRole({ name, description }: IRoleDTO): Promise<IRole> {
+    const role = await this.roleRepository.createRole({ name, description });
+
+    return role;
   }
 }

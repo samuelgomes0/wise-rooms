@@ -18,8 +18,8 @@ export interface IResourceCreateDTO {
 }
 
 export interface IResourceRepository {
-  getResources(): Promise<IResource[]>;
-  getResourceById(resourceId: number): Promise<IResource | null>;
+  listResources(): Promise<IResource[]>;
+  findResourceById(resourceId: number): Promise<IResource | null>;
   createResource(data: IResourceCreateDTO): Promise<IResource>;
   updateResource(
     resourceId: number,

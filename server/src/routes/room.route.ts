@@ -4,8 +4,7 @@ import { Router } from "express";
 import { isAuthenticated } from "../middlewares/auth.middleware";
 import { AuditLogRepository } from "../repositories/auditLog.repository";
 import { RoomRepository } from "../repositories/room.repository";
-import { AuditLogUseCase } from "../usecases/auditLog.usecase";
-import { RoomUseCase } from "../usecases/room.usecase";
+import { RoomUseCase, AuditLogUseCase } from "../usecases";
 
 const router = Router();
 const roomRepository = new RoomRepository();

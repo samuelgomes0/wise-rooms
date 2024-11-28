@@ -4,7 +4,7 @@ import {
   IBookingCreateDTO,
   IBookingRepository,
   TBookingStatus,
-} from "../interfaces/Booking.interface";
+} from "../interfaces";
 
 export class BookingRepository implements IBookingRepository {
   async listBookings(): Promise<IBooking[]> {

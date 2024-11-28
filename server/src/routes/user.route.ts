@@ -66,7 +66,7 @@ router.get("/email/:email", async (req, res) => {
 });
 
 // POST /users
-router.post("/", isAuthenticated, async (req: any, res) => {
+router.post("/", async (req: any, res) => {
   const { name, email, password } = req.body;
 
   try {

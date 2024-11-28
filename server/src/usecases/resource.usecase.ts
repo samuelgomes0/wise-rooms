@@ -1,6 +1,5 @@
-// src/usecases/ResourceUsecase.ts
-import { IResource } from "../interfaces/IResource";
-import { ResourceRepository } from "../repositories/ResourceRepository";
+import { IResource } from "../interfaces/Resource.interface";
+import { ResourceRepository } from "../repositories/resource.repository";
 
 export class ResourceUsecase {
   private resourceRepository: ResourceRepository;
@@ -9,20 +8,11 @@ export class ResourceUsecase {
     this.resourceRepository = resourceRepository;
   }
 
-  // Create a new resource
-  async createResource(
-    data: Omit<IResource, "id" | "createdAt" | "updatedAt">
-  ): Promise<IResource> {
-    return this.resourceRepository.create(data);
+  async createResource(resource: IResource) {
+    return this.resourceRepository.createResource(resource);
   }
 
-  // Get all resources
-  async getAllResources(): Promise<IResource[]> {
-    return this.resourceRepository.findAll();
-  }
-
-  // Delete a resource
-  async deleteResource(id: number): Promise<void> {
-    await this.resourceRepository.delete(id);
+  async getResources() {
+    return this.resourceRepository.getResources();
   }
 }

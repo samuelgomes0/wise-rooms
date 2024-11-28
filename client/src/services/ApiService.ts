@@ -9,7 +9,6 @@ class ApiService {
       baseURL,
     });
 
-    // Adicionando um interceptor para incluir o token nos headers
     this.api.interceptors.request.use((config) => {
       const { "wiserooms.token": token } = parseCookies();
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { BookingRegistrationForm } from "@/components/BookingRegistrationForm";
+import { BookingRegistrationForm } from "@/components/Bookings/BookingRegistrationForm";
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
 import Pagination from "@/components/Pagination";
@@ -31,9 +31,9 @@ import {
 import { AuthContext } from "@/contexts/AuthContext";
 import bookingServiceInstance from "@/services/BookingService";
 import { IBooking } from "@/types";
-import { Roles } from "@/types/Roles.enum";
+import { ERoles } from "@/types/Roles.enum";
 import { getStatusBadge } from "@/utils";
-import { filterBookings } from "@/utils/filterBookings"; // Função de filtragem
+import { filterBookings } from "@/utils/filterBookings";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CalendarIcon, MoreHorizontalIcon, SearchIcon } from "lucide-react";
@@ -77,6 +77,7 @@ export default function Reservas() {
 
   useEffect(() => {
     bookingServiceInstance.listBookings().then(({ data }) => {
+      console.log(data);
       setBookings(data);
     });
   }, []);
@@ -93,7 +94,7 @@ export default function Reservas() {
               <div>
                 <h1 className="text-2xl font-bold">Reservas</h1>
                 <p className="text-sm text-gray-500">
-                  {Roles[user?.roleId as unknown as keyof typeof Roles]}
+                  {ERoles[user?.roleId as unknown as keyof typeof ERoles]}
                 </p>
               </div>
             </div>

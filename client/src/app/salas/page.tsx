@@ -3,7 +3,7 @@
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
 import Pagination from "@/components/Pagination";
-import { RoomRegistrationForm } from "@/components/RoomRegistrationForm";
+import { RoomRegistrationForm } from "@/components/Rooms/RoomRegistrationForm";
 import SearchFilter from "@/components/SearchFilter";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -16,12 +16,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AuthContext } from "@/contexts/AuthContext";
-import { Roles } from "@/types/Roles.enum";
+import roomServiceInstance from "@/services/RoomService";
+import { ERoles } from "@/types/Roles.enum";
+import { IRoom } from "@/types/Room.interface";
 import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function Salas() {
-  const [rooms, setRooms] = useState([]);
+  const [rooms, setRooms] = useState<IRoom[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -32,7 +34,7 @@ export default function Salas() {
     (room) =>
       room.id.toString().includes(searchTerm) ||
       room.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      room.description.toLowerCase().includes(searchTerm.toLowerCase())
+      room.description?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const paginatedRooms = filteredRooms.slice(
@@ -40,6 +42,10 @@ export default function Salas() {
     currentPage * itemsPerPage
   );
   const totalPages = Math.ceil(filteredRooms.length / itemsPerPage);
+
+  useEffect(() => {
+    roomServiceInstance.listRooms().then(({ data }) => setRooms(data));
+  }, []);
 
   return (
     <div className="flex p-4 w-full">
@@ -53,7 +59,7 @@ export default function Salas() {
               <div>
                 <h1 className="text-2xl font-bold">Salas</h1>
                 <p className="text-sm text-gray-500">
-                  {Roles[user?.roleId as unknown as keyof typeof Roles]}
+                  {ERoles[user?.roleId as unknown as keyof typeof ERoles]}
                 </p>
               </div>
             </div>

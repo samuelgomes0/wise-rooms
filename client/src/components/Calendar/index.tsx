@@ -1,8 +1,8 @@
 import { DAYS_OF_WEEK, HOURS } from "@/constants/calendar";
 import { Event, useCalendar } from "@/hooks/useCalendar";
 import React, { useState } from "react";
+import { CreateBookingModal } from "../Bookings/CreateBookingModal";
 import { CalendarHeader } from "../CalendarHeader";
-import { CreateBookingModal } from "../CreateBookingModal";
 import { ViewEventModal } from "../ViewEventModal";
 
 export const Calendar: React.FC = () => {

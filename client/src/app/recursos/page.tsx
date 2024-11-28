@@ -23,13 +23,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AuthContext } from "@/contexts/AuthContext";
+import { IResource } from "@/types/Resource.interface";
 import { resourceTypes } from "@/types/resourceTypes.enum";
-import { Roles } from "@/types/Roles.enum";
+import { ERoles } from "@/types/Roles.enum";
 import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
 import { useContext, useState } from "react";
 
 export default function Recursos() {
-  const [resources, setResources] = useState([]);
+  const [resources, setResources] = useState<IResource[]>([]);
   const [statusFilter, setStatusFilter] = useState("Todos");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -62,7 +63,7 @@ export default function Recursos() {
               <div>
                 <h1 className="text-2xl font-bold">Recursos</h1>
                 <p className="text-sm text-gray-500">
-                  {Roles[user?.roleId as unknown as keyof typeof Roles]}
+                  {ERoles[user?.roleId as unknown as keyof typeof ERoles]}
                 </p>
               </div>
             </div>

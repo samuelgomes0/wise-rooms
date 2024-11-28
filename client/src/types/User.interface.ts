@@ -1,6 +1,9 @@
+import { IBooking } from "./Booking.interface";
+
 export interface IUser {
   id: string;
   name: string;
   email: string;
   roleId: number;
+  bookings?: IBooking[];
 }

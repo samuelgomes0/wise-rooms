@@ -21,14 +21,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { UserRegistrationForm } from "@/components/UserRegistrationForm";
+import { UserRegistrationForm } from "@/components/Users/UserRegistrationForm";
 import { AuthContext } from "@/contexts/AuthContext";
-import { Roles } from "@/types/Roles.enum";
+import userServiceInstance from "@/services/UserService";
+import { IUser } from "@/types";
+import { ERoles } from "@/types/Roles.enum";
 import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function Usuarios() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<IUser[]>([]);
   const [statusFilter, setStatusFilter] = useState("Todos");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -37,10 +39,10 @@ export default function Usuarios() {
   const { user } = useContext(AuthContext);
 
   const filteredUsers = users.filter(
-    (resource) =>
-      resource.id.toString().includes(searchTerm) ||
-      resource.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      resource.email.toLowerCase().includes(searchTerm.toLowerCase())
+    (user) =>
+      user.id.toString().includes(searchTerm) ||
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const paginatedUsers = filteredUsers.slice(
@@ -48,6 +50,13 @@ export default function Usuarios() {
     currentPage * itemsPerPage
   );
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+
+  useEffect(() => {
+    userServiceInstance.listUsers().then(({ data }) => {
+      setUsers(data);
+      console.log(data);
+    });
+  }, []);
 
   return (
     <div className="flex p-4 w-full">
@@ -61,7 +70,7 @@ export default function Usuarios() {
               <div>
                 <h1 className="text-2xl font-bold">Usuários</h1>
                 <p className="text-sm text-gray-500">
-                  {Roles[user?.roleId as unknown as keyof typeof Roles]}
+                  {ERoles[user?.roleId as unknown as keyof typeof ERoles]}
                 </p>
               </div>
             </div>
@@ -108,6 +117,7 @@ export default function Usuarios() {
             ]}
             data={paginatedUsers.map((user) => ({
               ...user,
+              role: ERoles[user.roleId],
               options: (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

@@ -3,7 +3,7 @@
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
 import Pagination from "@/components/Pagination";
-import { ResourceRegistrationForm } from "@/components/ResourceRegistrationForm";
+import { ResourceRegistrationForm } from "@/components/Resources/ResourceRegistrationForm";
 import SearchFilter from "@/components/SearchFilter";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";

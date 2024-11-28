@@ -43,6 +43,12 @@ export default function Salas() {
   );
   const totalPages = Math.ceil(filteredRooms.length / itemsPerPage);
 
+  const handleDeleteRoom = (roomId: number) => {
+    roomServiceInstance.deleteRoom(roomId).then(() => {
+      setRooms(rooms.filter((room) => room.id !== roomId));
+    });
+  };
+
   useEffect(() => {
     roomServiceInstance.listRooms().then(({ data }) => setRooms(data));
   }, []);
@@ -107,7 +113,10 @@ export default function Salas() {
                     <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
                     <DropdownMenuItem>Editar sala</DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-red-600">
+                    <DropdownMenuItem
+                      className="text-red-600"
+                      onClick={() => handleDeleteRoom(room.id)}
+                    >
                       Deletar sala
                     </DropdownMenuItem>
                   </DropdownMenuContent>

@@ -31,6 +31,13 @@ import { useContext, useEffect, useState } from "react";
 
 export default function Usuarios() {
   const [users, setUsers] = useState<IUser[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    listUsers();
+  };
+
   const [statusFilter, setStatusFilter] = useState("Todos");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,10 +58,21 @@ export default function Usuarios() {
   );
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
 
+  const listUsers = () => {
+    userServiceInstance.listUsers().then(({ data }) => {
+      setUsers(data);
+    });
+  };
+
+  const handleDeleteUser = (id: string) => {
+    userServiceInstance.deleteUser(id).then(() => {
+      listUsers();
+    });
+  };
+
   useEffect(() => {
     userServiceInstance.listUsers().then(({ data }) => {
       setUsers(data);
-      console.log(data);
     });
   }, []);
 
@@ -77,8 +95,10 @@ export default function Usuarios() {
             <GenericModal
               title="Adicionar Novo Usuário"
               triggerText="+ Novo Usuário"
+              isOpen={isModalOpen}
+              onOpenChange={setIsModalOpen}
             >
-              <UserRegistrationForm />
+              <UserRegistrationForm onCloseModal={handleModalClose} />
             </GenericModal>
           </div>
           <div className="flex gap-4">
@@ -135,7 +155,10 @@ export default function Usuarios() {
                     <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
                     <DropdownMenuItem>Editar usuário</DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-red-600">
+                    <DropdownMenuItem
+                      className="text-red-600"
+                      onClick={() => handleDeleteUser(user.id)}
+                    >
                       Deletar usuário
                     </DropdownMenuItem>
                   </DropdownMenuContent>

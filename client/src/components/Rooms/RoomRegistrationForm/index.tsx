@@ -15,30 +15,23 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-
-const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "O nome da sala deve ter pelo menos 2 caracteres.",
-  }),
-  capacity: z
-    .number({ invalid_type_error: "Informe a capacidade como um número." })
-    .min(1, { message: "A capacidade deve ser pelo menos 1." }),
-  description: z.string().optional(),
-});
+import { registerRoomSchema } from "@/schemas/registerRoom.schema";
+import roomServiceInstance from "@/services/RoomService";
 
 export function RoomRegistrationForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof registerRoomSchema>>({
+    resolver: zodResolver(registerRoomSchema),
     defaultValues: {
       name: "",
-      capacity: "",
+      capacity: 0,
       description: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // Aqui você pode adicionar a lógica para enviar os dados para o servidor
+  function onSubmit(values: z.infer<typeof registerRoomSchema>) {
+    roomServiceInstance.createRoom(values).then(() => {
+      form.reset();
+    });
   }
 
   return (
@@ -71,6 +64,10 @@ export function RoomRegistrationForm() {
                   type="number"
                   placeholder="Capacidade da sala"
                   {...field}
+                  onChange={({ target }) => {
+                    console.log(target.value);
+                    field.onChange(parseInt(target.value));
+                  }}
                 />
               </FormControl>
               <FormMessage />

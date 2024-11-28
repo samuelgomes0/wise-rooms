@@ -197,13 +197,17 @@ export default function Reservas() {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
                     <DropdownMenuItem>Editar reserva</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      className="text-red-600"
-                      onClick={() => handleCancelBooking(booking.id)}
-                    >
-                      Cancelar reserva
-                    </DropdownMenuItem>
+                    {booking.status !== "CANCELLED" && (
+                      <>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          className="text-red-600"
+                          onClick={() => handleCancelBooking(booking.id)}
+                        >
+                          Cancelar reserva
+                        </DropdownMenuItem>
+                      </>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               ),

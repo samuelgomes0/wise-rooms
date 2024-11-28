@@ -1,11 +1,9 @@
 import apiServiceInstance from "./ApiService";
 
 interface RoomData {
-  userId: string;
-  roomId: number;
-  date: Date;
-  startTime: Date;
-  endTime: Date;
+  name: string;
+  capacity: number;
+  description?: string;
 }
 
 class RoomService {
@@ -13,14 +11,16 @@ class RoomService {
     return await apiServiceInstance.get("/rooms");
   }
 
-  async createRoom({ userId, roomId, date, startTime, endTime }: RoomData) {
-    return await apiServiceInstance.post<void, RoomData>("/rooms", {
-      userId,
-      roomId,
-      date,
-      startTime,
-      endTime,
+  async createRoom({ name, capacity, description }: RoomData) {
+    return await apiServiceInstance.post("/rooms", {
+      name,
+      capacity,
+      description,
     });
+  }
+
+  async deleteRoom(roomId: number) {
+    return await apiServiceInstance.delete(`/rooms/${roomId}`);
   }
 }
 

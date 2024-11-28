@@ -35,7 +35,7 @@ export default function RegisterPage() {
     }
 
     try {
-      await UserService.create({ name, email, password }).then(
+      await UserService.createUser({ name, email, password }).then(
         () => (window.location.href = "/entrar")
       );
     } catch (error) {

@@ -30,13 +30,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { registerBookingSchema } from "@/schemas";
 import bookingServiceInstance from "@/services/BookingService";
 import roomServiceInstance from "@/services/RoomService";
 import userServiceInstance from "@/services/UserService";
 import { IUser } from "@/types";
 import { IRoom } from "@/types/Room.interface";
 import { useEffect, useState } from "react";
-import { registerBookingSchema } from "@/schemas";
 
 export function BookingRegistrationForm({
   onCloseModal,
@@ -71,8 +71,8 @@ export function BookingRegistrationForm({
         endTime: timeEndDate,
       });
 
-      form.reset(); // Reseta o formulário
-      onCloseModal(); // Fecha o modal
+      form.reset();
+      onCloseModal();
     } catch (error) {
       console.error("Erro ao criar reserva:", error);
     }

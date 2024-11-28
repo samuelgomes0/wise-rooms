@@ -4,6 +4,7 @@ interface UserData {
   name: string;
   email: string;
   password: string;
+  roleId: number;
 }
 
 class UserService {
@@ -19,12 +20,17 @@ class UserService {
     return await apiServiceInstance.get(`/users/email/${email}`);
   }
 
-  async create({ name, email, password }: UserData) {
-    return await apiServiceInstance.post<void, UserData>("/users/create", {
+  async createUser({ name, email, password, roleId }: UserData) {
+    return await apiServiceInstance.post<void, UserData>("/users", {
       name,
       email,
       password,
+      roleId,
     });
+  }
+
+  async deleteUser(id: string) {
+    return await apiServiceInstance.delete(`/users/${id}`);
   }
 }
 

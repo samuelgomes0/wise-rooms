@@ -21,42 +21,58 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import userCreationSchema from "@/schemas/createUser.schema";
+import roleServiceInstance from "@/services/RoleService";
+import userServiceInstance from "@/services/UserService";
+import { IRole } from "@/types";
+import { useEffect, useState } from "react";
 
-const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "O nome deve ter pelo menos 2 caracteres.",
-  }),
-  email: z.string().email({
-    message: "Informe um email válido.",
-  }),
-  password: z.string().min(6, {
-    message: "A senha deve ter pelo menos 6 caracteres.",
-  }),
-  role: z.string().min(1, {
-    message: "Selecione um cargo.",
-  }),
-});
+export function UserRegistrationForm({
+  onCloseModal,
+}: {
+  onCloseModal: () => void;
+}) {
+  const [roles, setRoles] = useState<IRole[]>([]);
 
-export function UserRegistrationForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof userCreationSchema>>({
+    resolver: zodResolver(userCreationSchema),
     defaultValues: {
       name: "",
       email: "",
       password: "",
-      role: "",
+      roleId: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // Aqui você pode adicionar a lógica para enviar os dados para o servidor
+  async function onSubmit({
+    name,
+    email,
+    password,
+    roleId,
+  }: z.infer<typeof userCreationSchema>) {
+    await userServiceInstance.createUser({
+      name,
+      email,
+      password,
+      roleId: Number(roleId),
+    });
+
+    form.reset();
+    onCloseModal();
   }
+
+  useEffect(() => {
+    roleServiceInstance.listRoles().then(({ data }) => {
+      setRoles(data);
+    });
+  }, []);
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit((data) => {
+          onSubmit(data);
+        })}
         className="flex flex-col gap-4"
       >
         <FormField
@@ -100,7 +116,7 @@ export function UserRegistrationForm() {
         />
         <FormField
           control={form.control}
-          name="role"
+          name="roleId"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Cargo</FormLabel>
@@ -111,9 +127,11 @@ export function UserRegistrationForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="viewer">Visualizador</SelectItem>
-                  <SelectItem value="operator">Operador</SelectItem>
-                  <SelectItem value="admin">Administrador</SelectItem>
+                  {roles.map(({ id, name }) => (
+                    <SelectItem key={id} value={id.toString()}>
+                      {name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <FormMessage />

@@ -19,8 +19,11 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
+
 import { ROOMS, WEEKDAYS } from "@/lib/constants";
+
 import { ChevronLeft, ChevronRight } from "lucide-react";
+
 import { useCallback, useEffect, useState } from "react";
 
 const generateTimeSlots = () => {
@@ -440,7 +443,7 @@ export default function Calendario() {
           const dateKey = date.toISOString().split("T")[0];
           const dayReservations = reservations[dateKey];
           const isCurrentMonth = date.getMonth() === currentDate.getMonth();
-          type NewType = any;
+          type NewType = { title: string; room: string };
 
           return (
             <div

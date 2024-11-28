@@ -8,7 +8,6 @@ import {
   IBooking,
   IBookingCreateDTO,
   IBookingRepository,
-  TBookingStatus,
 } from "./Booking.interface";
 import {
   IResource,
@@ -40,5 +39,4 @@ export {
   IUser,
   IUserCreateDTO,
   IUserRepository,
-  TBookingStatus,
 };

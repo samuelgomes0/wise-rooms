@@ -1,10 +1,6 @@
+import { BookingStatus } from "@prisma/client";
 import { prisma } from "../database/prisma-client";
-import {
-  IBooking,
-  IBookingCreateDTO,
-  IBookingRepository,
-  TBookingStatus,
-} from "../interfaces";
+import { IBooking, IBookingCreateDTO, IBookingRepository } from "../interfaces";
 
 export class BookingRepository implements IBookingRepository {
   async listBookings(): Promise<IBooking[]> {
@@ -107,7 +103,7 @@ export class BookingRepository implements IBookingRepository {
 
   async updateBookingStatus(
     bookingId: string,
-    status: TBookingStatus
+    status: BookingStatus
   ): Promise<IBooking> {
     return await prisma.booking.update({
       where: {

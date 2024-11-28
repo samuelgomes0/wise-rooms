@@ -5,9 +5,6 @@ CREATE TYPE "audit_actions" AS ENUM ('CREATE', 'UPDATE', 'DELETE');
 CREATE TYPE "audit_entities" AS ENUM ('USER', 'ROOM', 'RESOURCE', 'BOOKING');
 
 -- CreateEnum
-CREATE TYPE "role_names" AS ENUM ('VIEWER', 'OPERATOR', 'ADMIN');
-
--- CreateEnum
 CREATE TYPE "booking_statuses" AS ENUM ('PENDING', 'CONFIRMED', 'ACTIVE', 'COMPLETED', 'CANCELLED');
 
 -- CreateTable
@@ -26,8 +23,10 @@ CREATE TABLE "users" (
 -- CreateTable
 CREATE TABLE "roles" (
     "id" SERIAL NOT NULL,
-    "name" "role_names" NOT NULL,
+    "name" TEXT NOT NULL,
     "description" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "roles_pkey" PRIMARY KEY ("id")
 );

@@ -26,9 +26,11 @@ model User {
 // Role Model
 model Role {
   id          Int      @id @default(autoincrement())
-  name        RoleName @unique
+  name        String   @unique
   description String?
   users       User[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@map("roles")
 }
@@ -112,15 +114,6 @@ enum AuditEntity {
   BOOKING
 
   @@map("audit_entities")
-}
-
-// RoleName Enum
-enum RoleName {
-  VIEWER
-  OPERATOR
-  ADMIN
-
-  @@map("role_names")
 }
 
 enum BookingStatus {

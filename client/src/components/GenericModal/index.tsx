@@ -18,8 +18,8 @@ function GenericModal({
   title: string;
   triggerText: string;
   children: React.ReactNode;
-  isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
+  isOpen?: boolean;
+  onOpenChange?: (isOpen: boolean) => void;
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>

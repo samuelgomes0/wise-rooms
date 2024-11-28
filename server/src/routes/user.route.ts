@@ -65,7 +65,7 @@ router.get("/email/:email", async (req, res) => {
 });
 
 // POST /users
-router.post("/", async (req: any, res) => {
+router.post("/", isAuthenticated, async (req: any, res) => {
   const { name, email, password, roleId } = req.body;
 
   try {
@@ -76,14 +76,14 @@ router.post("/", async (req: any, res) => {
       roleId,
     });
 
-    // const { id: performedBy } = req.user;
+    const { id: performedBy } = req.user;
 
-    // await auditLogUseCase.createAuditLog({
-    //   userId: performedBy,
-    //   action: AuditAction.CREATE,
-    //   entity: AuditEntity.USER,
-    //   entityId: user.id,
-    // });
+    await auditLogUseCase.createAuditLog({
+      userId: performedBy,
+      action: AuditAction.CREATE,
+      entity: AuditEntity.USER,
+      entityId: user.id,
+    });
 
     return res.status(201).json({ message: "User created." });
   } catch (error) {

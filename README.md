@@ -1,4 +1,3 @@
-
 # Wise Rooms
 
 **Conectando espaços, criando possibilidades.**
@@ -8,6 +7,7 @@ Wise Rooms é um sistema intuitivo de agendamento e reserva de espaços instituc
 ## Tecnologias Utilizadas
 
 - **Front-end**
+
   - [TypeScript](https://www.typescriptlang.org/)
   - [React](https://reactjs.org/)
   - [Next.js](https://nextjs.org/)
@@ -38,7 +38,6 @@ Wise Rooms é um sistema intuitivo de agendamento e reserva de espaços instituc
 - **Gerenciamento de Salas**  
    Criação, edição e exclusão de salas com informações detalhadas.
 
-
 ## Instalação
 
 Siga as etapas abaixo para rodar o projeto localmente.
@@ -52,36 +51,43 @@ Siga as etapas abaixo para rodar o projeto localmente.
 ### Passos para rodar o projeto
 
 1. Clone o repositório:
+
    ```bash
    git clone https://github.com/samuelgomes0/wise-rooms.git
    ```
 
-2. Acesse o diretório do projeto:
+2. Acesse os diretórios do projeto:
+
    ```bash
-   cd wise-rooms
+   cd wise-rooms/client
+   cd wise-rooms/server
    ```
 
-3. Instale as dependências:
+3. Instale as dependências em ambos:
+
    ```bash
    npm install
    ```
 
-4. Configure o arquivo `.env` com as variáveis de ambiente necessárias. Exemplo:
+4. Configure os arquivos `.env` com as variáveis de ambiente necessárias. Exemplo:
+
    ```bash
-   DATABASE_URL=postgresql://username:password@localhost:5432/wiserooms
+   DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DATABASE
    ```
 
-5. Rode as migrações do Prisma para configurar o banco de dados:
+5. Rode as migrações do Prisma no server para configurar o banco de dados:
+
    ```bash
    npx prisma migrate dev
    ```
 
-6. Inicie o servidor:
+6. Inicie os ambientes de testes em ambos os diretórios:
+
    ```bash
    npm run dev
    ```
 
-7. Acesse o projeto em `http://localhost:3000`.
+7. Acesse o projeto. Exemplo: `http://localhost:3000`.
 
 ## Contribuição
 

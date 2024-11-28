@@ -17,7 +17,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -30,19 +29,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { AuthContext } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
-import { registerBookingSchema } from "@/schemas";
 import bookingServiceInstance from "@/services/BookingService";
 import roomServiceInstance from "@/services/RoomService";
+import userServiceInstance from "@/services/UserService";
+import { IUser } from "@/types";
 import { IRoom } from "@/types/Room.interface";
-import { useRouter } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { registerBookingSchema } from "@/schemas";
 
-export function BookingRegistrationForm() {
+export function BookingRegistrationForm({
+  onCloseModal,
+}: {
+  onCloseModal: () => void;
+}) {
+  const [users, setUsers] = useState<IUser[]>([]);
   const [rooms, setRooms] = useState<IRoom[]>([]);
-  const { user } = useContext(AuthContext);
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof registerBookingSchema>>({
     resolver: zodResolver(registerBookingSchema),
@@ -57,24 +59,20 @@ export function BookingRegistrationForm() {
 
   async function onSubmit(values: z.infer<typeof registerBookingSchema>) {
     const dateISO = values.date.toISOString().split("T")[0];
-
     const timeStartDate = new Date(`${dateISO}T${values.startTime}:00`);
     const timeEndDate = new Date(`${dateISO}T${values.endTime}:00`);
 
     try {
-      if (user === null) {
-        throw new Error("Usuário não autenticado");
-      }
-
       await bookingServiceInstance.createBooking({
-        userId: user.id,
+        userId: values.user,
         roomId: Number(values.room),
         date: values.date,
         startTime: timeStartDate,
         endTime: timeEndDate,
       });
 
-      router.refresh();
+      form.reset(); // Reseta o formulário
+      onCloseModal(); // Fecha o modal
     } catch (error) {
       console.error("Erro ao criar reserva:", error);
     }
@@ -82,8 +80,11 @@ export function BookingRegistrationForm() {
 
   useEffect(() => {
     roomServiceInstance.listRooms().then(({ data }) => {
-      console.log(data);
       setRooms(data);
+    });
+
+    userServiceInstance.listUsers().then(({ data }) => {
+      setUsers(data);
     });
   }, []);
 
@@ -92,7 +93,6 @@ export function BookingRegistrationForm() {
       <form
         onSubmit={form.handleSubmit(
           (data) => {
-            console.log("Dados válidos:", data);
             onSubmit(data);
           },
           (errors) => {
@@ -108,7 +108,21 @@ export function BookingRegistrationForm() {
             <FormItem>
               <FormLabel>Responsável</FormLabel>
               <FormControl>
-                <Input placeholder="Nome do responsável" {...field} />
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value || undefined}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione um responsável" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {users.map((user) => (
+                      <SelectItem key={user.id} value={user.id.toString()}>
+                        {user.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -120,20 +134,23 @@ export function BookingRegistrationForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Sala</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
+              <FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value || undefined}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione uma sala" />
                   </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {rooms.map((room) => (
-                    <SelectItem key={room.id} value={room.id.toString()}>
-                      {room.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                  <SelectContent>
+                    {rooms.map((room) => (
+                      <SelectItem key={room.id} value={room.id.toString()}>
+                        {room.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -172,6 +189,7 @@ export function BookingRegistrationForm() {
                       date < new Date() || date > new Date("2100-01-01")
                     }
                     initialFocus
+                    locale={ptBR}
                   />
                 </PopoverContent>
               </Popover>

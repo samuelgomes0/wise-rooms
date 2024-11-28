@@ -7,7 +7,7 @@ interface UserData {
 }
 
 class UserService {
-  async getAll() {
+  async listUsers() {
     return await apiServiceInstance.get("/users");
   }
 

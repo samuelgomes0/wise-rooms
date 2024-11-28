@@ -12,13 +12,17 @@ function GenericModal({
   title,
   triggerText,
   children,
+  isOpen,
+  onOpenChange,
 }: {
   title: string;
   triggerText: string;
   children: React.ReactNode;
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
 }) {
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button variant="default">{triggerText}</Button>
       </DialogTrigger>

@@ -40,6 +40,15 @@ import { CalendarIcon, MoreHorizontalIcon, SearchIcon } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 
 export default function Reservas() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    bookingServiceInstance.listBookings().then(({ data }) => {
+      setBookings(data);
+    });
+  };
+
   const [bookings, setBookings] = useState<IBooking[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [dateFilter, setDateFilter] = useState<Date | undefined>(undefined);
@@ -91,8 +100,10 @@ export default function Reservas() {
             <GenericModal
               title="Adicionar Nova Reserva"
               triggerText="+ Nova Reserva"
+              isOpen={isModalOpen}
+              onOpenChange={setIsModalOpen}
             >
-              <BookingRegistrationForm />
+              <BookingRegistrationForm onCloseModal={handleModalClose} />
             </GenericModal>
           </div>
           <div className="flex gap-4 relative">

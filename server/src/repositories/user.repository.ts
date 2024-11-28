@@ -10,6 +10,7 @@ export class UserRepository implements IUserRepository {
     return await prisma.user.findMany({
       include: {
         bookings: true,
+        role: true,
       },
     });
   }

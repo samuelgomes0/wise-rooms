@@ -3,11 +3,17 @@ import {
   IBooking,
   IBookingCreateDTO,
   IBookingRepository,
+  TBookingStatus,
 } from "../interfaces/Booking.interface";
 
 export class BookingRepository implements IBookingRepository {
   async listBookings(): Promise<IBooking[]> {
-    return await prisma.booking.findMany();
+    return await prisma.booking.findMany({
+      include: {
+        user: true,
+        room: true,
+      },
+    });
   }
 
   async findBookingById(bookingId: string): Promise<IBooking | null> {
@@ -69,7 +75,7 @@ export class BookingRepository implements IBookingRepository {
       },
     });
 
-    return !!conflict; // Retorna `true` se houver conflito
+    return !!conflict;
   }
 
   async updateBooking(
@@ -95,6 +101,20 @@ export class BookingRepository implements IBookingRepository {
     return await prisma.booking.delete({
       where: {
         id: bookingId,
+      },
+    });
+  }
+
+  async updateBookingStatus(
+    bookingId: string,
+    status: TBookingStatus
+  ): Promise<IBooking> {
+    return await prisma.booking.update({
+      where: {
+        id: bookingId,
+      },
+      data: {
+        status,
       },
     });
   }

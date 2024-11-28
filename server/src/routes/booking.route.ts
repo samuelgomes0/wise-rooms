@@ -185,4 +185,35 @@ router.delete("/:bookingId", isAuthenticated, async (req: any, res) => {
   }
 });
 
+// PUT /bookings/:bookingId/cancel
+router.put("/:bookingId/cancel", isAuthenticated, async (req: any, res) => {
+  const { bookingId } = req.params;
+  const { id: userId } = req.user;
+
+  console.log("userId", userId, "bookingId", bookingId);
+
+  try {
+    const booking = await bookingUseCase.cancelBooking(bookingId, userId);
+
+    const response = {
+      message: "Booking cancelled successfully.",
+      booking,
+    };
+
+    await auditLogUseCase.createAuditLog({
+      userId,
+      action: AuditAction.UPDATE,
+      entity: AuditEntity.BOOKING,
+      entityId: booking.id,
+    });
+
+    return res.status(200).json(response);
+  } catch (error) {
+    return res.status(400).json({
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred.",
+    });
+  }
+});
+
 export default router;

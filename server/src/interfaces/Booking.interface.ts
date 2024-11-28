@@ -37,4 +37,8 @@ export interface IBookingRepository {
     booking: IBookingCreateDTO
   ): Promise<IBooking>;
   deleteBooking(bookingId: string): Promise<IBooking>;
+  updateBookingStatus(
+    bookingId: string,
+    status: TBookingStatus
+  ): Promise<IBooking>;
 }

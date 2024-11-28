@@ -59,4 +59,34 @@ export class BookingUseCase {
   async deleteBooking(bookingId: string): Promise<IBooking> {
     return await this.bookingRepository.deleteBooking(bookingId);
   }
+
+  async cancelBooking(bookingId: string, userId: string): Promise<IBooking> {
+    const booking = await this.bookingRepository.findBookingById(bookingId);
+
+    if (!booking) {
+      throw new Error("Booking not found.");
+    }
+
+    if (booking.userId !== userId) {
+      throw new Error("Unauthorized: You can only cancel your own bookings.");
+    }
+
+    if (booking.status === "CANCELLED") {
+      throw new Error("Booking is already cancelled.");
+    }
+
+    const now = new Date();
+    if (booking.date < now) {
+      throw new Error("Cannot cancel a booking for a past date.");
+    }
+
+    if (booking.status !== "PENDING" && booking.status !== "CONFIRMED") {
+      throw new Error("Only pending or confirmed bookings can be cancelled.");
+    }
+
+    return await this.bookingRepository.updateBookingStatus(
+      bookingId,
+      "CANCELLED"
+    );
+  }
 }

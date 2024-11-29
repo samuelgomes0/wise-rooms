@@ -11,12 +11,12 @@ const resourceUseCase = new ResourceUseCase(resourceRepository);
 const auditLogRepository = new AuditLogRepository();
 const auditLogUseCase = new AuditLogUseCase(auditLogRepository);
 
-// GET /auditLogs
+// GET /resources
 router.get("/", async (req, res) => {
   try {
-    const auditLogs = await resourceUseCase.listResources();
+    const resources = await resourceUseCase.listResources();
 
-    return res.status(200).json(auditLogs);
+    return res.status(200).json(resources);
   } catch (error) {
     return res.status(400).json({
       error:
@@ -25,7 +25,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// POST /auditLogs
+// POST /resources
 router.post("/", isAuthenticated, async (req: any, res) => {
   const { name, type, quantity, roomId, description } = req.body;
 
@@ -50,6 +50,32 @@ router.post("/", isAuthenticated, async (req: any, res) => {
     return res.status(201).json({ message: "Resource created." });
   } catch (error) {
     return res.status(400).json({
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred.",
+    });
+  }
+});
+
+router.delete("/:id", isAuthenticated, async (request: any, reply) => {
+  const id = request.params.id;
+
+  console.log(typeof id);
+
+  try {
+    await resourceUseCase.deleteResource(parseInt(id));
+
+    const { id: performedBy } = request.user;
+
+    await auditLogUseCase.createAuditLog({
+      userId: performedBy,
+      action: AuditAction.DELETE,
+      entity: AuditEntity.RESOURCE,
+      entityId: String(id),
+    });
+
+    return reply.status(200).json({ message: "Resource deleted." });
+  } catch (error) {
+    return reply.status(400).json({
       error:
         error instanceof Error ? error.message : "An unknown error occurred.",
     });

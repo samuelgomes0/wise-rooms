@@ -21,6 +21,6 @@ export interface IResourceRepository {
   listResources(): Promise<IResource[]>;
   findResourceById(resourceId: number): Promise<IResource | null>;
   createResource(data: IResourceDTO): Promise<IResource>;
-  updateResource(resourceId: number, data: IResourceDTO): Promise<IResource>;
-  deleteResource(resourceId: number): Promise<IResource>;
+  updateResource(id: number, data: IResourceDTO): Promise<IResource>;
+  deleteResource(id: number): Promise<IResource>;
 }

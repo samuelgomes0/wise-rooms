@@ -12,7 +12,23 @@ export class ResourceUseCase {
     return this.resourceRepository.listResources();
   }
 
-  async createResource(resource: IResourceDTO): Promise<IResource> {
-    return this.resourceRepository.createResource(resource);
+  async createResource({
+    name,
+    type,
+    quantity,
+    roomId,
+    description,
+  }: IResourceDTO): Promise<IResource> {
+    return await this.resourceRepository.createResource({
+      name,
+      type,
+      quantity,
+      roomId,
+      description,
+    });
+  }
+
+  async deleteResource(id: number) {
+    return await this.resourceRepository.deleteResource(id);
   }
 }

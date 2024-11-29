@@ -18,7 +18,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { registerRoomSchema } from "@/schemas/registerRoom.schema";
 import roomServiceInstance from "@/services/RoomService";
 
-export function RoomRegistrationForm() {
+export function RoomRegistrationForm({
+  onCloseModal,
+}: {
+  onCloseModal: () => void;
+}) {
   const form = useForm<z.infer<typeof registerRoomSchema>>({
     resolver: zodResolver(registerRoomSchema),
     defaultValues: {
@@ -31,6 +35,7 @@ export function RoomRegistrationForm() {
   function onSubmit(values: z.infer<typeof registerRoomSchema>) {
     roomServiceInstance.createRoom(values).then(() => {
       form.reset();
+      onCloseModal();
     });
   }
 

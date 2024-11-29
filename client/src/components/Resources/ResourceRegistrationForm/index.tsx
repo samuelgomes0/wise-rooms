@@ -23,22 +23,37 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { createResourceSchema } from "@/schemas";
+import resourceServiceInstance from "@/services/ResourceService";
+import roomServiceInstance from "@/services/RoomService";
+import { IRoom } from "@/types";
+import { useEffect, useState } from "react";
 
 export function ResourceRegistrationForm() {
+  const [rooms, setRooms] = useState<IRoom[]>([]);
+
   const form = useForm<z.infer<typeof createResourceSchema>>({
     resolver: zodResolver(createResourceSchema),
     defaultValues: {
       name: "",
       type: "",
-      quantity: "",
+      quantity: 0,
+      roomId: "",
       description: "",
-      allocatedRoom: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof createResourceSchema>) {
+  const onSubmit = (values: z.infer<typeof createResourceSchema>) => {
     console.log(values);
-  }
+    resourceServiceInstance.createResource(values).then(() => {
+      form.reset();
+    });
+  };
+
+  useEffect(() => {
+    roomServiceInstance.listRooms().then((data) => {
+      setRooms(data);
+    });
+  }, []);
 
   return (
     <Form {...form}>
@@ -65,18 +80,9 @@ export function ResourceRegistrationForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Tipo</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione o tipo" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="equipamento">Equipamento</SelectItem>
-                  <SelectItem value="ferramenta">Ferramenta</SelectItem>
-                  <SelectItem value="mobiliario">Mobília</SelectItem>
-                </SelectContent>
-              </Select>
+              <FormControl>
+                <Input placeholder="Tipo do recurso" {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -92,8 +98,35 @@ export function ResourceRegistrationForm() {
                   type="number"
                   placeholder="Quantidade disponível"
                   {...field}
+                  onChange={({ target }) => {
+                    field.onChange(parseInt(target.value));
+                  }}
                 />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="roomId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Sala Alocada</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione uma sala" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {rooms.map((room) => (
+                    <SelectItem key={room.id} value={room.id.toString()}>
+                      {room.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
@@ -110,28 +143,6 @@ export function ResourceRegistrationForm() {
                   {...field}
                 />
               </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="allocatedRoom"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Sala Alocada</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione uma sala" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="sala1">Sala 1</SelectItem>
-                  <SelectItem value="sala2">Sala 2</SelectItem>
-                  <SelectItem value="sala3">Sala 3</SelectItem>
-                </SelectContent>
-              </Select>
               <FormMessage />
             </FormItem>
           )}

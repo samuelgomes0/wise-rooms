@@ -24,6 +24,13 @@ import { useContext, useEffect, useState } from "react";
 
 export default function Salas() {
   const [rooms, setRooms] = useState<IRoom[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    listRooms();
+  };
+
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -49,8 +56,12 @@ export default function Salas() {
     });
   };
 
-  useEffect(() => {
+  const listRooms = () => {
     roomServiceInstance.listRooms().then(({ data }) => setRooms(data));
+  };
+
+  useEffect(() => {
+    listRooms();
   }, []);
 
   return (
@@ -69,8 +80,13 @@ export default function Salas() {
                 </p>
               </div>
             </div>
-            <GenericModal title="Adicionar Nova Sala" triggerText="+ Nova Sala">
-              <RoomRegistrationForm />
+            <GenericModal
+              title="Adicionar Nova Sala"
+              triggerText="+ Nova Sala"
+              isOpen={isModalOpen}
+              onOpenChange={setIsModalOpen}
+            >
+              <RoomRegistrationForm onCloseModal={handleModalClose} />
             </GenericModal>
           </div>
           <div className="flex gap-4 relative">

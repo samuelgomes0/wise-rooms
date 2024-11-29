@@ -23,11 +23,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AuthContext } from "@/contexts/AuthContext";
+import resourceServiceInstance from "@/services/ResourceService";
 import { IResource } from "@/types/Resource.interface";
 import { resourceTypes } from "@/types/resourceTypes.enum";
 import { ERoles } from "@/types/Roles.enum";
 import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function Recursos() {
   const [resources, setResources] = useState<IResource[]>([]);
@@ -50,6 +51,17 @@ export default function Recursos() {
     currentPage * itemsPerPage
   );
   const totalPages = Math.ceil(filteredResources.length / itemsPerPage);
+
+  const listResources = async () => {
+    await resourceServiceInstance.listResources().then((data) => {
+      console.log(data);
+      setResources(data);
+    });
+  };
+
+  useEffect(() => {
+    listResources();
+  }, []);
 
   return (
     <div className="flex p-4 w-full">

@@ -1,3 +1,4 @@
+import { IRoom } from "@/types";
 import apiServiceInstance from "./ApiService";
 
 interface RoomData {
@@ -8,7 +9,8 @@ interface RoomData {
 
 class RoomService {
   async listRooms() {
-    return await apiServiceInstance.get("/rooms");
+    const { data } = await apiServiceInstance.get<IRoom[]>("/rooms");
+    return data;
   }
 
   async createRoom({ name, capacity, description }: RoomData) {

@@ -3,27 +3,24 @@ export interface IResource {
   name: string;
   type: string;
   quantity: number;
-  description?: string;
   roomId: number;
+  description?: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface IResourceCreateDTO {
+export interface IResourceDTO {
   name: string;
   type: string;
   quantity: number;
-  description?: string;
   roomId: number;
+  description?: string;
 }
 
 export interface IResourceRepository {
   listResources(): Promise<IResource[]>;
   findResourceById(resourceId: number): Promise<IResource | null>;
-  createResource(data: IResourceCreateDTO): Promise<IResource>;
-  updateResource(
-    resourceId: number,
-    data: IResourceCreateDTO
-  ): Promise<IResource>;
+  createResource(data: IResourceDTO): Promise<IResource>;
+  updateResource(resourceId: number, data: IResourceDTO): Promise<IResource>;
   deleteResource(resourceId: number): Promise<IResource>;
 }

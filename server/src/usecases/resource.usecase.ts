@@ -1,18 +1,18 @@
-import { IResource } from "../interfaces/Resource.interface";
+import { IResource, IResourceDTO } from "../interfaces";
 import { ResourceRepository } from "../repositories";
 
-export class ResourceUsecase {
+export class ResourceUseCase {
   private resourceRepository: ResourceRepository;
 
   constructor(resourceRepository: ResourceRepository) {
     this.resourceRepository = resourceRepository;
   }
 
-  async createResource(resource: IResource) {
-    return this.resourceRepository.createResource(resource);
+  async listResources(): Promise<IResource[]> {
+    return this.resourceRepository.listResources();
   }
 
-  async getResources() {
-    return this.resourceRepository.listResources();
+  async createResource(resource: IResourceDTO): Promise<IResource> {
+    return this.resourceRepository.createResource(resource);
   }
 }

@@ -86,12 +86,13 @@ model Booking {
 model AuditLog {
   id        Int         @id @default(autoincrement())
   userId    String
-  user      User        @relation(fields: [userId], references: [id])
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   action    AuditAction
   entity    AuditEntity
   entityId  String
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
+  deletedAt DateTime?
 
   @@map("audit_logs")
 }

@@ -11,7 +11,7 @@ import {
 } from "./Booking.interface";
 import {
   IResource,
-  IResourceCreateDTO,
+  IResourceDTO,
   IResourceRepository,
 } from "./Resource.interface";
 import { IRole, IRoleDTO, IRoleRepository } from "./Role.interface";
@@ -28,7 +28,7 @@ export {
   IBookingCreateDTO,
   IBookingRepository,
   IResource,
-  IResourceCreateDTO,
+  IResourceDTO,
   IResourceRepository,
   IRole,
   IRoleDTO,

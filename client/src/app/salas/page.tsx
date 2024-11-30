@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AuthContext } from "@/contexts/AuthContext";
+import { LoadingContext } from "@/contexts/LoadingContext";
 import roomServiceInstance from "@/services/RoomService";
 import { ERoles } from "@/types/Roles.enum";
 import { IRoom } from "@/types/Room.interface";
@@ -36,6 +37,7 @@ export default function Salas() {
   const itemsPerPage = 10;
 
   const { user } = useContext(AuthContext);
+  const { setIsLoading } = useContext(LoadingContext);
 
   const filteredRooms = rooms.filter(
     (room) =>
@@ -56,8 +58,11 @@ export default function Salas() {
     });
   };
 
-  const listRooms = () => {
-    roomServiceInstance.listRooms().then((data) => setRooms(data));
+  const listRooms = async () => {
+    setIsLoading(true);
+    const rooms = await roomServiceInstance.listRooms();
+    setRooms(rooms);
+    setIsLoading(false);
   };
 
   useEffect(() => {

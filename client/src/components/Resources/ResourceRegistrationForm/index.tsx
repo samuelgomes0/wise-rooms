@@ -43,7 +43,6 @@ export function ResourceRegistrationForm() {
   });
 
   const onSubmit = (values: z.infer<typeof createResourceSchema>) => {
-    console.log(values);
     resourceServiceInstance.createResource(values).then(() => {
       form.reset();
     });

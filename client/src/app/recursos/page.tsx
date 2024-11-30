@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AuthContext } from "@/contexts/AuthContext";
+import { LoadingContext } from "@/contexts/LoadingContext";
 import resourceServiceInstance from "@/services/ResourceService";
 import { IResource } from "@/types/Resource.interface";
 import { resourceTypes } from "@/types/resourceTypes.enum";
@@ -38,6 +39,7 @@ export default function Recursos() {
   const itemsPerPage = 10;
 
   const { user } = useContext(AuthContext);
+  const { setIsLoading } = useContext(LoadingContext);
 
   const filteredResources = resources.filter(
     (resource) =>
@@ -53,10 +55,17 @@ export default function Recursos() {
   const totalPages = Math.ceil(filteredResources.length / itemsPerPage);
 
   const listResources = async () => {
-    await resourceServiceInstance.listResources().then((data) => {
-      console.log(data);
-      setResources(data);
-    });
+    setIsLoading(true);
+
+    try {
+      const resources = await resourceServiceInstance.listResources();
+
+      setResources(resources);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {

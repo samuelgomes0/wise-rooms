@@ -6,8 +6,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { LoadingContext } from "@/contexts/LoadingContext";
 import { IBooking, IRoom, IUser } from "@/types";
 import { IResource } from "@/types/Resource.interface";
+import { useContext } from "react";
+import Spinner from "../Spinner";
 
 type TableColumn = {
   header: string;
@@ -21,6 +24,8 @@ function GenericTable({
   columns: TableColumn[];
   data: IResource[] | IUser[] | IBooking[] | IRoom[];
 }) {
+  const { isLoading } = useContext(LoadingContext);
+
   return (
     <Table>
       <TableHeader>
@@ -32,8 +37,15 @@ function GenericTable({
           ))}
         </TableRow>
       </TableHeader>
+
       <TableBody>
-        {data.length > 0 ? (
+        {isLoading ? (
+          <TableRow>
+            <TableCell colSpan={columns.length}>
+              <Spinner />
+            </TableCell>
+          </TableRow>
+        ) : data.length > 0 ? (
           data.map((row, idx) => (
             <TableRow key={idx}>
               {columns.map((col) => (

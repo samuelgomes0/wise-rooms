@@ -29,6 +29,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AuthContext } from "@/contexts/AuthContext";
+import { LoadingContext } from "@/contexts/LoadingContext";
 import bookingServiceInstance from "@/services/BookingService";
 import { IBooking } from "@/types";
 import { ERoles } from "@/types/Roles.enum";
@@ -55,6 +56,7 @@ export default function Reservas() {
   const itemsPerPage = 10;
 
   const { user } = useContext(AuthContext);
+  const { setIsLoading } = useContext(LoadingContext);
 
   const { filteredBookings, paginatedBookings, totalPages } = filterBookings({
     bookings,
@@ -66,8 +68,16 @@ export default function Reservas() {
   });
 
   const listBookings = async () => {
-    const data = await bookingServiceInstance.listBookings();
-    setBookings(data);
+    setIsLoading(true);
+
+    try {
+      const data = await bookingServiceInstance.listBookings();
+      setBookings(data);
+    } catch (error) {
+      console.error("Error listing bookings:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCancelBooking = async (bookingId: string) => {

@@ -70,7 +70,6 @@ export function RoomRegistrationForm({
                   placeholder="Capacidade da sala"
                   {...field}
                   onChange={({ target }) => {
-                    console.log(target.value);
                     field.onChange(parseInt(target.value));
                   }}
                 />

@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { UserRegistrationForm } from "@/components/Users/UserRegistrationForm";
 import { AuthContext } from "@/contexts/AuthContext";
+import { LoadingContext } from "@/contexts/LoadingContext";
 import userServiceInstance from "@/services/UserService";
 import { IUser } from "@/types";
 import { ERoles } from "@/types/Roles.enum";
@@ -44,6 +45,7 @@ export default function Usuarios() {
   const itemsPerPage = 10;
 
   const { user } = useContext(AuthContext);
+  const { setIsLoading } = useContext(LoadingContext);
 
   const filteredUsers = users.filter(
     (user) =>
@@ -58,10 +60,11 @@ export default function Usuarios() {
   );
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
 
-  const listUsers = () => {
-    userServiceInstance.listUsers().then((data) => {
-      setUsers(data);
-    });
+  const listUsers = async () => {
+    setIsLoading(true);
+    const users = await userServiceInstance.listUsers();
+    setUsers(users);
+    setIsLoading(false);
   };
 
   const handleDeleteUser = (id: string) => {
@@ -71,9 +74,7 @@ export default function Usuarios() {
   };
 
   useEffect(() => {
-    userServiceInstance.listUsers().then((data) => {
-      setUsers(data);
-    });
+    listUsers();
   }, []);
 
   return (

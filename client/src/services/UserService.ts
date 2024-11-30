@@ -1,3 +1,4 @@
+import { IUser } from "@/types";
 import apiServiceInstance from "./ApiService";
 
 interface UserData {
@@ -8,8 +9,9 @@ interface UserData {
 }
 
 class UserService {
-  async listUsers() {
-    return await apiServiceInstance.get("/users");
+  async listUsers(): Promise<IUser[]> {
+    const users = await apiServiceInstance.get<IUser[]>("/users");
+    return users.data;
   }
 
   async findById(id: string) {

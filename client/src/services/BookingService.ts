@@ -1,3 +1,4 @@
+import { IBooking } from "@/types";
 import apiServiceInstance from "./ApiService";
 
 interface BookingData {
@@ -9,8 +10,9 @@ interface BookingData {
 }
 
 class BookingService {
-  async listBookings() {
-    return await apiServiceInstance.get("/bookings");
+  async listBookings(): Promise<IBooking[]> {
+    const bookings = await apiServiceInstance.get<IBooking[]>("/bookings");
+    return bookings.data;
   }
 
   async createBooking({

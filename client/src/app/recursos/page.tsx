@@ -64,9 +64,9 @@ export default function Recursos() {
   }, []);
 
   return (
-    <div className="flex p-4 w-full">
+    <div className="py-8 w-4/5 mx-auto overflow-hidden">
       <main className="flex-1">
-        <header className="bg-white rounded-lg shadow p-6 mb-8">
+        <header className="bg-white rounded-lg shadow-sm p-6 mb-8">
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-4">
               <Avatar>
@@ -113,7 +113,7 @@ export default function Recursos() {
             </Select>
           </div>
         </header>
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           <GenericTable
             columns={[
               { header: "Código", accessor: "id" },

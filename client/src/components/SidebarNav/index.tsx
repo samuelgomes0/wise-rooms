@@ -2,9 +2,10 @@ import { Button } from "@/components/ui/button";
 import { AuthContext } from "@/contexts/AuthContext";
 import {
   CalendarIcon,
-  ClipboardIcon,
+  ClipboardListIcon,
   HammerIcon,
   HouseIcon,
+  MapPinCheckIcon,
   UserCog2Icon,
 } from "lucide-react";
 import Link from "next/link";
@@ -21,10 +22,11 @@ export function SidebarNav() {
   const mainNavItems = [{ label: "Calendário", icon: CalendarIcon, path: "/" }];
 
   const managementNavItems = [
-    { label: "Reservas", icon: ClipboardIcon, path: "/reservas" },
+    { label: "Reservas", icon: MapPinCheckIcon, path: "/reservas" },
     { label: "Salas", icon: HouseIcon, path: "/salas" },
     { label: "Recursos", icon: HammerIcon, path: "/recursos" },
     { label: "Usuários", icon: UserCog2Icon, path: "/usuarios" },
+    { label: "Auditoria", icon: ClipboardListIcon, path: "/auditoria" },
   ];
 
   return (
@@ -49,8 +51,9 @@ export function SidebarNav() {
             <h3 className="font-bold text-sm py-2">Gerenciamento</h3>
             {managementNavItems.map(({ label, icon: Icon, path }) => (
               <li key={label}>
-                <Link href={path}>
+                <Link href={label === "Auditoria" ? "#" : path} aria-hidden>
                   <Button
+                    disabled={label === "Auditoria"}
                     variant="ghost"
                     className={`w-full justify-start ${isActive(path) ? "bg-gray-100" : ""}`}
                     aria-current={isActive(path) ? "page" : undefined}

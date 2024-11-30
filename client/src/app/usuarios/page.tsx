@@ -59,7 +59,7 @@ export default function Usuarios() {
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
 
   const listUsers = () => {
-    userServiceInstance.listUsers().then(({ data }) => {
+    userServiceInstance.listUsers().then((data) => {
       setUsers(data);
     });
   };
@@ -71,15 +71,15 @@ export default function Usuarios() {
   };
 
   useEffect(() => {
-    userServiceInstance.listUsers().then(({ data }) => {
+    userServiceInstance.listUsers().then((data) => {
       setUsers(data);
     });
   }, []);
 
   return (
-    <div className="flex p-4 w-full">
+    <div className="py-8 w-4/5 mx-auto overflow-hidden">
       <main className="flex-1">
-        <header className="bg-white rounded-lg shadow p-6 mb-8">
+        <header className="bg-white rounded-lg shadow-sm p-6 mb-8">
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-4">
               <Avatar>
@@ -126,7 +126,7 @@ export default function Usuarios() {
             </Select>
           </div>
         </header>
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           <GenericTable
             columns={[
               { header: "Código", accessor: "id" },

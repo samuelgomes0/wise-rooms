@@ -79,11 +79,11 @@ export function BookingRegistrationForm({
   }
 
   useEffect(() => {
-    roomServiceInstance.listRooms().then(({ data }) => {
+    roomServiceInstance.listRooms().then((data) => {
       setRooms(data);
     });
 
-    userServiceInstance.listUsers().then(({ data }) => {
+    userServiceInstance.listUsers().then((data) => {
       setUsers(data);
     });
   }, []);

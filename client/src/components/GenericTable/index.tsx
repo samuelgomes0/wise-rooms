@@ -6,6 +6,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { IBooking, IRoom, IUser } from "@/types";
+import { IResource } from "@/types/Resource.interface";
 
 type TableColumn = {
   header: string;
@@ -17,7 +19,7 @@ function GenericTable({
   data,
 }: {
   columns: TableColumn[];
-  data: any[];
+  data: IResource[] | IUser[] | IBooking[] | IRoom[];
 }) {
   return (
     <Table>

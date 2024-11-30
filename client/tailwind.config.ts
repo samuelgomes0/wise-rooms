@@ -22,7 +22,7 @@ const config = {
         serif: ["Merriweather", "serif"],
       },
       colors: {
-        read: "#747474",
+        read: "#6b7280",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

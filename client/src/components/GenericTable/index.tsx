@@ -26,7 +26,9 @@ function GenericTable({
       <TableHeader>
         <TableRow>
           {columns.map((col) => (
-            <TableHead key={col.accessor}>{col.header}</TableHead>
+            <TableHead className="text-read" key={col.accessor}>
+              {col.header}
+            </TableHead>
           ))}
         </TableRow>
       </TableHeader>

@@ -1,24 +1,32 @@
 "use client";
 
-import { Appointment } from "@/types/Appointment.interface";
-import { useState } from "react";
+import bookingServiceInstance from "@/services/BookingService";
+import { IBooking } from "@/types";
+import { useEffect, useState } from "react";
 import CalendarHeader from "./Header";
 import { WeeklyView } from "./WeeklyView";
 
-const sampleAppointments: Appointment[] = [
-  { date: new Date(), time: "09:00", title: "Reunião com João", duration: 2 },
-  { date: new Date(), time: "14:00", title: "Consulta Dentista", duration: 1 },
-  { date: new Date(), time: "16:00", title: "Sync da Equipe", duration: 1 },
-];
-
 export function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [bookings, setBookings] = useState<IBooking[]>([]);
+
+  const listBookings = async () => {
+    const data = await bookingServiceInstance.listBookings();
+    setBookings(data);
+  };
+
+  useEffect(() => {
+    listBookings();
+  }, [currentDate]);
 
   return (
     <>
-      <CalendarHeader />
+      <CalendarHeader
+        currentDate={currentDate}
+        setCurrentDate={setCurrentDate}
+      />
       <div className=" mt-8">
-        <WeeklyView startDate={currentDate} appointments={sampleAppointments} />
+        <WeeklyView startDate={currentDate} bookings={bookings} />
       </div>
     </>
   );

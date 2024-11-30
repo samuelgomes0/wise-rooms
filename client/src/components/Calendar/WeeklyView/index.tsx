@@ -1,13 +1,13 @@
 import { DEFAULT_TIME_SLOTS } from "@/constants";
-import { Appointment } from "@/types/Appointment.interface";
+import { IBooking } from "@/types";
 import { capitalizeString } from "@/utils";
 
 interface WeeklyViewProps {
   startDate: Date;
-  appointments: Appointment[];
+  bookings: IBooking[];
 }
 
-export function WeeklyView({ startDate, appointments }: WeeklyViewProps) {
+export function WeeklyView({ startDate, bookings }: WeeklyViewProps) {
   const adjustedStartDate = new Date(startDate);
   const dayOfWeek = adjustedStartDate.getDay();
   adjustedStartDate.setDate(adjustedStartDate.getDate() - dayOfWeek);
@@ -21,6 +21,7 @@ export function WeeklyView({ startDate, appointments }: WeeklyViewProps) {
 
   return (
     <div className="flex">
+      {/* Hours */}
       <div className="flex flex-col mr-6">
         <div className="h-[64px] mb-2 py-2"></div>
         <div className="flex flex-col gap-1">
@@ -35,6 +36,7 @@ export function WeeklyView({ startDate, appointments }: WeeklyViewProps) {
         </div>
       </div>
       <div className="flex-1">
+        {/* Header */}
         <div className="grid gap-1 grid-cols-7">
           {weekDays.map((day, index) => (
             <div
@@ -50,6 +52,7 @@ export function WeeklyView({ startDate, appointments }: WeeklyViewProps) {
             </div>
           ))}
         </div>
+        {/* Slots */}
         <div
           className="grid gap-1"
           style={{

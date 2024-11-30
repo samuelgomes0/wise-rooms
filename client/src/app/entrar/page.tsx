@@ -60,7 +60,7 @@ export default function LoginPage() {
           <CardTitle className="text-2xl font-bold">
             Entrar na sua conta
           </CardTitle>
-          <CardDescription className="text-neutral-500 text-sm">
+          <CardDescription className="text-read text-sm">
             Preencha os campos para acessar sua conta e começar a reservar
             espaços.
           </CardDescription>

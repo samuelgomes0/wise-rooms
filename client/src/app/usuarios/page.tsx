@@ -87,7 +87,7 @@ export default function Usuarios() {
               </Avatar>
               <div>
                 <h1 className="text-2xl font-bold">Usuários</h1>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-read">
                   {ERoles[user?.roleId as unknown as keyof typeof ERoles]}
                 </p>
               </div>

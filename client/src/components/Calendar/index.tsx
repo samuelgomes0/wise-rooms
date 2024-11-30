@@ -25,9 +25,7 @@ export function Calendar() {
         currentDate={currentDate}
         setCurrentDate={setCurrentDate}
       />
-      <div className=" mt-8">
-        <WeeklyView startDate={currentDate} bookings={bookings} />
-      </div>
+      <WeeklyView startDate={currentDate} bookings={bookings} />
     </>
   );
 }

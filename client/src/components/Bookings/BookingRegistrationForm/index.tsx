@@ -29,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DEFAULT_TIME_SLOTS } from "@/constants";
 import { cn } from "@/lib/utils";
 import { registerBookingSchema } from "@/schemas";
 import bookingServiceInstance from "@/services/BookingService";
@@ -214,12 +215,9 @@ export function BookingRegistrationForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {Array.from({ length: 24 }, (_, i) => i).map((hour) => (
-                      <SelectItem
-                        key={hour}
-                        value={`${hour.toString().padStart(2, "0")}:00`}
-                      >
-                        {`${hour.toString().padStart(2, "0")}:00`}
+                    {DEFAULT_TIME_SLOTS.map((timeSlot) => (
+                      <SelectItem key={timeSlot} value={timeSlot}>
+                        {timeSlot}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -244,12 +242,9 @@ export function BookingRegistrationForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {Array.from({ length: 24 }, (_, i) => i).map((hour) => (
-                      <SelectItem
-                        key={hour}
-                        value={`${hour.toString().padStart(2, "0")}:00`}
-                      >
-                        {`${hour.toString().padStart(2, "0")}:00`}
+                    {DEFAULT_TIME_SLOTS.map((timeSlot) => (
+                      <SelectItem key={timeSlot} value={timeSlot}>
+                        {timeSlot}
                       </SelectItem>
                     ))}
                   </SelectContent>

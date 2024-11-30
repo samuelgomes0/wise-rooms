@@ -49,11 +49,11 @@ export default function CalendarHeader({
   return (
     <div className="bg-white m-auto rounded py-4 px-8 shadow-sm flex justify-between items-center">
       <h2 className="text-xl font-semibold">{`${capitalizeString(getMonthAndYear.month)}, ${getMonthAndYear.year}`}</h2>
-      <div className="flex gap-2">
+      <div className="flex gap-4">
         <Button size="icon" variant="outline" onClick={handlePreviousWeek}>
           <ChevronLeftIcon size={16} />
         </Button>
-        <Button size="default" variant="outline" onClick={handleToday}>
+        <Button size="default" variant="default" onClick={handleToday}>
           Hoje
         </Button>
         <Button size="icon" variant="outline" onClick={handleNextWeek}>

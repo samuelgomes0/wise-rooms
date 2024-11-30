@@ -66,19 +66,6 @@ router.get("/user/:userId", async (req, res) => {
 router.post("/", isAuthenticated, async (req: any, res) => {
   const { userId, roomId, date, startTime, endTime, description } = req.body;
 
-  console.log(
-    "userId",
-    userId,
-    "roomId",
-    roomId,
-    "date",
-    date,
-    "startTime",
-    startTime,
-    "endTime",
-    endTime
-  );
-
   if (!userId || !roomId || !date || !startTime || !endTime) {
     return res.status(400).json({ error: "Missing required fields." });
   }
@@ -183,8 +170,6 @@ router.delete("/:bookingId", isAuthenticated, async (req: any, res) => {
 router.put("/:bookingId/cancel", isAuthenticated, async (req: any, res) => {
   const { bookingId } = req.params;
   const { id: userId } = req.user;
-
-  console.log("userId", userId, "bookingId", bookingId);
 
   try {
     const booking = await bookingUseCase.cancelBooking(bookingId, userId);

@@ -1,3 +1,3 @@
-import { rooms } from "./rooms";
+import { DAYS_OF_WEEK, DEFAULT_TIME_SLOTS } from "./calendar";
 
-export { rooms };
+export { DAYS_OF_WEEK, DEFAULT_TIME_SLOTS };

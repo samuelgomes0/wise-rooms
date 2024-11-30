@@ -1,194 +1,86 @@
-import { DAYS_OF_WEEK, HOURS } from "@/constants/calendar";
-import { Event, useCalendar } from "@/hooks/useCalendar";
-import React, { useState } from "react";
-import { CreateBookingModal } from "../Bookings/CreateBookingModal";
-import { CalendarHeader } from "../CalendarHeader";
-import { ViewEventModal } from "../ViewEventModal";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export const Calendar: React.FC = () => {
-  const {
-    nextWeek,
-    previousWeek,
-    getWeekDates,
-    formatHeaderDateRange,
-    currentMonthYear,
-  } = useCalendar();
+const timeSlots = [
+  "08:00",
+  "09:00",
+  "10:00",
+  "11:00",
+  "12:00",
+  "13:00",
+  "14:00",
+  "15:00",
+  "16:00",
+  "17:00",
+];
 
-  const [view, setView] = useState<string>("week");
-  const [filter, setFilter] = useState<string>("all");
-  const [showNewEventModal, setShowNewEventModal] = useState<boolean>(false);
-  const [showViewEventModal, setShowViewEventModal] = useState<boolean>(false);
+const appointments = [
+  { time: "09:00", title: "Meeting with John", duration: 2 },
+  { time: "14:00", title: "Dentist Appointment", duration: 1 },
+  { time: "16:00", title: "Team Sync", duration: 1 },
+];
 
-  const [newEvent, setNewEvent] = useState<Partial<Event>>({
-    title: "",
-    start: "",
-    end: "",
-    date: null,
-    color: "bg-indigo-200",
-  });
-
-  const [events, setEvents] = useState<Event[]>([
-    {
-      date: new Date(),
-      start: "8:00",
-      end: "9:00",
-      title: "Preparação da Apresentação do Cliente",
-      color: "bg-purple-200",
-    },
-  ]);
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
-
-  const handleNewEvent = () => {
-    if (!newEvent.date || !newEvent.start || !newEvent.end || !newEvent.title) {
-      alert("Por favor, preencha todos os campos.");
-      return;
-    }
-
-    const eventDate =
-      newEvent.date instanceof Date
-        ? newEvent.date
-        : new Date(newEvent.date as string);
-
-    const hasConflict = events.some(
-      (event) =>
-        event.date.toDateString() === eventDate.toDateString() &&
-        ((newEvent.start! >= event.start && newEvent.start! < event.end) ||
-          (newEvent.end! > event.start && newEvent.end! <= event.end))
-    );
-
-    if (hasConflict) {
-      alert("Conflito de horário! Escolha outro horário.");
-      return;
-    }
-
-    const newEventWithDate = { ...newEvent, date: eventDate } as Event;
-    setEvents([...events, newEventWithDate]);
-    setShowNewEventModal(false);
-    setNewEvent({
-      title: "",
-      start: "",
-      end: "",
-      date: null,
-      color: "bg-indigo-200",
-    });
-  };
-
-  const handleSlotClick = (date: Date, hour: string) => {
-    const eventExists = events.some(
-      (event) =>
-        event.date.toDateString() === date.toDateString() &&
-        event.start === hour
-    );
-    if (!eventExists) {
-      setNewEvent({ ...newEvent, date, start: hour });
-      setShowNewEventModal(true);
-    }
-  };
-
-  const handleEventClick = (event: Event, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setSelectedEvent(event);
-    setShowViewEventModal(true);
-  };
-
-  const weekDates = getWeekDates();
+export default function Calendar() {
+  const currentDate = new Date();
+  const dayNumber = currentDate.getDate();
+  const weekday = currentDate.toLocaleDateString("pt-BR", { weekday: "long" });
 
   return (
-    <div className="flex  w-full">
-      <main className="flex-1 overflow-y-auto p-4">
-        <CalendarHeader
-          filter={filter}
-          setFilter={setFilter}
-          view={view}
-          setView={setView}
-          previousWeek={previousWeek}
-          nextWeek={nextWeek}
-          currentMonthYear={currentMonthYear}
-          formatHeaderDateRange={formatHeaderDateRange}
-        />
-
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <div
-            className="grid grid-cols-[100px_repeat(7,_1fr)] gap-px bg-gray-200"
-            role="table"
-          >
-            <div
-              className="bg-gray-50 text-center p-2 font-semibold"
-              role="columnheader"
-            >
-              Horários
-            </div>
-            {weekDates.map((date, index) => (
+    <div className="w-full max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+      <div className="flex justify-between items-center p-4 bg-gray-100">
+        <Button variant="outline" size="icon">
+          <ChevronLeft className="h-4 w-4" />
+        </Button>
+        <h2 className="text-xl font-semibold text-center">
+          <span className="text-3xl">{dayNumber}</span>
+          <br />
+          <span className="capitalize">{weekday}</span>
+        </h2>
+        <Button variant="outline" size="icon">
+          <ChevronRight className="h-4 w-4" />
+        </Button>
+      </div>
+      <div className="flex">
+        <div className="flex-grow">
+          <div className="grid grid-cols-1 gap-1">
+            {timeSlots.map((slot) => (
               <div
-                key={index}
-                className="bg-gray-50 p-2 text-center font-medium"
-                role="columnheader"
+                key={slot}
+                className="h-16 border-b border-gray-200 relative"
               >
-                {DAYS_OF_WEEK[date.getDay()]} <br />
-                <span className="text-sm text-gray-500">
-                  {date.toLocaleDateString("pt-BR", {
-                    day: "numeric",
-                    month: "short",
-                  })}
-                </span>
-              </div>
-            ))}
-
-            {HOURS.map((hour, hourIndex) => (
-              <div key={`hour-${hourIndex}`}>
-                <div
-                  className="bg-white p-4 text-center text-sm text-gray-500"
-                  role="rowheader"
-                >
-                  {hour}
-                </div>
-                {weekDates.map((date, dayIndex) => (
-                  <div
-                    key={`${hourIndex}-${dayIndex}`}
-                    className="bg-white p-2 relative cursor-pointer hover:bg-gray-50"
-                    onClick={() => handleSlotClick(date, hour)}
-                    role="gridcell"
-                    aria-label={`Horário ${hour} em ${date.toLocaleDateString(
-                      "pt-BR"
-                    )}`}
-                  >
-                    {events
-                      .filter(
-                        (event) =>
-                          event.date.toDateString() === date.toDateString() &&
-                          event.start === hour
-                      )
-                      .map((event, eventIndex) => (
-                        <div
-                          key={eventIndex}
-                          className={`absolute top-0 left-0 right-0 p-2 m-1 rounded ${event.color} text-xs cursor-pointer`}
-                          style={{
-                            height: `${
-                              (parseInt(event.end) - parseInt(event.start)) * 40
-                            }px`,
-                          }}
-                          onClick={(e) => handleEventClick(event, e)}
-                          role="button"
-                          aria-label={`Evento: ${event.title}`}
-                        >
-                          {event.title}
-                        </div>
-                      ))}
-                  </div>
-                ))}
+                {appointments.map((appointment, index) => {
+                  if (appointment.time === slot) {
+                    return (
+                      <div
+                        key={index}
+                        className="absolute left-0 right-0 bg-blue-200 rounded p-2 text-sm"
+                        style={{
+                          top: "0",
+                          height: `${appointment.duration * 64}px`,
+                          zIndex: 10,
+                        }}
+                      >
+                        {appointment.title}
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
               </div>
             ))}
           </div>
         </div>
-      </main>
-
-      <CreateBookingModal />
-
-      <ViewEventModal
-        showViewEventModal={showViewEventModal}
-        setShowViewEventModal={setShowViewEventModal}
-        selectedEvent={selectedEvent}
-      />
+        <div className="w-20 border-l border-gray-200">
+          {timeSlots.map((slot) => (
+            <div
+              key={slot}
+              className="h-16 flex items-center justify-center text-sm text-gray-500"
+            >
+              {slot}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
-};
+}

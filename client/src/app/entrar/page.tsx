@@ -11,6 +11,7 @@ import {
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Notification } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { loginSchema } from "@/schemas";
@@ -46,14 +47,15 @@ export default function LoginPage() {
     try {
       await userServiceInstance.findByEmail(data.email);
       await signIn(data);
-    } catch (error) {
-      console.log(error);
-      const description = error.response.data.error;
+      toast({
+        title: Notification.SUCCESS.LOGIN.TITLE,
+        description: Notification.SUCCESS.LOGIN.DESCRIPTION,
+      });
+    } catch {
       toast({
         variant: "destructive",
-        title: "Erro: Falha no Login",
-        description,
-        duration: 4000,
+        title: Notification.ERROR.LOGIN.TITLE,
+        description: Notification.ERROR.LOGIN.DESCRIPTION,
       });
     }
   };

@@ -21,6 +21,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Notification } from "@/constants";
+import { useToast } from "@/hooks/use-toast";
 import userCreationSchema from "@/schemas/createUser.schema";
 import roleServiceInstance from "@/services/RoleService";
 import userServiceInstance from "@/services/UserService";
@@ -44,22 +46,34 @@ export function UserRegistrationForm({
     },
   });
 
-  async function onSubmit({
+  const { toast } = useToast();
+
+  const onSubmit = async ({
     name,
     email,
     password,
     roleId,
-  }: z.infer<typeof userCreationSchema>) {
-    await userServiceInstance.createUser({
-      name,
-      email,
-      password,
-      roleId: Number(roleId),
-    });
+  }: z.infer<typeof userCreationSchema>) => {
+    try {
+      await userServiceInstance.createUser({
+        name,
+        email,
+        password,
+        roleId: Number(roleId),
+      });
 
-    form.reset();
-    onCloseModal();
-  }
+      onCloseModal();
+      toast({
+        title: Notification.SUCCESS.USER.TITLE,
+        description: Notification.SUCCESS.USER.DESCRIPTION,
+      });
+    } catch {
+      toast({
+        title: Notification.ERROR.USER.TITLE,
+        description: Notification.ERROR.USER.DESCRIPTION,
+      });
+    }
+  };
 
   useEffect(() => {
     roleServiceInstance.listRoles().then(({ data }) => {

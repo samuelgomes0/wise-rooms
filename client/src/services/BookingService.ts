@@ -15,6 +15,13 @@ class BookingService {
     return bookings.data;
   }
 
+  async findBookingsByUser(userId: string): Promise<IBooking[]> {
+    const bookings = await apiServiceInstance.get<IBooking[]>(
+      `/bookings/user/${userId}`
+    );
+    return bookings.data;
+  }
+
   async createBooking({
     userId,
     roomId,

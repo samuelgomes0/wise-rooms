@@ -79,8 +79,9 @@ export function BookingRegistrationForm({
       onCloseModal();
       toast({
         variant: "default",
-        title: "Oba! Parece que deu tudo certo! 🎉",
-        description: "Sua reserva foi criada com sucesso.",
+        title: "Reserva realizada com sucesso! 🎉",
+        description:
+          "Sua reserva foi concluída com sucesso. Os detalhes foram registrados e a sala estará disponível no horário selecionado.",
       });
     } catch (error) {
       const description = error.response.data.error;

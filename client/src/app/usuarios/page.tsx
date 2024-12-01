@@ -22,8 +22,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { UserRegistrationForm } from "@/components/Users/UserRegistrationForm";
+import { Notification } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
+import { useToast } from "@/hooks/use-toast";
 import userServiceInstance from "@/services/UserService";
 import { IUser } from "@/types";
 import { ERoles } from "@/types/Roles.enum";
@@ -67,9 +69,14 @@ export default function Usuarios() {
     setIsLoading(false);
   };
 
-  const handleDeleteUser = (id: string) => {
-    userServiceInstance.deleteUser(id).then(() => {
-      listUsers();
+  const { toast } = useToast();
+
+  const handleDeleteUser = async (id: string) => {
+    await userServiceInstance.deleteUser(id);
+    await listUsers();
+    toast({
+      title: Notification.SUCCESS.USER.DELETE_TITLE,
+      description: Notification.SUCCESS.USER.DELETE_DESCRIPTION,
     });
   };
 

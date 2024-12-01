@@ -22,8 +22,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Notification } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
+import { useToast } from "@/hooks/use-toast";
 import resourceServiceInstance from "@/services/ResourceService";
 import { IResource } from "@/types/Resource.interface";
 import { resourceTypes } from "@/types/resourceTypes.enum";
@@ -32,6 +34,13 @@ import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 
 export default function Recursos() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleModalClose = async () => {
+    setIsModalOpen(false);
+    await listResources();
+  };
+
   const [resources, setResources] = useState<IResource[]>([]);
   const [statusFilter, setStatusFilter] = useState("Todos");
   const [searchTerm, setSearchTerm] = useState("");
@@ -68,6 +77,29 @@ export default function Recursos() {
     }
   };
 
+  const { toast } = useToast();
+
+  const handleDeleteResource = async (id: number) => {
+    setIsLoading(true);
+
+    try {
+      await resourceServiceInstance.deleteResource(id);
+      await listResources();
+      toast({
+        title: Notification.SUCCESS.RESOURCE.DELETE_TITLE,
+        description: Notification.SUCCESS.RESOURCE.DELETE_DESCRIPTION,
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: Notification.ERROR.RESOURCE.DELETE_TITLE,
+        description: Notification.ERROR.RESOURCE.DELETE_DESCRIPTION,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     listResources();
   }, []);
@@ -91,8 +123,10 @@ export default function Recursos() {
             <GenericModal
               title="Adicionar Novo Recurso"
               triggerText="+ Novo Recurso"
+              isOpen={isModalOpen}
+              onOpenChange={setIsModalOpen}
             >
-              <ResourceRegistrationForm />
+              <ResourceRegistrationForm onCloseModal={handleModalClose} />
             </GenericModal>
           </div>
           <div className="flex gap-4">
@@ -150,7 +184,10 @@ export default function Recursos() {
                     <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
                     <DropdownMenuItem>Editar recurso</DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="text-red-600">
+                    <DropdownMenuItem
+                      className="text-red-600"
+                      onClick={() => handleDeleteResource(resource.id)}
+                    >
                       Deletar recurso
                     </DropdownMenuItem>
                   </DropdownMenuContent>

@@ -28,6 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Notification } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
@@ -85,10 +86,10 @@ export default function Reservas() {
 
   const handleCancelBooking = async (bookingId: string) => {
     await bookingServiceInstance.cancelBooking(bookingId);
-    listBookings();
+    await listBookings();
     toast({
-      title: "Reserva cancelada com sucesso! 🎉",
-      description: "Sua reserva foi cancelada com sucesso.",
+      title: Notification.SUCCESS.BOOKING.CANCEL_TITLE,
+      description: Notification.SUCCESS.BOOKING.CANCEL_DESCRIPTION,
     });
   };
 

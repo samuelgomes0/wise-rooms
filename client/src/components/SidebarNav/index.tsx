@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { AuthContext } from "@/contexts/AuthContext";
 import {
   CalendarIcon,
+  ClipboardCheckIcon,
   ClipboardListIcon,
   HammerIcon,
   HouseIcon,
@@ -19,7 +20,14 @@ export function SidebarNav() {
 
   const isActive = (path: string) => pathname === path;
 
-  const mainNavItems = [{ label: "Calendário", icon: CalendarIcon, path: "/" }];
+  const mainNavItems = [
+    { label: "Calendário", icon: CalendarIcon, path: "/" },
+    {
+      label: "Minhas reservas",
+      icon: ClipboardCheckIcon,
+      path: "/minhas-reservas",
+    },
+  ];
 
   const managementNavItems = [
     { label: "Reservas", icon: MapPinCheckIcon, path: "/reservas" },
@@ -36,6 +44,7 @@ export function SidebarNav() {
           <li key={label}>
             <Link href={path} aria-hidden>
               <Button
+                disabled={label === "Minhas reservas" && !isAuthenticated}
                 variant="ghost"
                 className={`w-full justify-start ${isActive(path) ? "bg-gray-100" : ""}`}
                 aria-current={isActive(path) ? "page" : undefined}

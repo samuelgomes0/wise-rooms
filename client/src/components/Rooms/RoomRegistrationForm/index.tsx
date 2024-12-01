@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Notification } from "@/constants";
+import { useToast } from "@/hooks/use-toast";
 import { registerRoomSchema } from "@/schemas/registerRoom.schema";
 import roomServiceInstance from "@/services/RoomService";
 
@@ -32,10 +34,14 @@ export function RoomRegistrationForm({
     },
   });
 
-  function onSubmit(values: z.infer<typeof registerRoomSchema>) {
-    roomServiceInstance.createRoom(values).then(() => {
-      form.reset();
-      onCloseModal();
+  const { toast } = useToast();
+
+  async function onSubmit(values: z.infer<typeof registerRoomSchema>) {
+    await roomServiceInstance.createRoom(values);
+    onCloseModal();
+    toast({
+      title: Notification.SUCCESS.ROOM.TITLE,
+      description: Notification.SUCCESS.ROOM.DESCRIPTION,
     });
   }
 

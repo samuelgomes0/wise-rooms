@@ -15,6 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Notification } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
@@ -59,10 +60,8 @@ export default function Salas() {
     await roomServiceInstance.deleteRoom(roomId);
     setRooms(rooms.filter((room) => room.id !== roomId));
     toast({
-      variant: "default",
-      title: "Sala deletada com sucesso! 🎉",
-      description:
-        "A sala foi removida do sistema com sucesso. Todas as reservas associadas a ela foram canceladas.",
+      title: Notification.SUCCESS.ROOM.DELETE_TITLE,
+      description: Notification.SUCCESS.ROOM.DELETE_DESCRIPTION,
     });
   };
 

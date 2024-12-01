@@ -9,7 +9,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Notification } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 import { ChevronDownIcon, LogOutIcon, User2Icon } from "lucide-react";
 import Link from "next/link";
 import { useContext } from "react";
@@ -17,8 +19,14 @@ import { useContext } from "react";
 export function UserDropdown() {
   const { user, signOut, isAuthenticated } = useContext(AuthContext);
 
+  const { toast } = useToast();
+
   const handleLogout = () => {
     signOut();
+    toast({
+      title: Notification.SUCCESS.LOGOUT.TITLE,
+      description: Notification.SUCCESS.LOGOUT.DESCRIPTION,
+    });
   };
 
   return (

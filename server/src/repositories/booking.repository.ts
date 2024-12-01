@@ -25,6 +25,9 @@ export class BookingRepository implements IBookingRepository {
       where: {
         userId,
       },
+      include: {
+        room: true,
+      },
     });
   }
 

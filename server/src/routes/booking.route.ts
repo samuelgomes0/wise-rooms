@@ -51,7 +51,7 @@ router.get("/user/:userId", async (req, res) => {
   const { userId } = req.params;
 
   try {
-    const bookings = await bookingRepository.findBookingByUser(userId);
+    const bookings = await bookingUseCase.findBookingByUser(userId);
 
     return res.status(200).json(bookings);
   } catch (error) {

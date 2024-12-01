@@ -23,6 +23,7 @@ import roomServiceInstance from "@/services/RoomService";
 import { ERoles } from "@/types/Roles.enum";
 import { IRoom } from "@/types/Room.interface";
 import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
 export default function Salas() {
@@ -38,7 +39,7 @@ export default function Salas() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const { user } = useContext(AuthContext);
+  const { user, isAuthenticated } = useContext(AuthContext);
   const { setIsLoading } = useContext(LoadingContext);
 
   const { toast } = useToast();
@@ -72,7 +73,10 @@ export default function Salas() {
     setIsLoading(false);
   };
 
+  const router = useRouter();
+
   useEffect(() => {
+    if (!isAuthenticated) return router.push("/");
     listRooms();
   }, []);
 

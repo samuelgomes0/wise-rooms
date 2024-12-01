@@ -9,7 +9,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { DEFAULT_TIME_SLOTS } from "@/constants";
 import { IBooking } from "@/types";
-import { capitalizeString } from "@/utils";
+import { capitalizeString, getStatusBadge } from "@/utils";
 import { ZoomInIcon } from "lucide-react";
 
 interface WeeklyViewProps {
@@ -98,20 +98,24 @@ export function WeeklyView({ startDate, bookings }: WeeklyViewProps) {
                         <DialogTitle className="text-2xl">
                           Detalhes do Agendamento
                         </DialogTitle>
-                        <Separator />
-                        <DialogDescription className="text-back flex flex-col gap-2">
-                          <div className="text-base">
-                            <strong>Usuário:</strong> {booking.user.name}
+                      </DialogHeader>
+                      <Separator />
+                      <DialogDescription className="text-back grid grid-cols-1 grid-row-3 gap-4">
+                        <div className="grid grid-cols-3 items-center justify-between">
+                          <div className="flex flex-col">
+                            <strong>Usuário</strong> {booking.user.name}
                           </div>
-                          <div className="text-base">
-                            <strong>Sala:</strong> {booking.room.name}
+                          <div className="flex flex-col">
+                            <strong>Sala</strong> {booking.room.name}
                           </div>
-                          <div className="text-base">
-                            <strong>Data:</strong>{" "}
+                          <div className="flex flex-col">
+                            <strong>Data</strong>{" "}
                             {new Date(booking.date).toLocaleDateString("pt-BR")}
                           </div>
-                          <div className="text-base">
-                            <strong>Horário:</strong>{" "}
+                        </div>
+                        <div className="grid grid-cols-3">
+                          <div className="flex flex-col">
+                            <strong>Horário</strong>{" "}
                             {new Date(booking.startTime).toLocaleTimeString(
                               "pt-BR",
                               {
@@ -128,8 +132,18 @@ export function WeeklyView({ startDate, bookings }: WeeklyViewProps) {
                               }
                             )}
                           </div>
-                        </DialogDescription>
-                      </DialogHeader>
+                          <div className="grid gap-1 w-2/4">
+                            <strong>Status</strong>{" "}
+                            {getStatusBadge(booking.status)}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex flex-col break-words">
+                            <strong>Descrição</strong>{" "}
+                            {booking.description || "Sem descrição"}
+                          </div>
+                        </div>
+                      </DialogDescription>
                     </DialogContent>
                   </Dialog>
                 ))}

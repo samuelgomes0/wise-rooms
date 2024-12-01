@@ -1,4 +1,10 @@
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { AuthContext } from "@/contexts/AuthContext";
 import {
   CalendarIcon,
@@ -42,17 +48,38 @@ export function SidebarNav() {
       <ul className="space-y-2">
         {mainNavItems.map(({ label, icon: Icon, path }) => (
           <li key={label}>
-            <Link href={path} aria-hidden>
-              <Button
-                disabled={label === "Minhas reservas" && !isAuthenticated}
-                variant="ghost"
-                className={`w-full justify-start ${isActive(path) ? "bg-gray-100" : ""}`}
-                aria-current={isActive(path) ? "page" : undefined}
-              >
-                <Icon className="mr-2 h-4 w-4" />
-                {label}
-              </Button>
-            </Link>
+            {label === "Minhas reservas" && !isAuthenticated ? (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild className="!pointer-events-auto">
+                    <Button
+                      disabled={label === "Minhas reservas" && !isAuthenticated}
+                      variant="ghost"
+                      className={`w-full justify-start ${isActive(path) ? "bg-gray-100" : ""}`}
+                      aria-current={isActive(path) ? "page" : undefined}
+                    >
+                      <Icon className="mr-2 h-4 w-4" />
+                      {label}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent className="text-sm">
+                    Faça login para acessar
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ) : (
+              <Link href={path} aria-hidden>
+                <Button
+                  disabled={label === "Minhas reservas" && !isAuthenticated}
+                  variant="ghost"
+                  className={`w-full justify-start ${isActive(path) ? "bg-gray-100" : ""}`}
+                  aria-current={isActive(path) ? "page" : undefined}
+                >
+                  <Icon className="mr-2 h-4 w-4" />
+                  {label}
+                </Button>
+              </Link>
+            )}
           </li>
         ))}
         {isAuthenticated && user?.roleId === 1 && (

@@ -9,6 +9,14 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -28,6 +36,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 import { Notification } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
@@ -40,6 +49,7 @@ import { filterBookings } from "@/utils/filterBookings";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CalendarIcon, MoreHorizontalIcon, SearchIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
 export default function Reservas() {
@@ -59,7 +69,7 @@ export default function Reservas() {
 
   const { toast } = useToast();
 
-  const { user } = useContext(AuthContext);
+  const { user, isAuthenticated } = useContext(AuthContext);
   const { setIsLoading } = useContext(LoadingContext);
 
   const { filteredBookings, paginatedBookings, totalPages } = filterBookings({
@@ -93,7 +103,10 @@ export default function Reservas() {
     });
   };
 
+  const router = useRouter();
+
   useEffect(() => {
+    if (!isAuthenticated) return router.push("/");
     listBookings();
   }, []);
 
@@ -197,34 +210,90 @@ export default function Reservas() {
               endTime: format(parseISO(booking.endTime.toString()), "HH:mm"),
               status: getStatusBadge(booking.status),
               options: (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      className="w-12 h-full"
-                      variant="ghost"
-                      aria-label="Ações da reserva"
-                    >
-                      <MoreHorizontalIcon />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-full">
-                    <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
-                    <DropdownMenuItem>Editar reserva</DropdownMenuItem>
-                    {booking.status !== "CANCELLED" && (
-                      <>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          className="text-red-600"
-                          onClick={() => handleCancelBooking(booking.id)}
-                        >
-                          Cancelar reserva
-                        </DropdownMenuItem>
-                      </>
-                    )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <Dialog>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        className="w-12 h-full"
+                        variant="ghost"
+                        aria-label="Ações da reserva"
+                      >
+                        <MoreHorizontalIcon />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-full">
+                      <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <DialogTrigger>Ver detalhes</DialogTrigger>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>Editar reserva</DropdownMenuItem>
+                      {booking.status !== "CANCELLED" && (
+                        <>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            className="text-red-600"
+                            onClick={() => handleCancelBooking(booking.id)}
+                          >
+                            Cancelar reserva
+                          </DropdownMenuItem>
+                        </>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl">
+                        Detalhes do Agendamento
+                      </DialogTitle>
+                    </DialogHeader>
+                    <Separator />
+                    <DialogDescription className="text-back grid grid-cols-1 grid-row-3 gap-4">
+                      <div className="grid grid-cols-3 items-center justify-between">
+                        <div className="flex flex-col">
+                          <strong>Usuário</strong> {booking.user.name}
+                        </div>
+                        <div className="flex flex-col">
+                          <strong>Sala</strong> {booking.room.name}
+                        </div>
+                        <div className="flex flex-col">
+                          <strong>Data</strong>{" "}
+                          {new Date(booking.date).toLocaleDateString("pt-BR")}
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-3">
+                        <div className="flex flex-col">
+                          <strong>Horário</strong>{" "}
+                          {new Date(booking.startTime).toLocaleTimeString(
+                            "pt-BR",
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            }
+                          )}{" "}
+                          -{" "}
+                          {new Date(booking.endTime).toLocaleTimeString(
+                            "pt-BR",
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            }
+                          )}
+                        </div>
+                        <div className="grid gap-1 w-2/4">
+                          <strong>Status</strong>{" "}
+                          {getStatusBadge(booking.status)}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex flex-col break-words">
+                          <strong>Descrição</strong>{" "}
+                          {booking.description || "Sem descrição"}
+                        </div>
+                      </div>
+                    </DialogDescription>
+                  </DialogContent>
+                </Dialog>
               ),
             }))}
           />

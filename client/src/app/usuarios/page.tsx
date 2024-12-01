@@ -30,6 +30,7 @@ import userServiceInstance from "@/services/UserService";
 import { IUser } from "@/types";
 import { ERoles } from "@/types/Roles.enum";
 import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
 export default function Usuarios() {
@@ -46,7 +47,7 @@ export default function Usuarios() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const { user } = useContext(AuthContext);
+  const { user, isAuthenticated } = useContext(AuthContext);
   const { setIsLoading } = useContext(LoadingContext);
 
   const filteredUsers = users.filter(
@@ -80,7 +81,10 @@ export default function Usuarios() {
     });
   };
 
+  const router = useRouter();
+
   useEffect(() => {
+    if (!isAuthenticated) return router.push("/");
     listUsers();
   }, []);
 

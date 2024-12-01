@@ -1,5 +1,6 @@
 "use client";
 
+import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Notification } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
+import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
 import { loginSchema } from "@/schemas";
 import userServiceInstance from "@/services/UserService";
@@ -26,8 +28,9 @@ import { z } from "zod";
 
 export default function LoginPage() {
   const { toast } = useToast();
-  const { signIn, isAuthenticated } = useContext(AuthContext);
   const router = useRouter();
+
+  const { signIn, isAuthenticated } = useContext(AuthContext);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -43,7 +46,10 @@ export default function LoginPage() {
     },
   });
 
+  const { isLoading, setIsLoading } = useContext(LoadingContext);
+
   const handleFormSubmit = async (data: z.infer<typeof loginSchema>) => {
+    setIsLoading(true);
     try {
       await userServiceInstance.findByEmail(data.email);
       await signIn(data);
@@ -57,6 +63,8 @@ export default function LoginPage() {
         title: Notification.ERROR.LOGIN.TITLE,
         description: Notification.ERROR.LOGIN.DESCRIPTION,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -131,8 +139,8 @@ export default function LoginPage() {
                   </span>
                 )}
               </div>
-              <Button type="submit" className="mt-2">
-                Entrar
+              <Button type="submit" className="mt-2" disabled={isLoading}>
+                {isLoading ? <Spinner size="small" /> : "Entrar"}
               </Button>
             </form>
           </Form>

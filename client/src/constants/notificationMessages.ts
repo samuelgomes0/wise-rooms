@@ -4,6 +4,11 @@ const SUCCESS = {
     DESCRIPTION:
       "Seja bem-vindo(a) de volta! Você está conectado(a) e pronto(a) para utilizar o sistema.",
   },
+  LOGOUT: {
+    TITLE: "Logout realizado com sucesso! 🎉",
+    DESCRIPTION:
+      "Você foi desconectado(a) do sistema. Esperamos vê-lo(a) novamente em breve!",
+  },
   BOOKING: {
     CREATE_TITLE: "Reserva criada com sucesso! 🎉",
     CREATE_DESCRIPTION:
@@ -30,7 +35,8 @@ const SUCCESS = {
   },
   USER: {
     TITLE: "Usuário criado com sucesso! 🎉",
-    DESCRIPTION: `O usuário foi criado no sistema com sucesso. Ele já pode acessar sua conta e utilizar os recursos disponíveis.`,
+    DESCRIPTION:
+      "O usuário foi criado no sistema com sucesso. Ele já pode acessar sua conta e utilizar os recursos disponíveis.",
     DELETE_TITLE: "Usuário deletado com sucesso! 🎉",
     DELETE_DESCRIPTION:
       "O usuário foi removido do sistema com sucesso. Ele não poderá mais acessar sua conta e utilizar os recursos disponíveis.",

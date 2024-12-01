@@ -36,7 +36,9 @@ export class BookingUseCase {
     );
 
     if (hasConflict) {
-      throw new Error("Booking conflict detected. Please choose another time.");
+      throw new Error(
+        "Não foi possível concluir a criação da reserva. Já existe outra reserva para a mesma sala no horário selecionado."
+      );
     }
 
     const booking = await this.bookingRepository.createBooking({

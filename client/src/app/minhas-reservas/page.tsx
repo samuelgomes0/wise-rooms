@@ -40,6 +40,7 @@ import { filterBookings } from "@/utils/filterBookings";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CalendarIcon, MoreHorizontalIcon, SearchIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
 export default function Reservas() {
@@ -59,7 +60,7 @@ export default function Reservas() {
 
   const { toast } = useToast();
 
-  const { user } = useContext(AuthContext);
+  const { user, isAuthenticated } = useContext(AuthContext);
   const { setIsLoading } = useContext(LoadingContext);
 
   const { filteredBookings, paginatedBookings, totalPages } = filterBookings({
@@ -95,7 +96,10 @@ export default function Reservas() {
     });
   };
 
+  const router = useRouter();
+
   useEffect(() => {
+    if (!isAuthenticated) return router.push("/");
     listBookings();
   }, []);
 

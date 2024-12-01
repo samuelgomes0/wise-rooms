@@ -51,7 +51,7 @@ export function SidebarNav() {
             {label === "Minhas reservas" && !isAuthenticated ? (
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger asChild>
+                  <TooltipTrigger asChild className="!pointer-events-auto">
                     <Button
                       disabled={label === "Minhas reservas" && !isAuthenticated}
                       variant="ghost"
@@ -62,8 +62,8 @@ export function SidebarNav() {
                       {label}
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>
-                    <span className="text-xs">Faça login para acessar</span>
+                  <TooltipContent className="text-sm">
+                    Faça login para acessar
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>

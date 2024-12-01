@@ -30,6 +30,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DEFAULT_TIME_SLOTS } from "@/constants";
+import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { registerBookingSchema } from "@/schemas";
 import bookingServiceInstance from "@/services/BookingService";
@@ -46,6 +47,8 @@ export function BookingRegistrationForm({
 }) {
   const [users, setUsers] = useState<IUser[]>([]);
   const [rooms, setRooms] = useState<IRoom[]>([]);
+
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof registerBookingSchema>>({
     resolver: zodResolver(registerBookingSchema),
@@ -74,8 +77,18 @@ export function BookingRegistrationForm({
 
       form.reset();
       onCloseModal();
+      toast({
+        variant: "default",
+        title: "Oba! Parece que deu tudo certo! 🎉",
+        description: "Sua reserva foi criada com sucesso.",
+      });
     } catch (error) {
-      console.error("Erro ao criar reserva:", error);
+      const description = error.response.data.error;
+      toast({
+        variant: "destructive",
+        title: "Opa! Parece que algo deu errado... 😕",
+        description,
+      });
     }
   }
 

@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
+import { useToast } from "@/hooks/use-toast";
 import roomServiceInstance from "@/services/RoomService";
 import { ERoles } from "@/types/Roles.enum";
 import { IRoom } from "@/types/Room.interface";
@@ -39,6 +40,8 @@ export default function Salas() {
   const { user } = useContext(AuthContext);
   const { setIsLoading } = useContext(LoadingContext);
 
+  const { toast } = useToast();
+
   const filteredRooms = rooms.filter(
     (room) =>
       room.id.toString().includes(searchTerm) ||
@@ -52,9 +55,14 @@ export default function Salas() {
   );
   const totalPages = Math.ceil(filteredRooms.length / itemsPerPage);
 
-  const handleDeleteRoom = (roomId: number) => {
-    roomServiceInstance.deleteRoom(roomId).then(() => {
-      setRooms(rooms.filter((room) => room.id !== roomId));
+  const handleDeleteRoom = async (roomId: number) => {
+    await roomServiceInstance.deleteRoom(roomId);
+    setRooms(rooms.filter((room) => room.id !== roomId));
+    toast({
+      variant: "default",
+      title: "Sala deletada com sucesso! 🎉",
+      description:
+        "A sala foi removida do sistema com sucesso. Todas as reservas associadas a ela foram canceladas.",
     });
   };
 

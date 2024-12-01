@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/select";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
+import { useToast } from "@/hooks/use-toast";
 import bookingServiceInstance from "@/services/BookingService";
 import { IBooking } from "@/types";
 import { ERoles } from "@/types/Roles.enum";
@@ -54,6 +55,8 @@ export default function Reservas() {
   const [statusFilter, setStatusFilter] = useState("Todos");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+
+  const { toast } = useToast();
 
   const { user } = useContext(AuthContext);
   const { setIsLoading } = useContext(LoadingContext);
@@ -81,8 +84,11 @@ export default function Reservas() {
   };
 
   const handleCancelBooking = async (bookingId: string) => {
-    await bookingServiceInstance.cancelBooking(bookingId).then(() => {
-      listBookings();
+    await bookingServiceInstance.cancelBooking(bookingId);
+    listBookings();
+    toast({
+      title: "Reserva cancelada com sucesso! 🎉",
+      description: "Sua reserva foi cancelada com sucesso.",
     });
   };
 

@@ -12,6 +12,7 @@ import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AuthContext } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 import { loginSchema } from "@/schemas";
 import userServiceInstance from "@/services/UserService";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,15 +24,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export default function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false);
+  const { toast } = useToast();
   const { signIn, isAuthenticated } = useContext(AuthContext);
   const router = useRouter();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push("/");
-    }
-  }, [isAuthenticated, router]);
+  const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -46,9 +43,26 @@ export default function LoginPage() {
   });
 
   const handleFormSubmit = async (data: z.infer<typeof loginSchema>) => {
-    userServiceInstance.findByEmail(data.email);
-    signIn(data);
+    try {
+      await userServiceInstance.findByEmail(data.email);
+      await signIn(data);
+    } catch (error) {
+      console.log(error);
+      const description = error.response.data.error;
+      toast({
+        variant: "destructive",
+        title: "Erro: Falha no Login",
+        description,
+        duration: 4000,
+      });
+    }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthenticated, router]);
 
   return (
     <main className="w-full h-full flex justify-center items-center">

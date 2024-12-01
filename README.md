@@ -53,14 +53,14 @@ Siga as etapas abaixo para rodar o projeto localmente.
 1. Clone o repositório:
 
    ```bash
-   git clone https://github.com/samuelgomes0/wise-rooms.git
+   git clone https://github.com/samuelgomes0/wise.rooms.git
    ```
 
 2. Acesse os diretórios do projeto:
 
    ```bash
-   cd wise-rooms/client
-   cd wise-rooms/server
+   cd wise.rooms/client
+   cd wise.rooms/server
    ```
 
 3. Instale as dependências em ambos:
@@ -98,7 +98,3 @@ Contribuições são bem-vindas! Se você deseja melhorar o projeto, siga os pas
 3. Commit suas mudanças (`git commit -m 'Adicionar minha nova feature'`).
 4. Envie para a branch (`git push origin minha-feature`).
 5. Abra um Pull Request.
-
-## Licença
-
-Este projeto está licenciado sob a **MIT License** – veja o arquivo [LICENSE](LICENSE) para mais detalhes.

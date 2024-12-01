@@ -31,6 +31,7 @@ import { IResource } from "@/types/Resource.interface";
 import { resourceTypes } from "@/types/resourceTypes.enum";
 import { ERoles } from "@/types/Roles.enum";
 import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
 export default function Recursos() {
@@ -47,7 +48,7 @@ export default function Recursos() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const { user } = useContext(AuthContext);
+  const { user, isAuthenticated } = useContext(AuthContext);
   const { setIsLoading } = useContext(LoadingContext);
 
   const filteredResources = resources.filter(
@@ -100,7 +101,10 @@ export default function Recursos() {
     }
   };
 
+  const router = useRouter();
+
   useEffect(() => {
+    if (!isAuthenticated) return router.push("/");
     listResources();
   }, []);
 

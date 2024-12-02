@@ -7,6 +7,14 @@ import SearchFilter from "@/components/SearchFilter";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -21,20 +29,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 import { UserRegistrationForm } from "@/components/Users/UserRegistrationForm";
-import { Notification } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
+import roleServiceInstance from "@/services/RoleService";
 import userServiceInstance from "@/services/UserService";
-import { IUser } from "@/types";
-import { ERoles } from "@/types/Roles.enum";
+import { ApiError, IRole, IUser } from "@/types";
+import { errorHandler, Filter } from "@/utils";
 import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
 export default function Usuarios() {
   const [users, setUsers] = useState<IUser[]>([]);
+  const [roles, setRoles] = useState<IRole[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleModalClose = () => {
@@ -50,18 +60,13 @@ export default function Usuarios() {
   const { user, isAuthenticated } = useContext(AuthContext);
   const { setIsLoading } = useContext(LoadingContext);
 
-  const filteredUsers = users.filter(
-    (user) =>
-      user.id.toString().includes(searchTerm) ||
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const paginatedUsers = filteredUsers.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const { filteredUsers, paginatedUsers, totalPages } = Filter.users({
+    users,
+    searchTerm,
+    roleFilter: statusFilter,
+    currentPage,
+    itemsPerPage,
+  });
 
   const listUsers = async () => {
     setIsLoading(true);
@@ -70,15 +75,21 @@ export default function Usuarios() {
     setIsLoading(false);
   };
 
+  const listRoles = async () => {
+    const roles = await roleServiceInstance.listRoles();
+    setRoles(roles);
+  };
+
   const { toast } = useToast();
 
   const handleDeleteUser = async (id: string) => {
-    await userServiceInstance.deleteUser(id);
-    await listUsers();
-    toast({
-      title: Notification.SUCCESS.USER.DELETE_TITLE,
-      description: Notification.SUCCESS.USER.DELETE_DESCRIPTION,
-    });
+    try {
+      await userServiceInstance.deleteUser(id);
+      await listUsers();
+    } catch (error) {
+      const { title, description } = errorHandler(error as ApiError);
+      toast({ variant: "destructive", title, description });
+    }
   };
 
   const router = useRouter();
@@ -86,6 +97,7 @@ export default function Usuarios() {
   useEffect(() => {
     if (!isAuthenticated) return router.push("/");
     listUsers();
+    listRoles();
   }, []);
 
   return (
@@ -99,9 +111,7 @@ export default function Usuarios() {
               </Avatar>
               <div>
                 <h1 className="text-2xl font-bold">Usuários</h1>
-                <p className="text-sm text-read">
-                  {ERoles[user?.roleId as unknown as keyof typeof ERoles]}
-                </p>
+                <p className="text-sm text-read">{user?.role.name}</p>
               </div>
             </div>
             <GenericModal
@@ -131,9 +141,11 @@ export default function Usuarios() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="Todos">Todos os cargos</SelectItem>
-                <SelectItem value="viewer">Visualizador</SelectItem>
-                <SelectItem value="operator">Operador</SelectItem>
-                <SelectItem value="admin">Administrador</SelectItem>
+                {roles.map((role) => (
+                  <SelectItem key={role.id} value={role.name}>
+                    {role.name}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -149,32 +161,64 @@ export default function Usuarios() {
             ]}
             data={paginatedUsers.map((user) => ({
               ...user,
-              role: ERoles[user.roleId],
+              role: user.role.name,
               options: (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      className="w-12 h-full"
-                      variant="ghost"
-                      aria-label="Ações do usuário"
-                    >
-                      <MoreHorizontalIcon />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-full">
-                    <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
-                    <DropdownMenuItem>Editar usuário</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      className="text-red-600"
-                      onClick={() => handleDeleteUser(user.id)}
-                    >
-                      Deletar usuário
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <Dialog>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        className="w-12 h-full"
+                        variant="ghost"
+                        aria-label="Ações do usuário"
+                      >
+                        <MoreHorizontalIcon />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-full">
+                      <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <DialogTrigger asChild>
+                          <span>Ver detalhes</span>
+                        </DialogTrigger>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem disabled>
+                        Editar usuário
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        className="text-red-600"
+                        onClick={() => handleDeleteUser(user.id)}
+                      >
+                        Deletar usuário
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl">
+                        Detalhes do Usuário
+                      </DialogTitle>
+                    </DialogHeader>
+                    <Separator />
+                    <DialogDescription className="text-back grid grid-cols-1 gap-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex flex-col">
+                          <strong>Código:</strong> {user.id}
+                        </div>
+                        <div className="flex flex-col">
+                          <strong>Nome:</strong> {user.name}
+                        </div>
+                        <div className="flex flex-col">
+                          <strong>E-mail:</strong> {user.email}
+                        </div>
+                        <div className="flex flex-col">
+                          <strong>Cargo:</strong> {user.role.name}
+                        </div>
+                      </div>
+                    </DialogDescription>
+                  </DialogContent>
+                </Dialog>
               ),
             }))}
           />

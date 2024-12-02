@@ -64,21 +64,32 @@ export function UserRegistrationForm({
 
       onCloseModal();
       toast({
-        title: Notification.SUCCESS.USER.TITLE,
-        description: Notification.SUCCESS.USER.DESCRIPTION,
+        title: Notification.SUCCESS.USER.CREATE_TITLE,
+        description: Notification.SUCCESS.USER.CREATE_DESCRIPTION,
       });
     } catch {
       toast({
-        title: Notification.ERROR.USER.TITLE,
-        description: Notification.ERROR.USER.DESCRIPTION,
+        title: Notification.ERROR.USER.CREATE_TITLE,
+        description: Notification.ERROR.USER.CREATE_DESCRIPTION,
+      });
+    }
+  };
+
+  const listRoles = async () => {
+    try {
+      const data = await roleServiceInstance.listRoles();
+      setRoles(data);
+      console.log(data);
+    } catch {
+      toast({
+        title: Notification.ERROR.ROLE.TITLE,
+        description: Notification.ERROR.ROLE.DESCRIPTION,
       });
     }
   };
 
   useEffect(() => {
-    roleServiceInstance.listRoles().then(({ data }) => {
-      setRoles(data);
-    });
+    listRoles();
   }, []);
 
   return (

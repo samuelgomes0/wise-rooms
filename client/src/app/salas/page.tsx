@@ -8,6 +8,14 @@ import SearchFilter from "@/components/SearchFilter";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -15,13 +23,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Notification } from "@/constants";
+import { Separator } from "@/components/ui/separator";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
 import roomServiceInstance from "@/services/RoomService";
-import { ERoles } from "@/types/Roles.enum";
+import { ApiError } from "@/types";
 import { IRoom } from "@/types/Room.interface";
+import { errorHandler, Filter } from "@/utils";
 import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
@@ -44,26 +53,21 @@ export default function Salas() {
 
   const { toast } = useToast();
 
-  const filteredRooms = rooms.filter(
-    (room) =>
-      room.id.toString().includes(searchTerm) ||
-      room.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      room.description?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const paginatedRooms = filteredRooms.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-  const totalPages = Math.ceil(filteredRooms.length / itemsPerPage);
+  const { filteredRooms, paginatedRooms, totalPages } = Filter.rooms({
+    rooms,
+    searchTerm,
+    currentPage,
+    itemsPerPage,
+  });
 
   const handleDeleteRoom = async (roomId: number) => {
-    await roomServiceInstance.deleteRoom(roomId);
-    setRooms(rooms.filter((room) => room.id !== roomId));
-    toast({
-      title: Notification.SUCCESS.ROOM.DELETE_TITLE,
-      description: Notification.SUCCESS.ROOM.DELETE_DESCRIPTION,
-    });
+    try {
+      await roomServiceInstance.deleteRoom(roomId);
+      setRooms(rooms.filter((room) => room.id !== roomId));
+    } catch (error) {
+      const { title, description } = errorHandler(error as ApiError);
+      toast({ variant: "destructive", title, description });
+    }
   };
 
   const listRooms = async () => {
@@ -91,9 +95,7 @@ export default function Salas() {
               </Avatar>
               <div>
                 <h1 className="text-2xl font-bold">Salas</h1>
-                <p className="text-sm text-read">
-                  {ERoles[user?.roleId as unknown as keyof typeof ERoles]}
-                </p>
+                <p className="text-sm text-read">{user?.role.name}</p>
               </div>
             </div>
             <GenericModal
@@ -129,30 +131,63 @@ export default function Salas() {
             data={paginatedRooms.map((room) => ({
               ...room,
               options: (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      className="w-12 h-full"
-                      variant="ghost"
-                      aria-label="Ações da sala"
-                    >
-                      <MoreHorizontalIcon />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-full">
-                    <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
-                    <DropdownMenuItem>Editar sala</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      className="text-red-600"
-                      onClick={() => handleDeleteRoom(room.id)}
-                    >
-                      Deletar sala
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <Dialog>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        className="w-12 h-full"
+                        variant="ghost"
+                        aria-label="Ações da sala"
+                      >
+                        <MoreHorizontalIcon />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-full">
+                      <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <DialogTrigger asChild>
+                          <span>Ver detalhes</span>
+                        </DialogTrigger>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem disabled>Editar sala</DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        className="text-red-600"
+                        onClick={() => handleDeleteRoom(room.id)}
+                      >
+                        Deletar sala
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl">
+                        Detalhes da Sala
+                      </DialogTitle>
+                    </DialogHeader>
+                    <Separator />
+                    <DialogDescription className="text-back grid grid-cols-1 grid-row-3 gap-4">
+                      <div className="grid grid-cols-3 items-center justify-between">
+                        <div className="flex flex-col">
+                          <strong>ID</strong> {room.id}
+                        </div>
+                        <div className="flex flex-col">
+                          <strong>Nome</strong> {room.name}
+                        </div>
+                        <div className="flex flex-col">
+                          <strong>Capacidade</strong> {room.capacity}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex flex-col break-words">
+                          <strong>Descrição</strong>{" "}
+                          {room.description || "Sem descrição"}
+                        </div>
+                      </div>
+                    </DialogDescription>
+                  </DialogContent>
+                </Dialog>
               ),
             }))}
           />

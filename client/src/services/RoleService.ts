@@ -1,8 +1,10 @@
+import { IRole } from "@/types";
 import apiServiceInstance from "./ApiService";
 
 class RoleService {
-  async listRoles() {
-    return await apiServiceInstance.get("/roles");
+  async listRoles(): Promise<IRole[]> {
+    const roles = await apiServiceInstance.get<IRole[]>("/roles");
+    return roles.data;
   }
 }
 

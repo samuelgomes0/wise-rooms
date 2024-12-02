@@ -47,8 +47,8 @@ export function UserDropdown() {
           <DropdownMenuContent className="w-52">
             <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Perfil</DropdownMenuItem>
-            <DropdownMenuItem>Configurações</DropdownMenuItem>
+            <DropdownMenuItem disabled>Perfil</DropdownMenuItem>
+            <DropdownMenuItem disabled>Configurações</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-red-600" onClick={handleLogout}>
               <LogOutIcon className="mr-2" size={16} />

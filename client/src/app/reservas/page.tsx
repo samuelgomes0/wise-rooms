@@ -42,10 +42,8 @@ import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
 import bookingServiceInstance from "@/services/BookingService";
-import { IBooking } from "@/types";
-import { ERoles } from "@/types/Roles.enum";
-import { getStatusBadge } from "@/utils";
-import { filterBookings } from "@/utils/filterBookings";
+import { ApiError, IBooking } from "@/types";
+import { errorHandler, Filter, getStatusBadge } from "@/utils";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CalendarIcon, MoreHorizontalIcon, SearchIcon } from "lucide-react";
@@ -72,7 +70,7 @@ export default function Reservas() {
   const { user, isAuthenticated } = useContext(AuthContext);
   const { setIsLoading } = useContext(LoadingContext);
 
-  const { filteredBookings, paginatedBookings, totalPages } = filterBookings({
+  const { filteredBookings, paginatedBookings, totalPages } = Filter.bookings({
     bookings,
     searchTerm,
     statusFilter,
@@ -95,12 +93,17 @@ export default function Reservas() {
   };
 
   const handleCancelBooking = async (bookingId: string) => {
-    await bookingServiceInstance.cancelBooking(bookingId);
-    await listBookings();
-    toast({
-      title: Notification.SUCCESS.BOOKING.CANCEL_TITLE,
-      description: Notification.SUCCESS.BOOKING.CANCEL_DESCRIPTION,
-    });
+    try {
+      await bookingServiceInstance.cancelBooking(bookingId);
+      await listBookings();
+      toast({
+        title: Notification.SUCCESS.BOOKING.CANCEL_TITLE,
+        description: Notification.SUCCESS.BOOKING.CANCEL_DESCRIPTION,
+      });
+    } catch (error) {
+      const { title, description } = errorHandler(error as ApiError);
+      toast({ variant: "destructive", title, description });
+    }
   };
 
   const router = useRouter();
@@ -121,9 +124,7 @@ export default function Reservas() {
               </Avatar>
               <div>
                 <h1 className="text-2xl font-bold">Reservas</h1>
-                <p className="text-sm text-read">
-                  {ERoles[user?.roleId as unknown as keyof typeof ERoles]}
-                </p>
+                <p className="text-sm text-read">{user?.role.name}</p>
               </div>
             </div>
             <GenericModal
@@ -227,7 +228,9 @@ export default function Reservas() {
                       <DropdownMenuItem>
                         <DialogTrigger>Ver detalhes</DialogTrigger>
                       </DropdownMenuItem>
-                      <DropdownMenuItem>Editar reserva</DropdownMenuItem>
+                      <DropdownMenuItem disabled>
+                        Editar reserva
+                      </DropdownMenuItem>
                       {booking.status !== "CANCELLED" && (
                         <>
                           <DropdownMenuSeparator />

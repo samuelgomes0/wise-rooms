@@ -8,6 +8,14 @@ import SearchFilter from "@/components/SearchFilter";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -22,14 +30,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 import { Notification } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
 import resourceServiceInstance from "@/services/ResourceService";
+import { ApiError } from "@/types";
 import { IResource } from "@/types/Resource.interface";
 import { resourceTypes } from "@/types/resourceTypes.enum";
-import { ERoles } from "@/types/Roles.enum";
+import { errorHandler } from "@/utils";
 import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
@@ -91,11 +101,8 @@ export default function Recursos() {
         description: Notification.SUCCESS.RESOURCE.DELETE_DESCRIPTION,
       });
     } catch (error) {
-      console.error(error);
-      toast({
-        title: Notification.ERROR.RESOURCE.DELETE_TITLE,
-        description: Notification.ERROR.RESOURCE.DELETE_DESCRIPTION,
-      });
+      const { title, description } = errorHandler(error as ApiError);
+      toast({ variant: "destructive", title, description });
     } finally {
       setIsLoading(false);
     }
@@ -119,9 +126,7 @@ export default function Recursos() {
               </Avatar>
               <div>
                 <h1 className="text-2xl font-bold">Recursos</h1>
-                <p className="text-sm text-read">
-                  {ERoles[user?.roleId as unknown as keyof typeof ERoles]}
-                </p>
+                <p className="text-sm text-read">{user?.role.name}</p>
               </div>
             </div>
             <GenericModal
@@ -172,30 +177,63 @@ export default function Recursos() {
             data={paginatedResources.map((resource) => ({
               ...resource,
               options: (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      className="w-12 h-full"
-                      variant="ghost"
-                      aria-label="Ações do recurso"
-                    >
-                      <MoreHorizontalIcon />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-full">
-                    <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
-                    <DropdownMenuItem>Editar recurso</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      className="text-red-600"
-                      onClick={() => handleDeleteResource(resource.id)}
-                    >
-                      Deletar recurso
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <Dialog>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        className="w-12 h-full"
+                        variant="ghost"
+                        aria-label="Ações do recurso"
+                      >
+                        <MoreHorizontalIcon />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-full">
+                      <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <DialogTrigger asChild>
+                          <span>Ver detalhes</span>
+                        </DialogTrigger>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem disabled>
+                        Editar recurso
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        className="text-red-600"
+                        onClick={() => handleDeleteResource(resource.id)}
+                      >
+                        Deletar recurso
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl">
+                        Detalhes do Recurso
+                      </DialogTitle>
+                    </DialogHeader>
+                    <Separator />
+                    <DialogDescription className="text-back grid grid-cols-1 gap-4">
+                      <div className="grid grid-cols-3 gap-4">
+                        <div className="flex flex-col">
+                          <strong>Código:</strong> {resource.id}
+                        </div>
+                        <div className="flex flex-col">
+                          <strong>Nome:</strong> {resource.name}
+                        </div>
+                        <div className="flex flex-col">
+                          <strong>Tipo:</strong> {resource.type}
+                        </div>
+                      </div>
+                      <div className="flex flex-col break-words">
+                        <strong>Descrição:</strong>{" "}
+                        {resource.description || "Sem descrição"}
+                      </div>
+                    </DialogDescription>
+                  </DialogContent>
+                </Dialog>
               ),
             }))}
           />

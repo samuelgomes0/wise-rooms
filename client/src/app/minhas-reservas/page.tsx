@@ -34,9 +34,7 @@ import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
 import bookingServiceInstance from "@/services/BookingService";
 import { IBooking } from "@/types";
-import { ERoles } from "@/types/Roles.enum";
-import { getStatusBadge } from "@/utils";
-import { filterBookings } from "@/utils/filterBookings";
+import { Filter, getStatusBadge } from "@/utils";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { CalendarIcon, MoreHorizontalIcon, SearchIcon } from "lucide-react";
@@ -63,7 +61,7 @@ export default function Reservas() {
   const { user, isAuthenticated } = useContext(AuthContext);
   const { setIsLoading } = useContext(LoadingContext);
 
-  const { filteredBookings, paginatedBookings, totalPages } = filterBookings({
+  const { filteredBookings, paginatedBookings, totalPages } = Filter.bookings({
     bookings,
     searchTerm,
     statusFilter,
@@ -114,9 +112,7 @@ export default function Reservas() {
               </Avatar>
               <div>
                 <h1 className="text-2xl font-bold">Minhas reservas</h1>
-                <p className="text-sm text-read">
-                  {ERoles[user?.roleId as unknown as keyof typeof ERoles]}
-                </p>
+                <p className="text-sm text-read">{user?.role.name}</p>
               </div>
             </div>
             <GenericModal

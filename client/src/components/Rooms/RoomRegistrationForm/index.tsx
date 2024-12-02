@@ -40,8 +40,8 @@ export function RoomRegistrationForm({
     await roomServiceInstance.createRoom(values);
     onCloseModal();
     toast({
-      title: Notification.SUCCESS.ROOM.TITLE,
-      description: Notification.SUCCESS.ROOM.DESCRIPTION,
+      title: Notification.SUCCESS.ROOM.CREATE_TITLE,
+      description: Notification.SUCCESS.ROOM.CREATE_DESCRIPTION,
     });
   }
 

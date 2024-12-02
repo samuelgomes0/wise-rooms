@@ -1,5 +1,6 @@
 import capitalizeString from "./capitalizeString";
-import { filterBookings } from "./filterBookings";
+import errorHandler from "./errorHandler";
+import Filter from "./filterHandler";
 import { getStatusBadge } from "./getStatusBadge";
 
-export { capitalizeString, filterBookings, getStatusBadge };
+export { capitalizeString, errorHandler, Filter, getStatusBadge };

@@ -7,6 +7,7 @@ import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -29,22 +30,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DEFAULT_TIME_SLOTS } from "@/constants";
+import { DEFAULT_TIME_SLOTS, Notification } from "@/constants";
+import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { registerBookingSchema } from "@/schemas";
 import bookingServiceInstance from "@/services/BookingService";
 import roomServiceInstance from "@/services/RoomService";
 import userServiceInstance from "@/services/UserService";
-import { IUser } from "@/types";
+import { ApiError, IUser } from "@/types";
 import { IRoom } from "@/types/Room.interface";
-import { useEffect, useState } from "react";
+import { errorHandler } from "@/utils";
+import { useContext, useEffect, useState } from "react";
 
 export function BookingRegistrationForm({
   onCloseModal,
 }: {
   onCloseModal: () => void;
 }) {
+  const { isLoading, setIsLoading } = useContext(LoadingContext);
   const [users, setUsers] = useState<IUser[]>([]);
   const [rooms, setRooms] = useState<IRoom[]>([]);
 
@@ -67,6 +71,8 @@ export function BookingRegistrationForm({
     const timeEndDate = new Date(`${dateISO}T${values.endTime}:00`);
 
     try {
+      setIsLoading(true);
+
       await bookingServiceInstance.createBooking({
         userId: values.user,
         roomId: Number(values.room),
@@ -75,21 +81,19 @@ export function BookingRegistrationForm({
         endTime: timeEndDate,
       });
 
-      form.reset();
       onCloseModal();
+
       toast({
         variant: "default",
-        title: "Reserva realizada com sucesso! 🎉",
-        description:
-          "Sua reserva foi concluída com sucesso. Os detalhes foram registrados e a sala estará disponível no horário selecionado.",
+        title: Notification.SUCCESS.BOOKING.CREATE_TITLE,
+        description: Notification.SUCCESS.BOOKING.CREATE_DESCRIPTION,
       });
     } catch (error) {
-      const description = error.response.data.error;
-      toast({
-        variant: "destructive",
-        title: "Opa! Parece que algo deu errado... 😕",
-        description,
-      });
+      const { title, description } = errorHandler(error as ApiError);
+
+      toast({ variant: "destructive", title, description });
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -268,7 +272,9 @@ export function BookingRegistrationForm({
             )}
           />
         </div>
-        <Button type="submit">Criar Reserva</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? <Spinner size="small" /> : "Criar Reserva"}
+        </Button>
       </form>
     </Form>
   );

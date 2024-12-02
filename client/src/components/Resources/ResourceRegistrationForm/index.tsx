@@ -60,8 +60,8 @@ export function ResourceRegistrationForm({
     });
     onCloseModal();
     toast({
-      title: Notification.SUCCESS.RESOURCE.TITLE,
-      description: Notification.SUCCESS.RESOURCE.DESCRIPTION,
+      title: Notification.SUCCESS.RESOURCE.CREATE_TITLE,
+      description: Notification.SUCCESS.RESOURCE.CREATE_DESCRIPTION,
     });
   };
 

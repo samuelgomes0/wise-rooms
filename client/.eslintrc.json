@@ -24,7 +24,6 @@
     "react/react-in-jsx-scope": "off", // Remover importação do React
     "quotes": ["error", "double"], // Aspas duplas
     "semi": ["error", "always"], // Ponto e vírgula
-    "indent": ["error", 2], // Indentação de 2 espaços
     "space-before-blocks": ["error", "always"], // Espaço antes e depois das chaves
     "comma-spacing": ["error", { "before": false, "after": true }], // Espaços após vírgulas
     "no-unused-vars": "warn", // Variáveis não utilizadas

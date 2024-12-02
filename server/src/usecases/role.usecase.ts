@@ -1,5 +1,6 @@
 import { IRole, IRoleDTO } from "../interfaces";
 import { RoleRepository } from "../repositories";
+import AppError from "../utils/errorHandling";
 
 export class RoleUseCase {
   private roleRepository: RoleRepository;
@@ -20,6 +21,13 @@ export class RoleUseCase {
   }
 
   async createRole({ name, description }: IRoleDTO): Promise<IRole> {
+    const roles = await this.listRoles();
+
+    for (const role of roles) {
+      if (role.name === name)
+        throw new AppError("ROLE_ALREADY_EXISTS", "Role already exists.", 400);
+    }
+
     const role = await this.roleRepository.createRole({ name, description });
 
     return role;

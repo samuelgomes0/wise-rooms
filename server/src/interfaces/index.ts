@@ -1,3 +1,4 @@
+import ApiError from "./ApiError.interface";
 import {
   IAuditLog,
   IAuditLogDTO,
@@ -19,6 +20,7 @@ import { IRoom, IRoomCreateDTO, IRoomRepository } from "./Room.interface";
 import { IUser, IUserCreateDTO, IUserRepository } from "./User.interface";
 
 export {
+  ApiError,
   IAuditLog,
   IAuditLogDTO,
   IAuditLogRepository,

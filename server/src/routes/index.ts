@@ -1,4 +1,5 @@
 import { Express } from "express";
+import errorHandler from "../middlewares/errorHandler.middleware";
 import auditLogRoutes from "./auditLog.route";
 import authRoutes from "./auth.route";
 import bookingRoutes from "./booking.route";
@@ -15,4 +16,5 @@ export default (server: Express) => {
   server.use("/roles", roleRoutes);
   server.use("/rooms", roomRoutes);
   server.use("/users", userRoutes);
+  server.use(errorHandler);
 };

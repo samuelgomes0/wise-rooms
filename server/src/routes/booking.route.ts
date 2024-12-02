@@ -4,6 +4,7 @@ import { isAuthenticated } from "../middlewares/auth.middleware";
 import { AuditLogRepository } from "../repositories/auditLog.repository";
 import { BookingRepository } from "../repositories/booking.repository";
 import { AuditLogUseCase, BookingUseCase } from "../usecases";
+import AppError from "../utils/errorHandling";
 
 const router = Router();
 const bookingRepository = new BookingRepository();
@@ -89,10 +90,9 @@ router.post("/", isAuthenticated, async (req: any, res) => {
 
     return res.status(201).json({ message: "Booking created." });
   } catch (error) {
-    return res.status(400).json({
-      error:
-        error instanceof Error ? error.message : "An unknown error occurred.",
-    });
+    const { code, message, statusCode } = error as AppError;
+
+    return res.status(statusCode).json({ code, message, statusCode });
   }
 });
 
@@ -188,10 +188,9 @@ router.put("/:bookingId/cancel", isAuthenticated, async (req: any, res) => {
 
     return res.status(200).json(response);
   } catch (error) {
-    return res.status(400).json({
-      error:
-        error instanceof Error ? error.message : "An unknown error occurred.",
-    });
+    const { code, message, statusCode } = error as AppError;
+
+    return res.status(statusCode).json({ code, message, statusCode });
   }
 });
 

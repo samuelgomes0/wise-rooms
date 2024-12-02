@@ -1,8 +1,10 @@
+import { AuditAction, AuditEntity } from "@prisma/client";
+
 export interface IAuditLog {
   id: number;
   userId: string;
-  action: AuditLogAction;
-  entity: AuditLogEntity;
+  action: AuditAction;
+  entity: AuditEntity;
   entityId: string;
   createdAt: Date;
   updatedAt: Date;
@@ -10,13 +12,10 @@ export interface IAuditLog {
 
 export interface IAuditLogDTO {
   userId: string;
-  action: AuditLogAction;
-  entity: AuditLogEntity;
+  action: AuditAction;
+  entity: AuditEntity;
   entityId: string;
 }
-
-export type AuditLogAction = "CREATE" | "UPDATE" | "DELETE";
-export type AuditLogEntity = "USER" | "ROOM" | "BOOKING" | "RESOURCE";
 
 export interface IAuditLogRepository {
   listAuditLogs(): Promise<IAuditLog[]>;

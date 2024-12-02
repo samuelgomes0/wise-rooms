@@ -112,6 +112,7 @@ enum AuditEntity {
   ROOM
   RESOURCE
   BOOKING
+  ROLE
 
   @@map("audit_entities")
 }

@@ -37,6 +37,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Notification } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
@@ -120,11 +121,17 @@ export default function Reservas() {
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-4">
               <Avatar>
-                <AvatarFallback>{user?.name[0]}</AvatarFallback>
+                <AvatarFallback>{user?.name[0] || "U"}</AvatarFallback>
               </Avatar>
               <div>
                 <h1 className="text-2xl font-bold">Reservas</h1>
-                <p className="text-sm text-read">{user?.role.name}</p>
+                <div className="text-sm text-read">
+                  {user?.role.name ? (
+                    <span>{user?.role.name}</span>
+                  ) : (
+                    <Skeleton className="w-24 h-3" />
+                  )}
+                </div>
               </div>
             </div>
             <GenericModal
@@ -133,7 +140,10 @@ export default function Reservas() {
               isOpen={isModalOpen}
               onOpenChange={setIsModalOpen}
             >
-              <BookingRegistrationForm onCloseModal={handleModalClose} />
+              <BookingRegistrationForm
+                onCloseModal={handleModalClose}
+                onBookingCreated={listBookings}
+              />
             </GenericModal>
           </div>
           <div className="flex gap-4 relative">
@@ -144,7 +154,7 @@ export default function Reservas() {
             <SearchFilter
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
-              placeholder="Buscar por código, responsável ou sala"
+              placeholder="Buscar por sala ou responsável"
             />
             <div className="relative">
               <Popover>
@@ -190,9 +200,8 @@ export default function Reservas() {
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           <GenericTable
             columns={[
-              { header: "Código", accessor: "id" },
-              { header: "Responsável", accessor: "user" },
               { header: "Sala", accessor: "room" },
+              { header: "Responsável", accessor: "user" },
               { header: "Início", accessor: "startTime" },
               { header: "Fim", accessor: "endTime" },
               { header: "Data", accessor: "date" },

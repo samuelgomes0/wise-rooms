@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <main>
       {isLoading && (
-        <div className="fixed bg-[rgba(0,0,0,0.5)] w-full h-full flex justify-center items-center z-20">
+        <div className="fixed bg-[rgba(0,0,0,0.25)] w-full h-full flex justify-center items-center z-20">
           <Spinner size="large" />
         </div>
       )}

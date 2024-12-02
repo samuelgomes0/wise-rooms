@@ -31,6 +31,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Notification } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
@@ -126,7 +127,13 @@ export default function Recursos() {
               </Avatar>
               <div>
                 <h1 className="text-2xl font-bold">Recursos</h1>
-                <p className="text-sm text-read">{user?.role.name}</p>
+                <div className="text-sm text-read">
+                  {user?.role.name ? (
+                    <span>{user?.role.name}</span>
+                  ) : (
+                    <Skeleton className="w-24 h-3" />
+                  )}
+                </div>
               </div>
             </div>
             <GenericModal

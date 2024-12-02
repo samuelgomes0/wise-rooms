@@ -51,7 +51,7 @@ export function WeeklyView({ startDate, bookings }: WeeklyViewProps) {
             key={index}
             className={`mb-2 py-2 text-center items-center flex flex-col rounded bg-white shadow-sm ${
               day.toDateString() === new Date().toDateString()
-                ? "bg-secondary-foreground text-white"
+                ? "bg-[#171717] text-white"
                 : ""
             }`}
           >

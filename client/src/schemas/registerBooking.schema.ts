@@ -22,4 +22,5 @@ export const registerBookingSchema = z.object({
       /^([01]\d|2[0-3]):([0-5]\d)$/,
       "Formato de horário inválido (HH:mm)."
     ),
+  description: z.string().optional(),
 });

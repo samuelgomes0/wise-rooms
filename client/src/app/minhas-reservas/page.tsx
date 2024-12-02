@@ -217,7 +217,7 @@ export default function Reservas() {
                           <DropdownMenuSeparator />
                           <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
                           <DropdownMenuItem disabled={true}>
-                            Editar reserva
+                            Editar reserva (em breve)
                           </DropdownMenuItem>
                           {booking.status !== "CANCELLED" && (
                             <>

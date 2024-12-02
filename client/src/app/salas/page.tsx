@@ -150,7 +150,9 @@ export default function Salas() {
                           <span>Ver detalhes</span>
                         </DialogTrigger>
                       </DropdownMenuItem>
-                      <DropdownMenuItem disabled>Editar sala</DropdownMenuItem>
+                      <DropdownMenuItem disabled>
+                        Editar sala (em breve)
+                      </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
                         className="text-red-600"

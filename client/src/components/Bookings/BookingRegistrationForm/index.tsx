@@ -30,6 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { DEFAULT_TIME_SLOTS, Notification } from "@/constants";
 import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
@@ -45,8 +46,10 @@ import { useContext, useEffect, useState } from "react";
 
 export function BookingRegistrationForm({
   onCloseModal,
+  onBookingCreated,
 }: {
   onCloseModal: () => void;
+  onBookingCreated: () => void;
 }) {
   const { isLoading, setIsLoading } = useContext(LoadingContext);
   const [users, setUsers] = useState<IUser[]>([]);
@@ -62,6 +65,7 @@ export function BookingRegistrationForm({
       date: undefined,
       startTime: undefined,
       endTime: undefined,
+      description: "",
     },
   });
 
@@ -79,9 +83,11 @@ export function BookingRegistrationForm({
         date: values.date,
         startTime: timeStartDate,
         endTime: timeEndDate,
+        description: values.description,
       });
 
       onCloseModal();
+      onBookingCreated();
 
       toast({
         variant: "default",
@@ -204,9 +210,13 @@ export function BookingRegistrationForm({
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
-                    disabled={(date) =>
-                      date < new Date() || date > new Date("2100-01-01")
-                    }
+                    disabled={(date) => {
+                      const today = new Date();
+                      const oneMonthAhead = new Date(today);
+                      oneMonthAhead.setMonth(today.getMonth() + 1);
+
+                      return date < today || date > oneMonthAhead;
+                    }}
                     initialFocus
                     locale={ptBR}
                   />
@@ -267,6 +277,25 @@ export function BookingRegistrationForm({
                     ))}
                   </SelectContent>
                 </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div>
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Descrição</FormLabel>
+                <FormControl>
+                  <Textarea
+                    {...field}
+                    placeholder="Adicione uma descrição para a reserva"
+                    className="textarea-class w-full h-20"
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

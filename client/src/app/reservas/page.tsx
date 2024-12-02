@@ -229,7 +229,7 @@ export default function Reservas() {
                         <DialogTrigger>Ver detalhes</DialogTrigger>
                       </DropdownMenuItem>
                       <DropdownMenuItem disabled>
-                        Editar reserva
+                        Editar reserva (em breve)
                       </DropdownMenuItem>
                       {booking.status !== "CANCELLED" && (
                         <>

@@ -95,7 +95,7 @@ export function SidebarNav() {
                     aria-current={isActive(path) ? "page" : undefined}
                   >
                     <Icon className="mr-2 h-4 w-4" />
-                    {label}
+                    {label === "Auditoria" ? "Auditoria (em breve)" : label}
                   </Button>
                 </Link>
               </li>

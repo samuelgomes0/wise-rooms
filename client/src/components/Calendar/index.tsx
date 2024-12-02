@@ -15,6 +15,10 @@ export function Calendar() {
     setBookings(data);
   };
 
+  const handleBookingCreated = async () => {
+    listBookings();
+  };
+
   useEffect(() => {
     listBookings();
   }, [currentDate]);
@@ -24,6 +28,7 @@ export function Calendar() {
       <CalendarHeader
         currentDate={currentDate}
         setCurrentDate={setCurrentDate}
+        onBookingCreated={handleBookingCreated}
       />
       <WeeklyView startDate={currentDate} bookings={bookings} />
     </>

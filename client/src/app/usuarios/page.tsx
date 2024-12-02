@@ -183,7 +183,7 @@ export default function Usuarios() {
                         </DialogTrigger>
                       </DropdownMenuItem>
                       <DropdownMenuItem disabled>
-                        Editar usuário
+                        Editar usuário (em breve)
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem

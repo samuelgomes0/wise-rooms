@@ -197,7 +197,7 @@ export default function Recursos() {
                         </DialogTrigger>
                       </DropdownMenuItem>
                       <DropdownMenuItem disabled>
-                        Editar recurso
+                        Editar recurso (em breve)
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem

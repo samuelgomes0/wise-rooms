@@ -9,11 +9,13 @@ import { useContext, useState } from "react";
 interface CalendarHeaderProps {
   currentDate: Date;
   setCurrentDate: React.Dispatch<React.SetStateAction<Date>>;
+  onBookingCreated: () => void;
 }
 
 export default function CalendarHeader({
   currentDate,
   setCurrentDate,
+  onBookingCreated,
 }: CalendarHeaderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -60,17 +62,17 @@ export default function CalendarHeader({
       endOfWeek.toLocaleString("pt-BR", { month: "long" })
     );
 
-    const year = currentDate.toLocaleString("pt-BR", { year: "numeric" });
+    const startYear = currentDate.toLocaleString("pt-BR", { year: "numeric" });
+    const endYear = endOfWeek.toLocaleString("pt-BR", { year: "numeric" });
 
     return startMonth === endMonth
-      ? `${startMonth}, ${year}`
-      : `${startMonth} / ${endMonth}, ${year}`;
+      ? `${startMonth} de ${startYear}`
+      : `${startMonth} de ${startYear} - ${endMonth} de ${endYear}`;
   };
 
   return (
     <div className="bg-white m-auto rounded py-4 px-8 shadow-sm flex justify-between items-center">
-      <h2 className="text-xl font-semibold">{getMonthRange()}</h2>
-      <div className="flex gap-4">
+      <div className="header-buttons flex gap-4">
         <Button size="icon" variant="outline" onClick={handlePreviousWeek}>
           <ChevronLeftIcon size={16} />
         </Button>
@@ -81,15 +83,23 @@ export default function CalendarHeader({
           <ChevronRightIcon size={16} />
         </Button>
       </div>
+      <h2 className="header-title text-xl font-semibold text-center flex-1">
+        {getMonthRange()}
+      </h2>
       {isAuthenticated ? (
-        <GenericModal
-          title="Adicionar Nova Reserva"
-          triggerText="+ Nova Reserva"
-          isOpen={isModalOpen}
-          onOpenChange={setIsModalOpen}
-        >
-          <BookingRegistrationForm onCloseModal={handleModalClose} />
-        </GenericModal>
+        <div className="header-modal">
+          <GenericModal
+            title="Adicionar Nova Reserva"
+            triggerText="+ Nova Reserva"
+            isOpen={isModalOpen}
+            onOpenChange={setIsModalOpen}
+          >
+            <BookingRegistrationForm
+              onCloseModal={handleModalClose}
+              onBookingCreated={onBookingCreated}
+            />
+          </GenericModal>
+        </div>
       ) : null}
     </div>
   );

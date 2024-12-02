@@ -49,7 +49,11 @@ export function WeeklyView({ startDate, bookings }: WeeklyViewProps) {
         {weekDays.map((day, index) => (
           <div
             key={index}
-            className="mb-2 py-2 text-center items-center flex flex-col rounded bg-white shadow-sm"
+            className={`mb-2 py-2 text-center items-center flex flex-col rounded bg-white shadow-sm ${
+              day.toDateString() === new Date().toDateString()
+                ? "bg-blue-100"
+                : ""
+            }`}
           >
             <div className="font-medium text-sm text-read">
               {capitalizeString(

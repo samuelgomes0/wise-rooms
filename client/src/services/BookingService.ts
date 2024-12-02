@@ -7,6 +7,7 @@ interface BookingData {
   date: Date;
   startTime: Date;
   endTime: Date;
+  description?: string;
 }
 
 class BookingService {
@@ -28,6 +29,7 @@ class BookingService {
     date,
     startTime,
     endTime,
+    description,
   }: BookingData) {
     return await apiServiceInstance.post<void, BookingData>("/bookings", {
       userId,
@@ -35,6 +37,7 @@ class BookingService {
       date,
       startTime,
       endTime,
+      description,
     });
   }
 
@@ -45,6 +48,7 @@ class BookingService {
     date,
     startTime,
     endTime,
+    description,
   }: BookingData & { bookingId: number }) {
     return await apiServiceInstance.put<void, BookingData>(
       `/bookings/${bookingId}`,
@@ -54,6 +58,7 @@ class BookingService {
         date,
         startTime,
         endTime,
+        description,
       }
     );
   }

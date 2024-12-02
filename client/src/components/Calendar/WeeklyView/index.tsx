@@ -42,6 +42,15 @@ export function WeeklyView({ startDate, bookings }: WeeklyViewProps) {
     );
   };
 
+  const isToday = (date: Date) => {
+    const today = new Date();
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
+  };
+
   return (
     <div className="flex-1 mt-8">
       {/* Header */}
@@ -49,7 +58,7 @@ export function WeeklyView({ startDate, bookings }: WeeklyViewProps) {
         {weekDays.map((day, index) => (
           <div
             key={index}
-            className="mb-2 py-2 text-center items-center flex flex-col rounded bg-white shadow-sm"
+            className={`mb-2 py-2 text-center items-center flex flex-col rounded bg-white shadow-sm ${isToday(day) ? "bg-blue-100" : ""}`}
           >
             <div className="font-medium text-sm text-read">
               {capitalizeString(
@@ -83,8 +92,7 @@ export function WeeklyView({ startDate, bookings }: WeeklyViewProps) {
                     <DialogTrigger className="w-full text-left">
                       <div
                         key={booking.id}
-                        className="bg-blue-200 text-xs p-1 px-2 rounded shadow-sm flex items-center justify-between"
-                        title={`${booking.user.name} - ${booking.room.name}`}
+                        className="bg-blue-200 text-xs p-1 px-2 rounded shadow-sm flex items-center justify-between hover:bg-blue-300 cursor-pointer transition-colors"
                       >
                         <div>
                           <strong>{booking.room.name}</strong>
@@ -100,7 +108,7 @@ export function WeeklyView({ startDate, bookings }: WeeklyViewProps) {
                         </DialogTitle>
                       </DialogHeader>
                       <Separator />
-                      <DialogDescription className="text-back grid grid-cols-1 grid-row-3 gap-4">
+                      <DialogDescription className="text-black grid grid-cols-1 grid-row-3 gap-4">
                         <div className="grid grid-cols-3 items-center justify-between">
                           <div className="flex flex-col">
                             <strong>Usuário</strong> {booking.user.name}

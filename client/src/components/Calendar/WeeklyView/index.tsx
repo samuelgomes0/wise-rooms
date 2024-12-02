@@ -56,7 +56,7 @@ export function WeeklyView({ startDate, bookings }: WeeklyViewProps) {
             }`}
           >
             <div
-              className={`font-medium text-sm text-read ${day.toDateString() === new Date().toDateString() ? "text-[#A8A8A8]" : ""}`}
+              className={`font-medium text-sm text-read ${day.toDateString() === new Date().toDateString() ? "text-[#ABABAB]" : ""}`}
             >
               {capitalizeString(
                 day.toLocaleDateString("pt-BR", { weekday: "short" })

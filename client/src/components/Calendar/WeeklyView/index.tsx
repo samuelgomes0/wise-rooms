@@ -51,11 +51,13 @@ export function WeeklyView({ startDate, bookings }: WeeklyViewProps) {
             key={index}
             className={`mb-2 py-2 text-center items-center flex flex-col rounded bg-white shadow-sm ${
               day.toDateString() === new Date().toDateString()
-                ? "bg-blue-100"
+                ? "bg-secondary-foreground text-white"
                 : ""
             }`}
           >
-            <div className="font-medium text-sm text-read">
+            <div
+              className={`font-medium text-sm text-read ${day.toDateString() === new Date().toDateString() ? "text-[#A8A8A8]" : ""}`}
+            >
               {capitalizeString(
                 day.toLocaleDateString("pt-BR", { weekday: "short" })
               )}

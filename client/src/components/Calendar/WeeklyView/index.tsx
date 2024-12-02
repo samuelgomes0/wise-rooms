@@ -58,9 +58,11 @@ export function WeeklyView({ startDate, bookings }: WeeklyViewProps) {
         {weekDays.map((day, index) => (
           <div
             key={index}
-            className={`mb-2 py-2 text-center items-center flex flex-col rounded bg-white shadow-sm ${isToday(day) ? "bg-blue-100" : ""}`}
+            className={`mb-2 py-2 text-center items-center flex flex-col rounded shadow-sm ${isToday(day) ? "bg-secondary-foreground text-white" : "bg-white"}`}
           >
-            <div className="font-medium text-sm text-read">
+            <div
+              className={`font-medium text-sm text-read ${isToday(day) ? "text-[#B0B0B0]" : "text-read"}`}
+            >
               {capitalizeString(
                 day.toLocaleDateString("pt-BR", { weekday: "short" })
               )}

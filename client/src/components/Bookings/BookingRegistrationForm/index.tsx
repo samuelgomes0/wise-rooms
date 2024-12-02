@@ -103,14 +103,17 @@ export function BookingRegistrationForm({
     }
   }
 
-  useEffect(() => {
-    roomServiceInstance.listRooms().then((data) => {
-      setRooms(data);
-    });
+  const listRoomsAndUsers = async () => {
+    const [rooms, users] = await Promise.all([
+      roomServiceInstance.listRooms(),
+      userServiceInstance.listUsers(),
+    ]);
+    setRooms(rooms);
+    setUsers(users);
+  };
 
-    userServiceInstance.listUsers().then((data) => {
-      setUsers(data);
-    });
+  useEffect(() => {
+    listRoomsAndUsers();
   }, []);
 
   return (
@@ -124,18 +127,18 @@ export function BookingRegistrationForm({
             console.log("Erros de validação:", errors);
           }
         )}
-        className="flex flex-col gap-4"
+        className="flex flex-col gap-4 w-full"
       >
         <FormField
           control={form.control}
           name="user"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col">
               <FormLabel>Responsável</FormLabel>
               <FormControl>
                 <Select
                   onValueChange={field.onChange}
-                  value={field.value || undefined}
+                  value={field.value || ""}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione um responsável" />
@@ -157,12 +160,12 @@ export function BookingRegistrationForm({
           control={form.control}
           name="room"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col">
               <FormLabel>Sala</FormLabel>
               <FormControl>
                 <Select
                   onValueChange={field.onChange}
-                  value={field.value || undefined}
+                  value={field.value || ""}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione uma sala" />

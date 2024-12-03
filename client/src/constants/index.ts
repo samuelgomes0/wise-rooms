@@ -1,4 +1,8 @@
-import { DAYS_OF_WEEK, DEFAULT_TIME_SLOTS } from "./calendar";
+import {
+  DAYS_OF_WEEK,
+  DEFAULT_TIME_SLOTS,
+  SEPARATED_DEFAULT_TIME_SLOTS,
+} from "./calendar";
 import { ERROR, SUCCESS } from "./notificationMessages";
 
 export const Notification = {
@@ -6,4 +10,4 @@ export const Notification = {
   ERROR,
 };
 
-export { DAYS_OF_WEEK, DEFAULT_TIME_SLOTS };
+export { DAYS_OF_WEEK, DEFAULT_TIME_SLOTS, SEPARATED_DEFAULT_TIME_SLOTS };

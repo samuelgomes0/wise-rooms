@@ -31,7 +31,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { DEFAULT_TIME_SLOTS, Notification } from "@/constants";
+import { Notification, SEPARATED_DEFAULT_TIME_SLOTS } from "@/constants";
 import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -246,7 +246,7 @@ export function BookingRegistrationForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {DEFAULT_TIME_SLOTS.map((timeSlot) => (
+                    {SEPARATED_DEFAULT_TIME_SLOTS.map((timeSlot) => (
                       <SelectItem key={timeSlot} value={timeSlot}>
                         {timeSlot}
                       </SelectItem>
@@ -273,7 +273,7 @@ export function BookingRegistrationForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {DEFAULT_TIME_SLOTS.map((timeSlot) => (
+                    {SEPARATED_DEFAULT_TIME_SLOTS.map((timeSlot) => (
                       <SelectItem key={timeSlot} value={timeSlot}>
                         {timeSlot}
                       </SelectItem>

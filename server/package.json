@@ -1,18 +1,19 @@
 {
-  "name": "server",
+  "name": "wise.rooms",
   "version": "1.0.0",
   "main": "src/app.ts",
+  "author": "Samuel Gomes Rosa",
+  "license": "ISC",
+  "engines": {
+    "node": "18"
+  },
   "scripts": {
     "dev": "nodemon --exec ts-node src/app.ts",
     "build": "tsc -p .",
-    "start": "node build/server.js",
-    "lint": "eslint . --ext .ts",
-    "format": "prettier --write .",
+    "start": "node dist/app.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev"
   },
-  "author": "Samuel Gomes Rosa",
-  "license": "ISC",
   "dependencies": {
     "@prisma/client": "^6.0.1",
     "argon2": "^0.41.1",
@@ -31,8 +32,5 @@
     "prisma": "^6.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
-  },
-  "engines": {
-    "node": "18"
   }
 }

@@ -29,13 +29,12 @@ router.get("/", async (request, reply) => {
 router.post("/", async (request: any, reply) => {
   const createRoleSchema = z.object({
     name: z.string(),
-    description: z.string().optional(),
   });
 
-  const { name, description } = createRoleSchema.parse(request.body);
+  const { name } = createRoleSchema.parse(request.body);
 
   try {
-    const role = await roleUseCase.createRole({ name, description });
+    const role = await roleUseCase.createRole({ name });
 
     const { id: performedBy } = request.user;
 

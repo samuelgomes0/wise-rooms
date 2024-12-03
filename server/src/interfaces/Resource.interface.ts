@@ -1,7 +1,6 @@
 export interface IResource {
   id: number;
   name: string;
-  type: string;
   quantity: number;
   roomId: number;
   description?: string | null;
@@ -11,7 +10,6 @@ export interface IResource {
 
 export interface IResourceDTO {
   name: string;
-  type: string;
   quantity: number;
   roomId: number;
   description?: string;

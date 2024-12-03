@@ -3,7 +3,6 @@ import apiServiceInstance from "./ApiService";
 
 interface ResourceData {
   name: string;
-  type: string;
   quantity: number;
   roomId: number;
   description?: string;
@@ -15,16 +14,9 @@ class ResourceService {
     return data;
   }
 
-  async createResource({
-    name,
-    type,
-    quantity,
-    roomId,
-    description,
-  }: ResourceData) {
+  async createResource({ name, quantity, roomId, description }: ResourceData) {
     return await apiServiceInstance.post("/resources", {
       name,
-      type,
       quantity,
       roomId,
       description,

@@ -3,7 +3,6 @@ import { IUser } from "./User.interface";
 export interface IRole {
   id: number;
   name: string;
-  description?: string | null;
   users?: IUser[];
   createdAt: Date;
   updatedAt: Date;
@@ -11,7 +10,6 @@ export interface IRole {
 
 export interface IRoleDTO {
   name: string;
-  description?: string;
 }
 
 export interface IRoleRepository {

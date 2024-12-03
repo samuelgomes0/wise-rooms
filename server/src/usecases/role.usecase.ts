@@ -20,7 +20,7 @@ export class RoleUseCase {
     });
   }
 
-  async createRole({ name, description }: IRoleDTO): Promise<IRole> {
+  async createRole({ name }: IRoleDTO): Promise<IRole> {
     const roles = await this.listRoles();
 
     for (const role of roles) {
@@ -28,7 +28,7 @@ export class RoleUseCase {
         throw new AppError("ROLE_ALREADY_EXISTS", "Role already exists.", 400);
     }
 
-    const role = await this.roleRepository.createRole({ name, description });
+    const role = await this.roleRepository.createRole({ name });
 
     return role;
   }

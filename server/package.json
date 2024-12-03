@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nodemon --exec ts-node src/app.ts",
     "build": "tsc -p .",
-    "start": "node build/app.js",
+    "start": "node build/server.js",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
     "prisma:generate": "prisma generate",
@@ -14,7 +14,7 @@
   "author": "Samuel Gomes Rosa",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^6.0.0",
+    "@prisma/client": "^6.0.1",
     "argon2": "^0.41.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -28,11 +28,11 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^20.14.11",
     "nodemon": "^3.1.4",
-    "prisma": "^6.0.0",
+    "prisma": "^6.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
   },
   "engines": {
-    "node": "18"
+    "node": "22.11.0"
   }
 }

@@ -25,12 +25,11 @@ model User {
 
 // Role Model
 model Role {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  description String?
-  users       User[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("roles")
 }
@@ -41,8 +40,8 @@ model Room {
   name        String
   capacity    Int
   description String?
-  resources   Resource[]
   bookings    Booking[]
+  resources   Resource[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
@@ -53,7 +52,6 @@ model Room {
 model Resource {
   id          Int      @id @default(autoincrement())
   name        String
-  type        String
   quantity    Int
   description String?
   room        Room     @relation(fields: [roomId], references: [id])

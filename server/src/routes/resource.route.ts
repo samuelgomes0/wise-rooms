@@ -27,12 +27,11 @@ router.get("/", async (req, res) => {
 
 // POST /resources
 router.post("/", isAuthenticated, async (req: any, res) => {
-  const { name, type, quantity, roomId, description } = req.body;
+  const { name, quantity, roomId, description } = req.body;
 
   try {
     const resource = await resourceUseCase.createResource({
       name,
-      type,
       quantity,
       roomId,
       description,

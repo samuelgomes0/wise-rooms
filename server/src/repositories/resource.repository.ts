@@ -20,7 +20,6 @@ export class ResourceRepository implements IResourceRepository {
 
   public async createResource({
     name,
-    type,
     quantity,
     roomId,
     description,
@@ -28,7 +27,6 @@ export class ResourceRepository implements IResourceRepository {
     return await prisma.resource.create({
       data: {
         name,
-        type,
         quantity,
         roomId,
         description,

@@ -65,8 +65,7 @@ export default function Recursos() {
   const filteredResources = resources.filter(
     (resource) =>
       resource.id.toString().includes(searchTerm) ||
-      resource.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      resource.type.toLowerCase().includes(searchTerm.toLowerCase())
+      resource.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const paginatedResources = filteredResources.slice(
@@ -177,7 +176,6 @@ export default function Recursos() {
             columns={[
               { header: "Código", accessor: "id" },
               { header: "Nome", accessor: "name" },
-              { header: "Tipo", accessor: "type" },
               { header: "Quantidade", accessor: "quantity" },
               { header: "Opções", accessor: "options" },
             ]}
@@ -229,9 +227,6 @@ export default function Recursos() {
                         </div>
                         <div className="flex flex-col">
                           <strong>Nome:</strong> {resource.name}
-                        </div>
-                        <div className="flex flex-col">
-                          <strong>Tipo:</strong> {resource.type}
                         </div>
                       </div>
                       <div className="flex flex-col break-words">

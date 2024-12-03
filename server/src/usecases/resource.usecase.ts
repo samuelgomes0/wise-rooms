@@ -14,14 +14,12 @@ export class ResourceUseCase {
 
   async createResource({
     name,
-    type,
     quantity,
     roomId,
     description,
   }: IResourceDTO): Promise<IResource> {
     return await this.resourceRepository.createResource({
       name,
-      type,
       quantity,
       roomId,
       description,

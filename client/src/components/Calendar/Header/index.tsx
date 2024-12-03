@@ -1,4 +1,4 @@
-import { BookingRegistrationForm } from "@/components/Bookings/BookingRegistrationForm";
+import { BookingRegistrationForm } from "@/components/Forms/BookingRegistrationForm";
 import GenericModal from "@/components/GenericModal";
 import { Button } from "@/components/ui/button";
 import { AuthContext } from "@/contexts/AuthContext";

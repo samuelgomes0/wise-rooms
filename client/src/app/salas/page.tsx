@@ -1,9 +1,9 @@
 "use client";
 
+import { RoomRegistrationForm } from "@/components/Forms/RoomRegistrationForm";
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
 import Pagination from "@/components/Pagination";
-import { RoomRegistrationForm } from "@/components/Rooms/RoomRegistrationForm";
 import SearchFilter from "@/components/SearchFilter";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";

@@ -1,5 +1,6 @@
 "use client";
 
+import { UserRegistrationForm } from "@/components/Forms/UserRegistrationForm";
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
 import Pagination from "@/components/Pagination";
@@ -31,7 +32,6 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { UserRegistrationForm } from "@/components/Users/UserRegistrationForm";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";

@@ -1,6 +1,6 @@
 "use client";
 
-import { BookingRegistrationForm } from "@/components/Bookings/BookingRegistrationForm";
+import { BookingRegistrationForm } from "@/components/Forms/BookingRegistrationForm";
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
 import Pagination from "@/components/Pagination";

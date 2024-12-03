@@ -295,7 +295,7 @@ export function BookingRegistrationForm({
                 <FormControl>
                   <Textarea
                     {...field}
-                    placeholder="Adicione uma descrição para a reserva"
+                    placeholder="Adicione uma descrição para a reserva (opcional)"
                     className="textarea-class w-full h-20"
                   />
                 </FormControl>

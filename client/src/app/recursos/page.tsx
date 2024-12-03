@@ -1,9 +1,9 @@
 "use client";
 
+import { ResourceRegistrationForm } from "@/components/Forms/ResourceRegistrationForm";
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
 import Pagination from "@/components/Pagination";
-import { ResourceRegistrationForm } from "@/components/Resources/ResourceRegistrationForm";
 import SearchFilter from "@/components/SearchFilter";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -37,10 +37,10 @@ import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
 import resourceServiceInstance from "@/services/ResourceService";
-import { ApiError } from "@/types";
+import roomServiceInstance from "@/services/RoomService";
+import { ApiError, IRoom } from "@/types";
 import { IResource } from "@/types/Resource.interface";
-import { resourceTypes } from "@/types/resourceTypes.enum";
-import { errorHandler } from "@/utils";
+import { errorHandler, Filter } from "@/utils";
 import { MoreHorizontalIcon, SearchIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
@@ -53,6 +53,7 @@ export default function Recursos() {
     await listResources();
   };
 
+  const [rooms, setRooms] = useState<IRoom[]>([]);
   const [resources, setResources] = useState<IResource[]>([]);
   const [statusFilter, setStatusFilter] = useState("Todos");
   const [searchTerm, setSearchTerm] = useState("");
@@ -62,30 +63,31 @@ export default function Recursos() {
   const { user, isAuthenticated } = useContext(AuthContext);
   const { setIsLoading } = useContext(LoadingContext);
 
-  const filteredResources = resources.filter(
-    (resource) =>
-      resource.id.toString().includes(searchTerm) ||
-      resource.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const paginatedResources = filteredResources.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-  const totalPages = Math.ceil(filteredResources.length / itemsPerPage);
+  const { filteredResources, paginatedResources, totalPages } =
+    Filter.resources({
+      resources,
+      searchTerm,
+      roomFilter: statusFilter,
+      currentPage,
+      itemsPerPage,
+    });
 
   const listResources = async () => {
     setIsLoading(true);
 
     try {
       const resources = await resourceServiceInstance.listResources();
-
       setResources(resources);
     } catch (error) {
       console.error(error);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const listRooms = async () => {
+    const rooms = await roomServiceInstance.listRooms();
+    setRooms(rooms);
   };
 
   const { toast } = useToast();
@@ -113,6 +115,7 @@ export default function Recursos() {
   useEffect(() => {
     if (!isAuthenticated) return router.push("/");
     listResources();
+    listRooms();
   }, []);
 
   return (
@@ -161,10 +164,10 @@ export default function Recursos() {
                 <SelectValue placeholder="Todos" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Todos">Todos os tipos</SelectItem>
-                {resourceTypes.map((type) => (
-                  <SelectItem key={type} value={type}>
-                    {type}
+                <SelectItem value="Todos">Todos as salas</SelectItem>
+                {rooms.map((room) => (
+                  <SelectItem key={room.name} value={room.name}>
+                    {room.name}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -176,6 +179,7 @@ export default function Recursos() {
             columns={[
               { header: "Código", accessor: "id" },
               { header: "Nome", accessor: "name" },
+              { header: "Alocado em", accessor: "roomName" },
               { header: "Quantidade", accessor: "quantity" },
               { header: "Opções", accessor: "options" },
             ]}
@@ -221,7 +225,7 @@ export default function Recursos() {
                     </DialogHeader>
                     <Separator />
                     <DialogDescription className="text-back grid grid-cols-1 gap-4">
-                      <div className="grid grid-cols-3 gap-4">
+                      <div className="grid grid-cols-2 gap-4">
                         <div className="flex flex-col">
                           <strong>Código:</strong> {resource.id}
                         </div>

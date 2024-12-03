@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { SidebarNav } from "../SidebarNav";
-import { UserDropdown } from "../UserDropdown";
+import { Nav } from "./Nav";
+import { UserDropdown } from "./UserDropdown";
 
 export function Sidebar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -30,7 +30,7 @@ export function Sidebar() {
           <X className="h-6 w-6" />
         </Button>
       </div>
-      <SidebarNav />
+      <Nav />
       <div className="absolute bottom-0 w-full p-4 border-t">
         <UserDropdown />
       </div>

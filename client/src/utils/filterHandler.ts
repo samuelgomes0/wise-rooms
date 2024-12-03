@@ -1,4 +1,5 @@
 import { IBooking, IRoom, IUser } from "@/types";
+import { IResource } from "@/types/Resource.interface";
 import { parseISO } from "date-fns";
 
 interface FilterBookingsParams {
@@ -116,10 +117,48 @@ function users({
   return { filteredUsers, paginatedUsers, totalPages };
 }
 
+interface FilterResourcesParams {
+  resources: IResource[];
+  searchTerm: string;
+  roomFilter: string;
+  currentPage: number;
+  itemsPerPage: number;
+}
+
+function resources({
+  resources,
+  searchTerm,
+  roomFilter,
+  currentPage,
+  itemsPerPage,
+}: FilterResourcesParams) {
+  const lowerSearchTerm = searchTerm.toLowerCase();
+
+  const filteredResources = resources.filter((resource) => {
+    const matchesSearch =
+      resource.id.toString().includes(lowerSearchTerm) ||
+      resource.name.toLowerCase().includes(lowerSearchTerm);
+
+    const matchesRoom =
+      roomFilter === "Todos" || resource.room.name === roomFilter;
+
+    return matchesSearch && matchesRoom;
+  });
+
+  const paginatedResources = filteredResources.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+  const totalPages = Math.ceil(filteredResources.length / itemsPerPage);
+
+  return { filteredResources, paginatedResources, totalPages };
+}
+
 const Filter = {
   bookings,
   rooms,
   users,
+  resources,
 };
 
 export default Filter;

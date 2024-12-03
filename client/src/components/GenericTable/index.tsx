@@ -50,7 +50,9 @@ function GenericTable({
             <TableRow key={idx}>
               {columns.map((col) => (
                 <TableCell className="py-3" key={col.accessor}>
-                  {row[col.accessor]}
+                  {col.accessor === "roomName"
+                    ? row.room.name
+                    : row[col.accessor]}
                 </TableCell>
               ))}
             </TableRow>

@@ -2,6 +2,8 @@ export interface IResource {
   id: number;
   name: string;
   quantity: number;
-  description?: string;
-  roomId: number;
+  room: {
+    name: string;
+  };
+  description: string;
 }

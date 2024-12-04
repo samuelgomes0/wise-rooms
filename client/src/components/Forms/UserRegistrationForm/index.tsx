@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -22,18 +23,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Notification } from "@/constants";
+import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
 import userCreationSchema from "@/schemas/createUser.schema";
 import roleServiceInstance from "@/services/RoleService";
 import userServiceInstance from "@/services/UserService";
 import { IRole } from "@/types";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export function UserRegistrationForm({
   onCloseModal,
 }: {
   onCloseModal: () => void;
 }) {
+  const { isLoading, setIsLoading } = useContext(LoadingContext);
+
   const [roles, setRoles] = useState<IRole[]>([]);
 
   const form = useForm<z.infer<typeof userCreationSchema>>({
@@ -55,6 +59,7 @@ export function UserRegistrationForm({
     roleId,
   }: z.infer<typeof userCreationSchema>) => {
     try {
+      setIsLoading(true);
       await userServiceInstance.createUser({
         name,
         email,
@@ -72,6 +77,8 @@ export function UserRegistrationForm({
         title: Notification.ERROR.USER.CREATE_TITLE,
         description: Notification.ERROR.USER.CREATE_DESCRIPTION,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -163,7 +170,9 @@ export function UserRegistrationForm({
             </FormItem>
           )}
         />
-        <Button type="submit">Cadastrar Usuário</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? <Spinner size="small" /> : "Cadastrar Usuário"}
+        </Button>
       </form>
     </Form>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { Calendar } from "@/components/Calendar";
+import Footer from "@/components/Footer";
 import Spinner from "@/components/Spinner";
 import { LoadingContext } from "@/contexts/LoadingContext";
 import { useContext } from "react";
@@ -18,6 +19,7 @@ export default function Home() {
       <div className="py-8 w-4/5 mx-auto">
         <Calendar />
       </div>
+      <Footer />
     </main>
   );
 }

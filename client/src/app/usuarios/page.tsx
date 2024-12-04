@@ -1,5 +1,6 @@
 "use client";
 
+import Footer from "@/components/Footer";
 import { UserRegistrationForm } from "@/components/Forms/UserRegistrationForm";
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
@@ -32,6 +33,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Notification } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
@@ -87,6 +89,10 @@ export default function Usuarios() {
     try {
       await userServiceInstance.deleteUser(id);
       await listUsers();
+      toast({
+        title: Notification.SUCCESS.USER.DELETE_TITLE,
+        description: Notification.SUCCESS.USER.DELETE_DESCRIPTION,
+      });
     } catch (error) {
       const { title, description } = errorHandler(error as ApiError);
       toast({ variant: "destructive", title, description });
@@ -102,7 +108,7 @@ export default function Usuarios() {
   }, []);
 
   return (
-    <div className="py-8 w-4/5 mx-auto overflow-hidden">
+    <div className="pt-8 w-4/5 mx-auto overflow-hidden flex flex-col justify-between h-screen">
       <main className="flex-1">
         <header className="bg-white rounded-lg shadow-sm p-6 mb-8">
           <div className="flex justify-between items-center mb-8">
@@ -240,6 +246,7 @@ export default function Usuarios() {
           />
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

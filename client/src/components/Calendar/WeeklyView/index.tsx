@@ -9,7 +9,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { DEFAULT_TIME_SLOTS } from "@/constants";
 import { IBooking } from "@/types";
-import { getStatusBadge } from "@/utils";
+import { attributeColorToRoom, getStatusBadge } from "@/utils";
 import { ZoomInIcon } from "lucide-react";
 import Header from "./Header";
 
@@ -47,6 +47,20 @@ export function WeeklyView({ startDate, bookings }: WeeklyViewProps) {
       bookingEndTime.getHours() > timeSlotStart;
 
     return dayMatch && timeMatch;
+  };
+
+  const handleMouseEnter = (
+    e: React.MouseEvent<HTMLDivElement>,
+    hoverColor: string
+  ) => {
+    e.currentTarget.style.backgroundColor = hoverColor;
+  };
+
+  const handleMouseLeave = (
+    e: React.MouseEvent<HTMLDivElement>,
+    baseColor: string
+  ) => {
+    e.currentTarget.style.backgroundColor = baseColor;
   };
 
   return (
@@ -90,11 +104,28 @@ export function WeeklyView({ startDate, bookings }: WeeklyViewProps) {
                       <DialogTrigger className="w-full text-left">
                         <div
                           key={booking.id}
-                          className="bg-blue-200 text-xs p-1 px-2 rounded shadow-sm flex items-center justify-between hover:bg-blue-300 cursor-pointer transition-colors"
+                          style={{
+                            backgroundColor: attributeColorToRoom(
+                              booking.roomId
+                            ).color,
+                          }}
+                          onMouseEnter={(e) =>
+                            handleMouseEnter(
+                              e,
+                              attributeColorToRoom(booking.roomId).hoverColor
+                            )
+                          }
+                          onMouseLeave={(e) =>
+                            handleMouseLeave(
+                              e,
+                              attributeColorToRoom(booking.roomId).color
+                            )
+                          }
+                          className="text-xs p-1 px-2 rounded shadow-sm flex items-center justify-between cursor-pointer transition-colors"
                         >
                           <div>
                             <strong>{booking.room.name}</strong>
-                            <div>{booking.user.name}</div>
+                            <p>{booking.user.name}</p>
                           </div>
                           <ZoomInIcon size={16} />
                         </div>

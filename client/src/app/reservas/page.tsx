@@ -1,5 +1,6 @@
 "use client";
 
+import Footer from "@/components/Footer";
 import { BookingRegistrationForm } from "@/components/Forms/BookingRegistrationForm";
 import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
@@ -115,7 +116,7 @@ export default function Reservas() {
   }, []);
 
   return (
-    <div className="py-8 w-4/5 mx-auto overflow-hidden">
+    <div className="pt-8 w-4/5 mx-auto overflow-hidden flex flex-col justify-between h-screen">
       <main className="flex-1">
         <header className="bg-white rounded-lg shadow-sm p-6 mb-8">
           <div className="flex justify-between items-center mb-8">
@@ -322,6 +323,7 @@ export default function Reservas() {
           />
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

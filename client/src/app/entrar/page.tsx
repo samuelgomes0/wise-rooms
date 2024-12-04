@@ -12,6 +12,7 @@ import {
 import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import { Notification } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
@@ -19,6 +20,8 @@ import { useToast } from "@/hooks/use-toast";
 import { loginSchema } from "@/schemas";
 import userServiceInstance from "@/services/UserService";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 import { ArrowLeft, EyeIcon, EyeOffIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -68,6 +71,35 @@ export default function LoginPage() {
     }
   };
 
+  const [googleUser, setGoogleUser] = useState(null);
+
+  const login = useGoogleLogin({
+    onSuccess: async (response) => {
+      setGoogleUser(response);
+    },
+    onError: (error) => {
+      console.error("Error", error);
+    },
+  });
+
+  useEffect(() => {
+    if (googleUser) {
+      axios
+        .get(
+          `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${googleUser.access_token}`,
+          {
+            headers: {
+              Authorization: `Bearer ${googleUser.access_token}`,
+              Accept: "application/json",
+            },
+          }
+        )
+        .then(async (response) => {
+          console.log(response);
+        });
+    }
+  }, [googleUser]);
+
   useEffect(() => {
     if (isAuthenticated) {
       router.push("/");
@@ -89,7 +121,7 @@ export default function LoginPage() {
             espaços.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-col gap-4">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(handleFormSubmit)}
@@ -144,6 +176,10 @@ export default function LoginPage() {
               </Button>
             </form>
           </Form>
+          <Separator />
+          <Button onClick={login} variant="outline" disabled>
+            Continuar com Google (em breve)
+          </Button>
         </CardContent>
       </Card>
     </main>

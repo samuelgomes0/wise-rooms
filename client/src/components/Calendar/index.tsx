@@ -36,7 +36,7 @@ export function Calendar() {
 
   useEffect(() => {
     listBookings();
-  }, [currentDate]);
+  }, []);
 
   return (
     <div className="relative">

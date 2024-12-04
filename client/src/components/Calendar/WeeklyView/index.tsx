@@ -65,14 +65,22 @@ export function WeeklyView({ startDate, bookings }: WeeklyViewProps) {
               const bookingsInSlot = filteredBookings.filter((booking) =>
                 isBookingInSlot(booking, day, timeSlot.split("\n")[0])
               );
+
+              const now = new Date();
+              const isCurrentTime =
+                day.toDateString() === now.toDateString() &&
+                parseInt(timeSlot.split(":")[0], 10) === now.getHours();
+
               return (
                 <div
                   key={`cell-${rowIndex}-${colIndex}`}
-                  className="shadow-sm bg-white rounded relative flex flex-wrap items-start gap-1 p-1"
+                  className={`shadow-sm rounded relative flex flex-wrap items-start gap-1 p-1
+                ${isCurrentTime ? "bg-[rgba(23,23,23,0.1)]" : "bg-white"} 
+                ${colIndex === 0 ? "border-l" : ""}`}
                 >
                   {/* Time slot */}
                   {colIndex === 0 && (
-                    <span className="text-sm font-medium absolute flex h-full top-0 items-center -left-14 text-read whitespace-pre-wrap">
+                    <span className="text-sm font-medium absolute flex h-full top-0 items-center -left-14 text-gray-600 whitespace-pre-wrap">
                       {timeSlot}
                     </span>
                   )}

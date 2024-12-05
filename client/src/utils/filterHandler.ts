@@ -103,8 +103,6 @@ function users({
 
     const matchesRole = roleFilter === "Todos" || user.role.name === roleFilter;
 
-    console.log(user.role.name, roleFilter);
-
     return matchesSearch && matchesRole;
   });
 

@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,9 +17,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Notification } from "@/constants";
+import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
 import { registerRoomSchema } from "@/schemas/registerRoom.schema";
 import roomServiceInstance from "@/services/RoomService";
+import { ApiError } from "@/types";
+import { errorHandler } from "@/utils";
+import { useContext } from "react";
 
 export function RoomRegistrationForm({
   onCloseModal,
@@ -37,13 +42,28 @@ export function RoomRegistrationForm({
   const { toast } = useToast();
 
   async function onSubmit(values: z.infer<typeof registerRoomSchema>) {
-    await roomServiceInstance.createRoom(values);
-    onCloseModal();
-    toast({
-      title: Notification.SUCCESS.ROOM.CREATE_TITLE,
-      description: Notification.SUCCESS.ROOM.CREATE_DESCRIPTION,
-    });
+    try {
+      setIsLoading(true);
+      await roomServiceInstance.createRoom(values);
+      onCloseModal();
+      toast({
+        title: Notification.SUCCESS.ROOM.CREATE_TITLE,
+        description: Notification.SUCCESS.ROOM.CREATE_DESCRIPTION,
+      });
+    } catch (error) {
+      const { title, description } = errorHandler(error as ApiError);
+
+      toast({
+        variant: "destructive",
+        title,
+        description,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
+
+  const { isLoading, setIsLoading } = useContext(LoadingContext);
 
   return (
     <Form {...form}>
@@ -100,7 +120,9 @@ export function RoomRegistrationForm({
             </FormItem>
           )}
         />
-        <Button type="submit">Cadastrar Sala</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? <Spinner size="small" /> : "Criar Reserva"}
+        </Button>
       </form>
     </Form>
   );

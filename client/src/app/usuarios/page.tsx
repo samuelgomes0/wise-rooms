@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Notification } from "@/constants";
+import { Notification, Role } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
@@ -120,7 +120,9 @@ export default function Usuarios() {
                 <h1 className="text-2xl font-bold">Usuários</h1>
                 <div className="text-sm text-read">
                   {user?.role.name ? (
-                    <span>{user?.role.name}</span>
+                    <span>
+                      {Role.label[user.role.name as keyof typeof Role.label]}
+                    </span>
                   ) : (
                     <Skeleton className="w-24 h-3" />
                   )}
@@ -156,7 +158,7 @@ export default function Usuarios() {
                 <SelectItem value="Todos">Todos os cargos</SelectItem>
                 {roles.map((role) => (
                   <SelectItem key={role.id} value={role.name}>
-                    {role.name}
+                    {Role.label[role.name as keyof typeof Role.label]}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -173,7 +175,7 @@ export default function Usuarios() {
             ]}
             data={paginatedUsers.map((user) => ({
               ...user,
-              role: user.role.name,
+              role: Role.label[user.role.name as keyof typeof Role.label],
               options: (
                 <Dialog>
                   <DropdownMenu>

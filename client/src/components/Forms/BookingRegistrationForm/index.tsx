@@ -54,6 +54,7 @@ export function BookingRegistrationForm({
   const { isLoading, setIsLoading } = useContext(LoadingContext);
   const [users, setUsers] = useState<IUser[]>([]);
   const [rooms, setRooms] = useState<IRoom[]>([]);
+  const [startTime, setStartTime] = useState<string | undefined>(undefined);
 
   const { toast } = useToast();
 
@@ -237,7 +238,10 @@ export function BookingRegistrationForm({
               <FormItem className="w-full">
                 <FormLabel>Horário de Início</FormLabel>
                 <Select
-                  onValueChange={field.onChange}
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    setStartTime(value);
+                  }}
                   defaultValue={field.value}
                 >
                   <FormControl>
@@ -273,7 +277,9 @@ export function BookingRegistrationForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {SEPARATED_DEFAULT_TIME_SLOTS.map((timeSlot) => (
+                    {SEPARATED_DEFAULT_TIME_SLOTS.filter(
+                      (timeSlot) => !startTime || timeSlot > startTime
+                    ).map((timeSlot) => (
                       <SelectItem key={timeSlot} value={timeSlot}>
                         {timeSlot}
                       </SelectItem>

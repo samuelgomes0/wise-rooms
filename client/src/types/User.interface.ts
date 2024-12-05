@@ -1,11 +1,24 @@
 import { IBooking } from "./Booking.interface";
-import IRole from "./Role.interface";
 
-export interface IUser {
+interface IUser {
   id: string;
   name: string;
   email: string;
-  roleId: number;
-  role: IRole;
+  password: string;
+  role: {
+    id: string;
+    name: string;
+  };
   bookings?: IBooking[];
+  auditLog?: {
+    id: string;
+    userId: string;
+    action: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+  createdAt: Date;
+  updatedAt: Date;
 }
+
+export default IUser;

@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Notification } from "@/constants";
+import { Notification, Role } from "@/constants";
 import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
 import userCreationSchema from "@/schemas/createUser.schema";
@@ -86,7 +86,6 @@ export function UserRegistrationForm({
     try {
       const data = await roleServiceInstance.listRoles();
       setRoles(data);
-      console.log(data);
     } catch {
       toast({
         title: Notification.ERROR.ROLE.TITLE,
@@ -161,7 +160,7 @@ export function UserRegistrationForm({
                 <SelectContent>
                   {roles.map(({ id, name }) => (
                     <SelectItem key={id} value={id.toString()}>
-                      {name}
+                      {Role.label[name as keyof typeof Role.label]}
                     </SelectItem>
                   ))}
                 </SelectContent>

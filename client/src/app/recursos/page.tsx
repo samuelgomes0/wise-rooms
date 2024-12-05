@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Notification } from "@/constants";
+import { Notification, Role, ROLES_LABELS } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
@@ -132,7 +132,9 @@ export default function Recursos() {
                 <h1 className="text-2xl font-bold">Recursos</h1>
                 <div className="text-sm text-read">
                   {user?.role.name ? (
-                    <span>{user?.role.name}</span>
+                    <span>
+                      {Role.label[user.role.name as keyof typeof ROLES_LABELS]}
+                    </span>
                   ) : (
                     <Skeleton className="w-24 h-3" />
                   )}

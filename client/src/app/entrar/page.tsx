@@ -84,19 +84,15 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (googleUser) {
-      axios
-        .get(
-          `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${googleUser.access_token}`,
-          {
-            headers: {
-              Authorization: `Bearer ${googleUser.access_token}`,
-              Accept: "application/json",
-            },
-          }
-        )
-        .then(async (response) => {
-          console.log(response);
-        });
+      axios.get(
+        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${googleUser.access_token}`,
+        {
+          headers: {
+            Authorization: `Bearer ${googleUser.access_token}`,
+            Accept: "application/json",
+          },
+        }
+      );
     }
   }, [googleUser]);
 

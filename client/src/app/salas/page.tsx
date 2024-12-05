@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Notification, Role } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
@@ -66,6 +67,10 @@ export default function Salas() {
     try {
       await roomServiceInstance.deleteRoom(roomId);
       setRooms(rooms.filter((room) => room.id !== roomId));
+      toast({
+        title: Notification.SUCCESS.ROOM.DELETE_TITLE,
+        description: Notification.SUCCESS.ROOM.DELETE_DESCRIPTION,
+      });
     } catch (error) {
       const { title, description } = errorHandler(error as ApiError);
       toast({ variant: "destructive", title, description });
@@ -99,7 +104,9 @@ export default function Salas() {
                 <h1 className="text-2xl font-bold">Salas</h1>
                 <div className="text-sm text-read">
                   {user?.role.name ? (
-                    <span>{user?.role.name}</span>
+                    <span>
+                      {Role.label[user.role.name as keyof typeof Role.label]}
+                    </span>
                   ) : (
                     <Skeleton className="w-24 h-3" />
                   )}

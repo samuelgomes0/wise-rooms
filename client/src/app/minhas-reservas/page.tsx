@@ -38,7 +38,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Notification } from "@/constants";
+import { Notification, Role } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
 import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
@@ -122,7 +122,9 @@ export default function Reservas() {
               </Avatar>
               <div>
                 <h1 className="text-2xl font-bold">Minhas reservas</h1>
-                <p className="text-sm text-read">{user?.role.name}</p>
+                <p className="text-sm text-read">
+                  {Role.label[user?.role.name]}
+                </p>
               </div>
             </div>
             <GenericModal
@@ -131,7 +133,10 @@ export default function Reservas() {
               isOpen={isModalOpen}
               onOpenChange={setIsModalOpen}
             >
-              <BookingRegistrationForm onCloseModal={handleModalClose} />
+              <BookingRegistrationForm
+                onCloseModal={handleModalClose}
+                onBookingCreated={listBookings}
+              />
             </GenericModal>
           </div>
           <div className="flex gap-4 relative">

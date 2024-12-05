@@ -5,6 +5,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Role } from "@/constants";
 import { AuthContext } from "@/contexts/AuthContext";
 import {
   CalendarIcon,
@@ -82,26 +83,26 @@ export function Nav() {
             )}
           </li>
         ))}
-        {isAuthenticated && user?.roleId === 1 && (
-          <>
-            <h3 className="font-bold text-sm py-2">Gerenciamento</h3>
-            {managementNavItems.map(({ label, icon: Icon, path }) => (
-              <li key={label}>
-                <Link href={label === "Auditoria" ? "#" : path} aria-hidden>
-                  <Button
-                    disabled={label === "Auditoria"}
-                    variant="ghost"
-                    className={`w-full justify-start ${isActive(path) ? "bg-gray-100" : ""}`}
-                    aria-current={isActive(path) ? "page" : undefined}
-                  >
-                    <Icon className="mr-2 h-4 w-4" />
-                    {label === "Auditoria" ? "Auditoria (em breve)" : label}
-                  </Button>
-                </Link>
-              </li>
-            ))}
-          </>
-        )}
+        {isAuthenticated &&
+          user?.roleId === (Role.id.Administrador || Role.id.Supervisor) && (
+            <>
+              <h3 className="font-bold text-sm py-2">Gerenciamento</h3>
+              {managementNavItems.map(({ label, icon: Icon, path }) => (
+                <li key={label}>
+                  <Link href={label === "Auditoria" ? "#" : path} aria-hidden>
+                    <Button
+                      variant="ghost"
+                      className={`w-full justify-start ${isActive(path) ? "bg-gray-100" : ""}`}
+                      aria-current={isActive(path) ? "page" : undefined}
+                    >
+                      <Icon className="mr-2 h-4 w-4" />
+                      {label === "Auditoria" ? "Auditoria" : label}
+                    </Button>
+                  </Link>
+                </li>
+              ))}
+            </>
+          )}
       </ul>
     </nav>
   );

@@ -34,7 +34,7 @@ router.post("/", async (request: any, reply) => {
   const { name } = createRoleSchema.parse(request.body);
 
   try {
-    const role = await roleUseCase.createRole({ name });
+    const role = await roleUseCase.createRole(name);
 
     const { id: performedBy } = request.user;
 

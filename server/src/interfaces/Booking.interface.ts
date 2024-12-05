@@ -19,7 +19,7 @@ export interface IBookingCreateDTO {
   date: Date;
   startTime: Date;
   endTime: Date;
-  description: string | null;
+  description?: string | null;
 }
 
 export interface IBookingRepository {

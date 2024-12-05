@@ -1,6 +1,6 @@
 import argon2 from "argon2";
 
-export async function comparePasswords(
+async function comparePasswords(
   hash: string,
   password: string
 ): Promise<boolean> {
@@ -12,3 +12,5 @@ export async function comparePasswords(
     throw new Error("An error occurred while comparing passwords.");
   }
 }
+
+export default comparePasswords;

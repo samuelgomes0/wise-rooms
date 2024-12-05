@@ -61,6 +61,9 @@ export class BookingRepository implements IBookingRepository {
       where: {
         roomId,
         date,
+        status: {
+          not: BookingStatus.CANCELLED,
+        },
         OR: [
           {
             startTime: {

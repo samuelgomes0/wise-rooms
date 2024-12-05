@@ -2,10 +2,16 @@
 CREATE TYPE "audit_actions" AS ENUM ('CREATE', 'UPDATE', 'DELETE');
 
 -- CreateEnum
-CREATE TYPE "audit_entities" AS ENUM ('USER', 'ROOM', 'RESOURCE', 'BOOKING');
+CREATE TYPE "audit_entities" AS ENUM ('USER', 'ROOM', 'RESOURCE', 'BOOKING', 'ROLE');
 
 -- CreateEnum
 CREATE TYPE "booking_statuses" AS ENUM ('PENDING', 'CONFIRMED', 'ACTIVE', 'COMPLETED', 'CANCELLED');
+
+-- CreateEnum
+CREATE TYPE "role_names" AS ENUM ('ADMIN', 'SUPERVISOR', 'EMPLOYEE', 'GUEST');
+
+-- CreateEnum
+CREATE TYPE "permission_names" AS ENUM ('CREATE_USER', 'READ_USER', 'UPDATE_USER', 'DELETE_USER', 'CREATE_ROLE', 'READ_ROLE', 'UPDATE_ROLE', 'DELETE_ROLE', 'ASSIGN_ROLE', 'CREATE_ROOM', 'READ_ROOM', 'UPDATE_ROOM', 'DELETE_ROOM', 'CREATE_RESOURCE', 'READ_RESOURCE', 'UPDATE_RESOURCE', 'DELETE_RESOURCE', 'CREATE_BOOKING', 'READ_BOOKING', 'UPDATE_BOOKING', 'CANCEL_BOOKING', 'CONFIRM_BOOKING', 'COMPLETE_BOOKING', 'VIEW_AUDIT_LOGS', 'MANAGE_PERMISSIONS', 'ACCESS_SYSTEM_SETTINGS');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -23,8 +29,7 @@ CREATE TABLE "users" (
 -- CreateTable
 CREATE TABLE "roles" (
     "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "description" TEXT,
+    "name" "role_names" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -32,10 +37,19 @@ CREATE TABLE "roles" (
 );
 
 -- CreateTable
+CREATE TABLE "permissions" (
+    "id" SERIAL NOT NULL,
+    "name" "permission_names" NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "permissions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "rooms" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "location" TEXT NOT NULL,
     "capacity" INTEGER NOT NULL,
     "description" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -48,7 +62,6 @@ CREATE TABLE "rooms" (
 CREATE TABLE "resources" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "type" TEXT NOT NULL,
     "quantity" INTEGER NOT NULL,
     "description" TEXT,
     "roomId" INTEGER NOT NULL,
@@ -83,15 +96,24 @@ CREATE TABLE "audit_logs" (
     "entityId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "deletedAt" TIMESTAMP(3),
 
     CONSTRAINT "audit_logs_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "_PermissionToRole" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL,
+
+    CONSTRAINT "_PermissionToRole_AB_pkey" PRIMARY KEY ("A","B")
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "roles_name_key" ON "roles"("name");
+CREATE INDEX "_PermissionToRole_B_index" ON "_PermissionToRole"("B");
 
 -- AddForeignKey
 ALTER TABLE "users" ADD CONSTRAINT "users_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "roles"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -106,4 +128,10 @@ ALTER TABLE "bookings" ADD CONSTRAINT "bookings_userId_fkey" FOREIGN KEY ("userI
 ALTER TABLE "bookings" ADD CONSTRAINT "bookings_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "rooms"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "audit_logs" ADD CONSTRAINT "audit_logs_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "audit_logs" ADD CONSTRAINT "audit_logs_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_PermissionToRole" ADD CONSTRAINT "_PermissionToRole_A_fkey" FOREIGN KEY ("A") REFERENCES "permissions"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_PermissionToRole" ADD CONSTRAINT "_PermissionToRole_B_fkey" FOREIGN KEY ("B") REFERENCES "roles"("id") ON DELETE CASCADE ON UPDATE CASCADE;

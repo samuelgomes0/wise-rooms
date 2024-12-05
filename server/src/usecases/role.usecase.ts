@@ -1,4 +1,5 @@
-import { IRole, IRoleDTO } from "../interfaces";
+import { RoleName } from "@prisma/client";
+import { IRole } from "../interfaces";
 import { RoleRepository } from "../repositories";
 import AppError from "../utils/errorHandling";
 
@@ -13,14 +14,13 @@ export class RoleUseCase {
     const roles = await this.roleRepository.listRoles();
 
     return roles.map((role) => {
-      const { createdAt, updatedAt, ...roleWithoutCreatedAtAndUpdatedAt } =
-        role;
+      const { ...roleWithoutCreatedAtAndUpdatedAt } = role;
 
       return roleWithoutCreatedAtAndUpdatedAt;
     });
   }
 
-  async createRole({ name }: IRoleDTO): Promise<IRole> {
+  async createRole(name: string): Promise<IRole> {
     const roles = await this.listRoles();
 
     for (const role of roles) {
@@ -28,8 +28,6 @@ export class RoleUseCase {
         throw new AppError("ROLE_ALREADY_EXISTS", "Role already exists.", 400);
     }
 
-    const role = await this.roleRepository.createRole({ name });
-
-    return role;
+    return await this.roleRepository.createRole(name as RoleName);
   }
 }

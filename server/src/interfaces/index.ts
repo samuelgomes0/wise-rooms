@@ -15,7 +15,7 @@ import {
   IResourceDTO,
   IResourceRepository,
 } from "./Resource.interface";
-import { IRole, IRoleDTO, IRoleRepository } from "./Role.interface";
+import { IRole, IRoleRepository } from "./Role.interface";
 import { IRoom, IRoomCreateDTO, IRoomRepository } from "./Room.interface";
 import { IUser, IUserCreateDTO, IUserRepository } from "./User.interface";
 
@@ -33,7 +33,6 @@ export {
   IResourceDTO,
   IResourceRepository,
   IRole,
-  IRoleDTO,
   IRoleRepository,
   IRoom,
   IRoomCreateDTO,

@@ -25,13 +25,25 @@ model User {
 
 // Role Model
 model Role {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  users     User[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int          @id @default(autoincrement())
+  name        RoleName
+  users       User[]
+  permissions Permission[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
   @@map("roles")
+}
+
+// Permission Model
+model Permission {
+  id        Int            @id @default(autoincrement())
+  name      PermissionName
+  roles     Role[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@map("permissions")
 }
 
 // Room Model
@@ -115,6 +127,7 @@ enum AuditEntity {
   @@map("audit_entities")
 }
 
+// BookingStatus Enum
 enum BookingStatus {
   PENDING
   CONFIRMED
@@ -123,4 +136,52 @@ enum BookingStatus {
   CANCELLED
 
   @@map("booking_statuses")
+}
+
+// Role Enum
+enum RoleName {
+  ADMIN
+  SUPERVISOR
+  EMPLOYEE
+  GUEST
+
+  @@map("role_names")
+}
+
+// PermissionName Enum
+enum PermissionName {
+  CREATE_USER
+  READ_USER
+  UPDATE_USER
+  DELETE_USER
+
+  CREATE_ROLE
+  READ_ROLE
+  UPDATE_ROLE
+  DELETE_ROLE
+  ASSIGN_ROLE
+
+  CREATE_ROOM
+  READ_ROOM
+  UPDATE_ROOM
+  DELETE_ROOM
+
+  CREATE_RESOURCE
+  READ_RESOURCE
+  UPDATE_RESOURCE
+  DELETE_RESOURCE
+
+  CREATE_BOOKING
+  READ_BOOKING
+  UPDATE_BOOKING
+  CANCEL_BOOKING
+  CONFIRM_BOOKING
+  COMPLETE_BOOKING
+
+  VIEW_AUDIT_LOGS
+
+  MANAGE_PERMISSIONS
+  ACCESS_SYSTEM_SETTINGS
+
+  @@map("permission_names")
 }

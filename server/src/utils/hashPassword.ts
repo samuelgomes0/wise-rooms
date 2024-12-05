@@ -1,6 +1,6 @@
 import argon2 from "argon2";
 
-export async function hashPassword(password: string): Promise<string> {
+async function hashPassword(password: string): Promise<string> {
   try {
     const hash = await argon2.hash(password);
 
@@ -9,3 +9,5 @@ export async function hashPassword(password: string): Promise<string> {
     throw new Error("Erro ao gerar hash da senha.");
   }
 }
+
+export default hashPassword;

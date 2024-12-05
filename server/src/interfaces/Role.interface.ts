@@ -1,19 +1,20 @@
-import { IUser } from "./User.interface";
+import { RoleName } from "@prisma/client";
 
 export interface IRole {
   id: number;
-  name: string;
-  users?: IUser[];
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface IRoleDTO {
-  name: string;
+  name: RoleName;
+  users?: {
+    id: string;
+    email: string;
+    name: string;
+  }[];
+  permissions?: {
+    id: number;
+    name: string;
+  }[];
 }
 
 export interface IRoleRepository {
   listRoles(): Promise<IRole[]>;
-  findRoleById(id: number): Promise<IRole | null>;
-  createRole(data: IRoleDTO): Promise<IRole>;
+  createRole(data: RoleName): Promise<IRole>;
 }

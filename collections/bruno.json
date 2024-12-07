@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Wise Rooms",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

@@ -9,49 +9,36 @@ export class UserUseCase {
     this.userRepository = userRepository;
   }
 
-  async listUsers(): Promise<
-    Omit<IUser, "password" | "createdAt" | "updatedAt">[]
-  > {
+  async listUsers(): Promise<Omit<IUser, "password">[]> {
     const users = await this.userRepository.listUsers();
 
     return users.map((user) => {
-      const {
-        password,
-        createdAt,
-        updatedAt,
-        ...userWithoutPasswordAndRoleId
-      } = user;
+      const { password, ...userWithoutPasswordAndRoleId } = user;
 
       return userWithoutPasswordAndRoleId;
     });
   }
 
-  async findById(
-    id: string
-  ): Promise<Omit<IUser, "password" | "createdAt" | "updatedAt"> | null> {
+  async findById(id: string): Promise<Omit<IUser, "password"> | null> {
     const user = await this.userRepository.findById(id);
 
     if (!user) {
       throw new Error("User not found.");
     }
 
-    const { password, createdAt, updatedAt, ...userWithoutPasswordAndRoleId } =
-      user;
+    const { password, ...userWithoutPasswordAndRoleId } = user;
 
     return userWithoutPasswordAndRoleId;
   }
 
-  async findByEmail(
-    email: string
-  ): Promise<Omit<IUser, "password" | "createdAt" | "updatedAt"> | null> {
+  async findByEmail(email: string): Promise<Omit<IUser, "password"> | null> {
     const user = await this.userRepository.findByEmail(email);
 
     if (!user) {
       throw new Error("User not found.");
     }
 
-    const { password, createdAt, updatedAt, ...userWithoutPasswordAndRoleId } =
-      user;
+    const { password, ...userWithoutPasswordAndRoleId } = user;
 
     return userWithoutPasswordAndRoleId;
   }

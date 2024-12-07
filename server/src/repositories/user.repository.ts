@@ -1,13 +1,39 @@
 import { prisma } from "../database/prisma-client";
 import { IUser, IUserCreateDTO, IUserRepository } from "../interfaces";
 
+const userSelect = {
+  id: true,
+  name: true,
+  email: true,
+  role: {
+    select: {
+      id: true,
+      name: true,
+    },
+  },
+  bookings: {
+    select: {
+      id: true,
+      room: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      date: true,
+      startTime: true,
+      endTime: true,
+      status: true,
+      description: true,
+    },
+  },
+  AuditLog: true,
+};
+
 export class UserRepository implements IUserRepository {
   async listUsers(): Promise<IUser[]> {
     return await prisma.user.findMany({
-      include: {
-        bookings: true,
-        role: true,
-      },
+      select: userSelect,
     });
   }
 
@@ -16,10 +42,7 @@ export class UserRepository implements IUserRepository {
       where: {
         id,
       },
-      include: {
-        role: true,
-        bookings: true,
-      },
+      select: userSelect,
     });
   }
 
@@ -28,9 +51,7 @@ export class UserRepository implements IUserRepository {
       where: {
         email,
       },
-      include: {
-        bookings: true,
-      },
+      select: userSelect,
     });
   }
 
@@ -47,6 +68,7 @@ export class UserRepository implements IUserRepository {
         password,
         roleId,
       },
+      select: userSelect,
     });
   }
 
@@ -66,6 +88,7 @@ export class UserRepository implements IUserRepository {
         password,
         roleId,
       },
+      select: userSelect,
     });
   }
 
@@ -74,6 +97,7 @@ export class UserRepository implements IUserRepository {
       where: {
         id,
       },
+      select: userSelect,
     });
   }
 }

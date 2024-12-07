@@ -1,16 +1,27 @@
 import { IAuditLog } from "./AuditLog.interface";
-import { IBooking } from "./Booking.interface";
 
 export interface IUser {
   id: string;
   name: string;
+  password?: string;
   email: string;
-  password: string;
-  roleId: number;
-  bookings?: IBooking[];
+  role: {
+    id: number;
+    name: string;
+  };
+  bookings: {
+    id: string;
+    room: {
+      id: number;
+      name: string;
+    };
+    date: Date;
+    startTime: Date;
+    endTime: Date;
+    status: string;
+    description: string | null;
+  }[];
   auditLog?: IAuditLog[];
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface IUserCreateDTO {

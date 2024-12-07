@@ -17,6 +17,10 @@ export class AuthUseCase {
       throw new Error("Usuário não encontrado.");
     }
 
+    if (!user.password) {
+      throw new Error("Senha não definida.");
+    }
+
     const passwordMatch = await comparePasswords(user.password, password);
 
     if (!passwordMatch) {

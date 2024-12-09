@@ -1,6 +1,6 @@
 import { IUser, IUserCreateDTO } from "../interfaces/User.interface";
 import { UserRepository } from "../repositories";
-import { hashPassword } from "../utils";
+import { AppError, hashPassword } from "../utils";
 
 export class UserUseCase {
   private userRepository: UserRepository;
@@ -23,7 +23,7 @@ export class UserUseCase {
     const user = await this.userRepository.findById(id);
 
     if (!user) {
-      throw new Error("User not found.");
+      throw new AppError("USER_NOT_FOUND", "User not found.", 404);
     }
 
     const { password, ...userWithoutPasswordAndRoleId } = user;
@@ -35,7 +35,7 @@ export class UserUseCase {
     const user = await this.userRepository.findByEmail(email);
 
     if (!user) {
-      throw new Error("User not found.");
+      throw new AppError("USER_NOT_FOUND", "User not found.", 404);
     }
 
     const { password, ...userWithoutPasswordAndRoleId } = user;
@@ -54,7 +54,7 @@ export class UserUseCase {
     const userExists = await this.userRepository.findByEmail(email);
 
     if (userExists) {
-      throw new Error("User already exists.");
+      throw new AppError("USER_ALREADY_EXISTS", "User already exists.", 400);
     }
 
     return await this.userRepository.createUser({
@@ -74,7 +74,7 @@ export class UserUseCase {
     const user = await this.userRepository.findByEmail(email);
 
     if (!user) {
-      throw new Error("User not found.");
+      throw new AppError("USER_NOT_FOUND", "User not found.", 404);
     }
 
     password ? await hashPassword(password) : user.password;
@@ -89,6 +89,12 @@ export class UserUseCase {
   }
 
   async deleteUser(id: string): Promise<IUser> {
+    const user = await this.userRepository.findById(id);
+
+    if (!user) {
+      throw new AppError("USER_NOT_FOUND", "User not found.", 404);
+    }
+
     return await this.userRepository.deleteUser(id);
   }
 }

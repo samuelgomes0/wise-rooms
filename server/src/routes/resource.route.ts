@@ -55,6 +55,7 @@ router.post("/", isAuthenticated, async (req: any, res) => {
   }
 });
 
+// DELETE /resources/:id
 router.delete("/:id", isAuthenticated, async (request: any, reply) => {
   const id = request.params.id;
 

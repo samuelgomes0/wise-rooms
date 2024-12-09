@@ -1,6 +1,6 @@
-import { ApiError } from "../interfaces";
 import comparePasswords from "./comparePasswords";
+import AppError from "./errorHandling";
 import hashPassword from "./hashPassword";
 import { generateToken, verifyToken } from "./jwt";
 
-export { ApiError, comparePasswords, generateToken, hashPassword, verifyToken };
+export { AppError, comparePasswords, generateToken, hashPassword, verifyToken };

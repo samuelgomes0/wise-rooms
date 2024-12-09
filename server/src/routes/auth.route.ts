@@ -19,6 +19,7 @@ router.post("/signin", async (req, res) => {
   }
 });
 
+// POST /auth/logout
 router.post("/logout", async (req, res) => {
   const { email } = req.body;
 
@@ -30,6 +31,7 @@ router.post("/logout", async (req, res) => {
   }
 });
 
+// GET /auth/profile
 router.get("/profile", isAuthenticated, async (req: any, res) => {
   try {
     res.status(200).json({ user: req.user });

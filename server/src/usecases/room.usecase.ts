@@ -1,5 +1,6 @@
 import { IRoom, IRoomCreateDTO } from "../interfaces/Room.interface";
 import { RoomRepository } from "../repositories";
+import { AppError } from "../utils";
 
 export class RoomUseCase {
   private roomRepository: RoomRepository;
@@ -9,11 +10,19 @@ export class RoomUseCase {
   }
 
   async getRooms(): Promise<IRoom[]> {
-    return await this.roomRepository.listRooms();
+    const rooms = await this.roomRepository.listRooms();
+
+    return rooms;
   }
 
   async getRoomById(roomId: number): Promise<IRoom | null> {
-    return await this.roomRepository.findRoomById(roomId);
+    const room = await this.roomRepository.findRoomById(roomId);
+
+    if (!room) {
+      throw new AppError("ROOM_NOT_FOUND", "Room not found.", 404);
+    }
+
+    return room;
   }
 
   async createRoom(room: IRoomCreateDTO): Promise<IRoom> {
@@ -21,10 +30,22 @@ export class RoomUseCase {
   }
 
   async updateRoom(roomId: number, room: IRoomCreateDTO): Promise<IRoom> {
+    const roomExists = await this.roomRepository.findRoomById(roomId);
+
+    if (!roomExists) {
+      throw new AppError("ROOM_NOT_FOUND", "Room not found.", 404);
+    }
+
     return await this.roomRepository.updateRoom(roomId, room);
   }
 
   async deleteRoom(roomId: number): Promise<void> {
-    return await this.roomRepository.deleteRoom(roomId);
+    const room = await this.roomRepository.findRoomById(roomId);
+
+    if (!room) {
+      throw new AppError("ROOM_NOT_FOUND", "Room not found.", 404);
+    }
+
+    await this.roomRepository.deleteRoom(roomId);
   }
 }

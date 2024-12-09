@@ -1,0 +1,19 @@
+meta {
+  name: setupAdmin
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{API_BASE_URL}}/users/setup-admin
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Samuel Gomes Rosa",
+    "email": "samuel_gomes26@hotmail.com",
+    "password": "admin"
+  }
+}

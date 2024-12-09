@@ -1,9 +1,11 @@
 import { AuditAction, AuditEntity } from "@prisma/client";
 import { Router } from "express";
+import { prisma } from "../database/prisma-client";
 import { isAuthenticated } from "../middlewares/auth.middleware";
 import { AuditLogRepository } from "../repositories/auditLog.repository";
 import { UserRepository } from "../repositories/user.repository";
 import { AuditLogUseCase, UserUseCase } from "../usecases";
+import { hashPassword } from "../utils";
 
 const router = Router();
 const userRepository = new UserRepository();
@@ -154,6 +156,35 @@ router.delete("/:id", isAuthenticated, async (req: any, res) => {
         error instanceof Error ? error.message : "An unknown error occurred.",
     });
   }
+});
+
+router.post("/setup-admin", async (request: any, response) => {
+  const { name, email, password } = request.body;
+
+  const adminAlreadyExists = await prisma.user.findFirst({
+    where: {
+      roleId: 1,
+    },
+  });
+
+  if (adminAlreadyExists) {
+    return response.status(400).json({
+      error: "An admin user already exists.",
+    });
+  }
+
+  const hashedPassword = await hashPassword(password);
+
+  await prisma.user.create({
+    data: {
+      name,
+      email,
+      password: hashedPassword,
+      roleId: 1,
+    },
+  });
+
+  return response.status(201).json("Admin user created.");
 });
 
 export default router;

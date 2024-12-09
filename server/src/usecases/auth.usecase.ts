@@ -1,12 +1,12 @@
-import { IUserRepository } from "../interfaces/User.interface";
+import { UserRepository } from "../repositories";
 import { comparePasswords, generateToken } from "../utils";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export class AuthUseCase {
-  private userRepository: IUserRepository;
+  private userRepository: UserRepository;
 
-  constructor(authRepository: IUserRepository) {
+  constructor(authRepository: UserRepository) {
     this.userRepository = authRepository;
   }
 

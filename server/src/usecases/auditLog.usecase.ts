@@ -9,7 +9,9 @@ export class AuditLogUseCase {
   }
 
   async listAuditLogs(): Promise<IAuditLog[]> {
-    return await this.auditLogRepository.listAuditLogs();
+    const auditLogs = await this.auditLogRepository.listAuditLogs();
+
+    return auditLogs;
   }
 
   async createAuditLog({

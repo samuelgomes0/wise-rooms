@@ -31,48 +31,42 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Notification, Role, SEPARATED_DEFAULT_TIME_SLOTS } from "@/constants";
-import { AuthContext } from "@/contexts/AuthContext";
+import { Notification, SEPARATED_DEFAULT_TIME_SLOTS } from "@/constants";
 import { LoadingContext } from "@/contexts/LoadingContext";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { registerBookingSchema } from "@/schemas";
 import bookingServiceInstance from "@/services/BookingService";
 import roomServiceInstance from "@/services/RoomService";
-import userServiceInstance from "@/services/UserService";
-import { ApiError, IUser } from "@/types";
+import { ApiError, IBooking } from "@/types";
 import { IRoom } from "@/types/Room.interface";
 import { errorHandler } from "@/utils";
 import { useContext, useEffect, useState } from "react";
 
-export function BookingRegistrationForm({
+function BookingEditForm({
+  booking,
   onCloseModal,
-  onBookingCreated,
+  onBookingUpdated,
 }: {
+  booking: IBooking;
   onCloseModal: () => void;
-  onBookingCreated: () => void;
+  onBookingUpdated: () => void;
 }) {
   const { isLoading, setIsLoading } = useContext(LoadingContext);
-  const [users, setUsers] = useState<IUser[]>([]);
   const [rooms, setRooms] = useState<IRoom[]>([]);
-  const [startTime, setStartTime] = useState<string | undefined>(undefined);
+  const [startTime, setStartTime] = useState<Date | string>(booking.startTime);
 
   const { toast } = useToast();
-
-  const { user } = useContext(AuthContext);
 
   const form = useForm<z.infer<typeof registerBookingSchema>>({
     resolver: zodResolver(registerBookingSchema),
     defaultValues: {
-      user:
-        user?.role.id === (Role.id.Administrador || Role.id.Supervisor)
-          ? ""
-          : user?.id,
-      room: "",
-      date: undefined,
-      startTime: undefined,
-      endTime: undefined,
-      description: "",
+      user: booking.userId.toString(),
+      room: booking.room.id.toString(),
+      date: new Date(booking.date),
+      startTime: booking.startTime,
+      endTime: booking.endTime,
+      description: booking.description || "",
     },
   });
 
@@ -84,22 +78,23 @@ export function BookingRegistrationForm({
     try {
       setIsLoading(true);
 
-      await bookingServiceInstance.createBooking({
+      await bookingServiceInstance.updateBooking({
+        bookingId: booking.id,
         userId: values.user,
-        roomId: Number(values.room),
-        date: values.date,
+        roomId: parseInt(values.room),
+        date: dateISO,
         startTime: timeStartDate,
         endTime: timeEndDate,
         description: values.description,
       });
 
       onCloseModal();
-      onBookingCreated();
+      onBookingUpdated();
 
       toast({
         variant: "default",
-        title: Notification.SUCCESS.BOOKING.CREATE_TITLE,
-        description: Notification.SUCCESS.BOOKING.CREATE_DESCRIPTION,
+        title: Notification.SUCCESS.BOOKING.UPDATE_TITLE,
+        description: Notification.SUCCESS.BOOKING.UPDATE_DESCRIPTION,
       });
     } catch (error) {
       const { title, description } = errorHandler(error as ApiError);
@@ -111,12 +106,8 @@ export function BookingRegistrationForm({
   }
 
   const listRoomsAndUsers = async () => {
-    const [rooms, users] = await Promise.all([
-      roomServiceInstance.listRooms(),
-      userServiceInstance.listUsers(),
-    ]);
+    const rooms = await roomServiceInstance.listRooms();
     setRooms(rooms);
-    setUsers(users);
   };
 
   useEffect(() => {
@@ -136,36 +127,6 @@ export function BookingRegistrationForm({
         )}
         className="flex flex-col gap-4 w-full"
       >
-        {user?.role.id === (Role.id.Administrador || Role.id.Supervisor) && (
-          <FormField
-            control={form.control}
-            name="user"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Responsável</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value || ""}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione um responsável" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {users.map((user) => (
-                        <SelectItem key={user.id} value={user.id.toString()}>
-                          {user.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        )}
-
         <FormField
           control={form.control}
           name="room"
@@ -251,7 +212,9 @@ export function BookingRegistrationForm({
                     field.onChange(value);
                     setStartTime(value);
                   }}
-                  defaultValue={field.value}
+                  defaultValue={
+                    typeof field.value === "string" ? field.value : ""
+                  }
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -278,7 +241,9 @@ export function BookingRegistrationForm({
                 <FormLabel>Horário de Fim</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  defaultValue={
+                    typeof field.value === "string" ? field.value : ""
+                  }
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -320,9 +285,11 @@ export function BookingRegistrationForm({
           />
         </div>
         <Button type="submit" disabled={isLoading}>
-          {isLoading ? <Spinner size="small" /> : "Criar Reserva"}
+          {isLoading ? <Spinner size="small" /> : "Salvar Alterações"}
         </Button>
       </form>
     </Form>
   );
 }
+
+export default BookingEditForm;

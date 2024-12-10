@@ -1,5 +1,5 @@
 import { BookingRegistrationForm } from "@/components/Forms/BookingRegistrationForm";
-import GenericModal from "@/components/GenericModal";
+import Modal from "@/components/Modal";
 import { Button } from "@/components/ui/button";
 import { AuthContext } from "@/contexts/AuthContext";
 import { capitalizeString } from "@/utils";
@@ -88,17 +88,19 @@ export default function CalendarHeader({
       </h2>
       {isAuthenticated ? (
         <div className="header-modal">
-          <GenericModal
-            title="Adicionar Nova Reserva"
-            triggerText="+ Nova Reserva"
-            isOpen={isModalOpen}
-            onOpenChange={setIsModalOpen}
-          >
-            <BookingRegistrationForm
-              onCloseModal={handleModalClose}
-              onBookingCreated={onBookingCreated}
-            />
-          </GenericModal>
+          <Button>
+            <Modal
+              title="Adicionar Nova Reserva"
+              triggerText="+ Nova Reserva"
+              isOpen={isModalOpen}
+              onOpenChange={setIsModalOpen}
+            >
+              <BookingRegistrationForm
+                onCloseModal={handleModalClose}
+                onBookingCreated={onBookingCreated}
+              />
+            </Modal>
+          </Button>
         </div>
       ) : null}
     </div>

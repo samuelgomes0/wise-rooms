@@ -1,4 +1,5 @@
-import { Button } from "@/components/ui/button";
+"use client";
+
 import {
   Dialog,
   DialogContent,
@@ -8,25 +9,25 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-function GenericModal({
+interface ModalProps {
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
+  title: string;
+  triggerText?: string;
+  children: React.ReactNode;
+}
+
+function Modal({
+  isOpen,
+  onOpenChange,
   title,
   triggerText,
   children,
-  isOpen,
-  onOpenChange,
-}: {
-  title: string;
-  triggerText: string;
-  children: React.ReactNode;
-  isOpen?: boolean;
-  onOpenChange?: (isOpen: boolean) => void;
-}) {
+}: ModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        <Button variant="default">{triggerText}</Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      {triggerText && <DialogTrigger>{triggerText}</DialogTrigger>}
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
@@ -39,4 +40,4 @@ function GenericModal({
   );
 }
 
-export default GenericModal;
+export default Modal;

@@ -84,7 +84,7 @@ export function Nav() {
           </li>
         ))}
         {isAuthenticated &&
-          user?.roleId === (Role.id.Administrador || Role.id.Supervisor) && (
+          user?.role.id === (Role.id.Administrador || Role.id.Supervisor) && (
             <>
               <h3 className="font-bold text-sm py-2">Gerenciamento</h3>
               {managementNavItems.map(({ label, icon: Icon, path }) => (

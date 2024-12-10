@@ -13,7 +13,8 @@ export const registerBookingSchema = z.object({
     .regex(
       /^([01]\d|2[0-3]):([0-5]\d)$/,
       "Formato de horário inválido (HH:mm)."
-    ),
+    )
+    .or(z.date()),
   endTime: z
     .string({
       required_error: "Selecione o horário de fim.",
@@ -21,6 +22,7 @@ export const registerBookingSchema = z.object({
     .regex(
       /^([01]\d|2[0-3]):([0-5]\d)$/,
       "Formato de horário inválido (HH:mm)."
-    ),
+    )
+    .or(z.date()),
   description: z.string().optional(),
 });

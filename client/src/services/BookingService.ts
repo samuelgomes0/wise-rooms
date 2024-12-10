@@ -4,9 +4,9 @@ import apiServiceInstance from "./ApiService";
 interface BookingData {
   userId: string;
   roomId: number;
-  date: Date;
-  startTime: Date;
-  endTime: Date;
+  date: Date | string;
+  startTime: Date | string;
+  endTime: Date | string;
   description?: string;
 }
 
@@ -49,7 +49,7 @@ class BookingService {
     startTime,
     endTime,
     description,
-  }: BookingData & { bookingId: number }) {
+  }: BookingData & { bookingId: string }) {
     return await apiServiceInstance.put<void, BookingData>(
       `/bookings/${bookingId}`,
       {

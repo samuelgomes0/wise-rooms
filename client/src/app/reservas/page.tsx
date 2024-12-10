@@ -2,8 +2,8 @@
 
 import Footer from "@/components/Footer";
 import { BookingRegistrationForm } from "@/components/Forms/BookingRegistrationForm";
-import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
+import Modal from "@/components/Modal";
 import Pagination from "@/components/Pagination";
 import SearchFilter from "@/components/SearchFilter";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -137,17 +137,19 @@ export default function Reservas() {
                 </div>
               </div>
             </div>
-            <GenericModal
-              title="Adicionar Nova Reserva"
-              triggerText="+ Nova Reserva"
-              isOpen={isModalOpen}
-              onOpenChange={setIsModalOpen}
-            >
-              <BookingRegistrationForm
-                onCloseModal={handleModalClose}
-                onBookingCreated={listBookings}
-              />
-            </GenericModal>
+            <Button>
+              <Modal
+                title="Adicionar Nova Reserva"
+                triggerText="+ Nova Reserva"
+                isOpen={isModalOpen}
+                onOpenChange={setIsModalOpen}
+              >
+                <BookingRegistrationForm
+                  onCloseModal={handleModalClose}
+                  onBookingCreated={listBookings}
+                />
+              </Modal>
+            </Button>
           </div>
           <div className="flex gap-4 relative">
             <SearchIcon

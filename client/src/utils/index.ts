@@ -1,13 +1,13 @@
-import capitalizeString from "./capitalizeString";
-import errorHandler from "./errorHandler";
-import Filter from "./filterHandler";
-import attributeColorToRoom from "./generateRoomColor";
-import { getStatusBadge } from "./getStatusBadge";
+import capitalizeString from "./capitalizeString.util";
+import errorHandler from "./errorHandler.util";
+import Filter from "./filterHandler.util";
+import attributeColorToRoom from "./generateRoomColor.util";
+import getStatusBadge from "./getStatusBadge.util";
 
 export {
+  Filter,
   attributeColorToRoom,
   capitalizeString,
   errorHandler,
-  Filter,
   getStatusBadge,
 };

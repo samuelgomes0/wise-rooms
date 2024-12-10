@@ -2,8 +2,8 @@
 
 import Footer from "@/components/Footer";
 import { UserRegistrationForm } from "@/components/Forms/UserRegistrationForm";
-import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
+import Modal from "@/components/Modal";
 import Pagination from "@/components/Pagination";
 import SearchFilter from "@/components/SearchFilter";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -129,14 +129,16 @@ export default function Usuarios() {
                 </div>
               </div>
             </div>
-            <GenericModal
-              title="Adicionar Novo Usuário"
-              triggerText="+ Novo Usuário"
-              isOpen={isModalOpen}
-              onOpenChange={setIsModalOpen}
-            >
-              <UserRegistrationForm onCloseModal={handleModalClose} />
-            </GenericModal>
+            <Button>
+              <Modal
+                title="Adicionar Novo Usuário"
+                triggerText="+ Novo Usuário"
+                isOpen={isModalOpen}
+                onOpenChange={setIsModalOpen}
+              >
+                <UserRegistrationForm onCloseModal={handleModalClose} />
+              </Modal>
+            </Button>
           </div>
           <div className="flex gap-4">
             <div className="flex gap-4 relative flex-1">

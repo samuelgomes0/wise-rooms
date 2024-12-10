@@ -2,8 +2,8 @@
 
 import Footer from "@/components/Footer";
 import { RoomRegistrationForm } from "@/components/Forms/RoomRegistrationForm";
-import GenericModal from "@/components/GenericModal";
 import GenericTable from "@/components/GenericTable";
+import Modal from "@/components/Modal";
 import Pagination from "@/components/Pagination";
 import SearchFilter from "@/components/SearchFilter";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -113,14 +113,16 @@ export default function Salas() {
                 </div>
               </div>
             </div>
-            <GenericModal
-              title="Adicionar Nova Sala"
-              triggerText="+ Nova Sala"
-              isOpen={isModalOpen}
-              onOpenChange={setIsModalOpen}
-            >
-              <RoomRegistrationForm onCloseModal={handleModalClose} />
-            </GenericModal>
+            <Button>
+              <Modal
+                title="Adicionar Nova Sala"
+                triggerText="+ Nova Sala"
+                isOpen={isModalOpen}
+                onOpenChange={setIsModalOpen}
+              >
+                <RoomRegistrationForm onCloseModal={handleModalClose} />
+              </Modal>
+            </Button>
           </div>
           <div className="flex gap-4 relative">
             <SearchIcon

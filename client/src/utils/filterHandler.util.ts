@@ -24,8 +24,8 @@ function bookings({
   const filteredBookings = bookings.filter((booking) => {
     const matchesSearch =
       booking.id.toString().toLowerCase().includes(lowerSearchTerm) ||
-      booking.user.name.toLowerCase().includes(lowerSearchTerm) ||
-      booking.room.name.toLowerCase().includes(lowerSearchTerm);
+      booking.user?.name.toLowerCase().includes(lowerSearchTerm) ||
+      booking.room?.name.toLowerCase().includes(lowerSearchTerm);
 
     const matchesDate =
       !dateFilter ||

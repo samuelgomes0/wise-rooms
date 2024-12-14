@@ -1,0 +1,21 @@
+meta {
+  name: updateBooking
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{API_BASE_URL}}/bookings/cm4hfilr40003ecy4jjc605i3
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNtNGhlcDBtZDAwMDFlY3B3djZrMWQyYjkiLCJpYXQiOjE3MzQwMzIyNjMsImV4cCI6MTczNDAzNTg2M30.tEy59KbAQpyM8rwfemJojl71BszGlognPnvcawcXPnQ
+}
+
+body:json {
+  {
+    "description": "Descrição alterada"
+  }
+}

@@ -101,8 +101,8 @@ router.put("/:bookingId", isAuthenticated, async (req: any, res) => {
   const { bookingId } = req.params;
   const { userId, roomId, date, startTime, endTime, description } = req.body;
 
-  if (!userId || !roomId || !date || !startTime || !endTime) {
-    return res.status(400).json({ error: "Missing required fields." });
+  if (!userId && !roomId && !date && !startTime && !endTime && !description) {
+    return res.status(400).json({ error: "At least one field is required." });
   }
 
   try {

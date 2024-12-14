@@ -1,4 +1,5 @@
 import ApiError from "./ApiError.interface";
+import IAuditLog from "./AuditLog.interface";
 import { IBooking } from "./Booking.interface";
 import { CreateUserDTO } from "./createUser";
 import IRole from "./Role.interface";
@@ -10,6 +11,7 @@ import IUser from "./User.interface";
 export type {
   ApiError,
   CreateUserDTO,
+  IAuditLog,
   IBooking,
   IRole,
   IRoom,

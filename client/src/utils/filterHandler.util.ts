@@ -1,4 +1,4 @@
-import { IBooking, IRoom, IUser } from "@/types";
+import { IAuditLog, IBooking, IRoom, IUser } from "@/types";
 import { IResource } from "@/types/Resource.interface";
 import { parseISO } from "date-fns";
 
@@ -152,11 +152,51 @@ function resources({
   return { filteredResources, paginatedResources, totalPages };
 }
 
+interface AuditProps {
+  audits: IAuditLog[];
+  dateFilter: Date;
+  searchTerm: string;
+  currentPage: number;
+  itemsPerPage: number;
+}
+
+function audit({
+  audits,
+  dateFilter,
+  searchTerm,
+  currentPage,
+  itemsPerPage,
+}: AuditProps) {
+  const lowerSearchTerm = searchTerm.toLowerCase();
+
+  const filteredAudits = audits.filter((audit) => {
+    const matchesSearch = audit.user.name
+      .toLowerCase()
+      .includes(lowerSearchTerm);
+
+    const matchesDate =
+      !dateFilter ||
+      parseISO(audit.createdAt.toString()).toDateString() ===
+        dateFilter.toDateString();
+
+    return matchesSearch && matchesDate;
+  });
+
+  const paginatedAudits = filteredAudits.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+  const totalPages = Math.ceil(filteredAudits.length / itemsPerPage);
+
+  return { filteredAudits, paginatedAudits, totalPages };
+}
+
 const Filter = {
   bookings,
   rooms,
   users,
   resources,
+  audit,
 };
 
 export default Filter;

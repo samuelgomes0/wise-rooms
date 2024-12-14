@@ -89,7 +89,7 @@ export function Nav() {
               <h3 className="font-bold text-sm py-2">Gerenciamento</h3>
               {managementNavItems.map(({ label, icon: Icon, path }) => (
                 <li key={label}>
-                  <Link href={label === "Auditoria" ? "#" : path} aria-hidden>
+                  <Link href={path} aria-hidden>
                     <Button
                       variant="ghost"
                       className={`w-full justify-start ${isActive(path) ? "bg-gray-100" : ""}`}

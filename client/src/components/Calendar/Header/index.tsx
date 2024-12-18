@@ -71,8 +71,8 @@ export default function CalendarHeader({
   };
 
   return (
-    <div className="bg-white m-auto rounded py-4 px-8 shadow-sm flex justify-between items-center">
-      <div className="header-buttons flex gap-4">
+    <div className="bg-white m-auto rounded py-4 px-4 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0">
+      <div className="header-buttons flex gap-2 sm:gap-4 justify-center sm:justify-start w-full sm:w-auto">
         <Button size="icon" variant="outline" onClick={handlePreviousWeek}>
           <ChevronLeftIcon size={16} />
         </Button>
@@ -83,11 +83,11 @@ export default function CalendarHeader({
           <ChevronRightIcon size={16} />
         </Button>
       </div>
-      <h2 className="header-title text-xl font-semibold text-center flex-1">
+      <h2 className="header-title text-lg sm:text-xl font-semibold text-center flex-1">
         {getMonthRange()}
       </h2>
       {isAuthenticated ? (
-        <div className="header-modal">
+        <div className="header-modal w-full sm:w-auto flex justify-center sm:justify-end">
           <Button>
             <Modal
               title="Adicionar Nova Reserva"

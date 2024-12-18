@@ -120,8 +120,8 @@ export default function Reservas() {
       <main className="flex-1">
         <header className="bg-white rounded-lg shadow-sm p-6 mb-8">
           <div className="flex justify-between items-center mb-8">
-            <div className="flex items-center gap-4">
-              <Avatar>
+            <div className="flex items-center gap-4 sm:flex-row">
+              <Avatar className="hidden sm:block">
                 <AvatarFallback>{user?.name[0] || "U"}</AvatarFallback>
               </Avatar>
               <div>
@@ -137,10 +137,23 @@ export default function Reservas() {
                 </div>
               </div>
             </div>
-            <Button>
+            <Button className="hidden sm:block">
               <Modal
                 title="Adicionar Nova Reserva"
                 triggerText="+ Nova Reserva"
+                isOpen={isModalOpen}
+                onOpenChange={setIsModalOpen}
+              >
+                <BookingRegistrationForm
+                  onCloseModal={handleModalClose}
+                  onBookingCreated={listBookings}
+                />
+              </Modal>
+            </Button>
+            <Button className="block sm:hidden">
+              <Modal
+                title="Adicionar Nova Reserva"
+                triggerText="+"
                 isOpen={isModalOpen}
                 onOpenChange={setIsModalOpen}
               >
@@ -315,7 +328,7 @@ export default function Reservas() {
             }))}
           />
         </div>
-        <div className="flex justify-between items-center mt-4">
+        <div className="flex flex-col-reverse gap-4 sm:flex-row justify-between items-center mt-4">
           <p className="text-sm text-gray-500">
             Exibindo {paginatedBookings.length} de {filteredBookings.length}{" "}
             reservas

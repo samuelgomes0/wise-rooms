@@ -48,7 +48,12 @@ import { ApiError, IBooking } from "@/types";
 import { errorHandler, Filter, getStatusBadge } from "@/utils";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { CalendarIcon, MoreHorizontalIcon, SearchIcon } from "lucide-react";
+import {
+  CalendarIcon,
+  FilterIcon,
+  MoreHorizontalIcon,
+  SearchIcon,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
@@ -164,9 +169,10 @@ export default function Reservas() {
               </Modal>
             </Button>
           </div>
+
           <div className="flex gap-4 relative">
             <SearchIcon
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              className="absolute left-4 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               size={20}
             />
             <SearchFilter
@@ -179,12 +185,14 @@ export default function Reservas() {
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-[200px] justify-start text-left font-normal"
+                    className="sm:w-[200px] w-full justify-start text-left font-normal text-gray-600"
                   >
                     {dateFilter ? (
                       format(dateFilter, "PPP", { locale: ptBR })
                     ) : (
-                      <span>Selecione uma data</span>
+                      <span className="hidden sm:block">
+                        Selecione uma data
+                      </span>
                     )}
                     <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                   </Button>
@@ -200,19 +208,25 @@ export default function Reservas() {
                 </PopoverContent>
               </Popover>
             </div>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[300px]">
-                <SelectValue placeholder="Todos" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Todos">Todos os status</SelectItem>
-                <SelectItem value="PENDING">Pendente</SelectItem>
-                <SelectItem value="CONFIRMED">Confirmado</SelectItem>
-                <SelectItem value="ACTIVE">Ativo</SelectItem>
-                <SelectItem value="COMPLETED">Completado</SelectItem>
-                <SelectItem value="CANCELLED">Cancelado</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="relative">
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="sm:w-[200px] w-full justify-start text-left font-normal text-gray-600">
+                  <FilterIcon
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    size={20}
+                  />
+                  <SelectValue placeholder="Todos" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Todos">Todos os status</SelectItem>
+                  <SelectItem value="PENDING">Pendente</SelectItem>
+                  <SelectItem value="CONFIRMED">Confirmado</SelectItem>
+                  <SelectItem value="ACTIVE">Ativo</SelectItem>
+                  <SelectItem value="COMPLETED">Completado</SelectItem>
+                  <SelectItem value="CANCELLED">Cancelado</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </header>
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
